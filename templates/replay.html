@@ -12,10 +12,12 @@
         <h2>SynopsLive, le replay</h2>
     </div>
 
-    <p class="big-message">
-        Retrouvez toutes les émissions diffusées, des plus récentes à nos archives.
-        <small>({{ episodes.count }} pour être exact)</small>
-    </p>
+    {% if current_show == None %}
+        <p class="big-message">
+            Retrouvez toutes les émissions diffusées, des plus récentes à nos archives.
+            <small>({{ episodes.count }} pour être exact)</small>
+        </p>
+    {% endif %}
 
     <div class="filter-by-show">
         <ul>

@@ -13,12 +13,11 @@ body.letter-space-please .cover h2 {
         background-image: url(/static/imgs/covers/live.jpg);
         overflow: hidden;
         position: relative;
+        z-index: 2;
         color: white;
         border-top-left-radius: 5px;
         border-top-right-radius: 5px;
         box-shadow: 0px 4px 4px rgba(0,0,0,0.2);
-
-        margin-bottom: 20px;
 
         h2 {
             font-family: 'Overlock','Trebuchet MS',sans-serif;
@@ -36,10 +35,59 @@ body.letter-space-please .cover h2 {
     p.big-message {
         font-family: 'Overlock','Trebuchet MS',sans-serif;
         font-size: 17pt;
-        margin-top: 25px;
+        margin-top: 45px;
         margin-bottom: 40px;
         margin-left: 70px;
         font-weight: normal;
+    }
+
+    .show-description {
+        background-color: #dfdfdf;
+        color: black;
+        min-height: 82px;
+        margin-top: 0px;
+        padding-left: 70px;
+        padding-right: 70px;
+        padding-top: 20px;
+        padding-bottom: 18px;
+        position: relative;
+        z-index: 1;
+        box-shadow: 0 5px 5px rgba(0,0,0,0.4);
+
+        .show-img {
+            margin: 0;
+            float: left;
+        }
+
+        h3 {
+            margin: 0;
+            font-size: 16pt;
+            font-weight: normal;
+            margin-left: 100px;
+            margin-right: 240px;
+        }
+
+        p {
+            margin-left: 100px;
+            margin-right: 240px;
+            margin-top: 5px;
+            font-size: 9pt;
+            margin-bottom: 5px;
+        }
+
+        .show-podcast-links {
+            margin: 0px;
+            position: absolute;
+            right: 70px;
+            width: 240px;
+            text-align: right;
+            top: 20px;
+
+            a {
+                margin-bottom: 10px;
+                text-align: left;
+            }
+        }
     }
 
     div.filter-by-show {

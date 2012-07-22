@@ -17,6 +17,16 @@
             Retrouvez toutes les émissions diffusées, des plus récentes à nos archives.
             <small>({{ episodes.count }} pour être exact)</small>
         </p>
+    {% else %}
+        <div class="show-description">
+            <img class="show-img" src="{{ current_show.icon_image.url }}" alt="{{ current_show.slug }}" />
+            <h3>{{ current_show.name }}</h3>
+            <p>{{ current_show.description }}</p>
+            <p class="show-podcast-links">
+                {% if current_show.podcast_itunes %}<a href="{{ current_show.podcast_itunes }}" class="do do-podcast">Podcaster avec iTunes</a>{% endif %}
+                {% if current_show.podcast_rss %}<a href="{{ current_show.podcast_rss }}" class="do do-podcast">Podcaster avec un flux RSS</a>{% endif %}
+            </p>
+        </div>
     {% endif %}
 
     <div class="filter-by-show">
@@ -62,10 +72,12 @@
                 </p>
                 <p></p>
             {% endfor %}
-            <p class="center-please">
-                {% if episode.show.podcast_itunes %}<a href="{{ episode.show.podcast_itunes }}" class="do do-podcast">Podcaster avec iTunes</a>{% endif %}
-                {% if episode.show.podcast_rss %}<a href="{{ episode.show.podcast_rss }}" class="do do-podcast">Podcaster avec un flux RSS</a>{% endif %}
-            </p>
+            {% if current_show == None %}
+                <p class="center-please">
+                    {% if episode.show.podcast_itunes %}<a href="{{ episode.show.podcast_itunes }}" class="do do-podcast">Podcaster avec iTunes</a>{% endif %}
+                    {% if episode.show.podcast_rss %}<a href="{{ episode.show.podcast_rss }}" class="do do-podcast">Podcaster avec un flux RSS</a>{% endif %}
+                </p>
+            {% endif %}
         </div>
         <div class="description">
             <p>

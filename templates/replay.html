@@ -2,7 +2,7 @@
 {% load format_natural %}
 
 {% block custom_css %}
-    <link rel="stylesheet" type="text/less" media="screen" href="/static/css/replay.less" charset="utf-8">
+    <link rel="stylesheet" type="text/less" media="screen" href="/static/css/replay.less" />
 {% endblock %}
 
 {% block page_classes %}replay{% endblock %}
@@ -12,8 +12,25 @@
         <h2>SynopsLive, le replay</h2>
     </div>
 
-    <p class="big-message">Retrouvez toutes les émissions diffusées, des plus récentes à nos archives. <small>({{ episodes.count }} pour être exact)</small></p>
+    <p class="big-message">
+        Retrouvez toutes les émissions diffusées, des plus récentes à nos archives.
+        <small>({{ episodes.count }} pour être exact)</small>
+    </p>
 
+    <div class="filter-by-show">
+        <ul>
+            <li>
+                <a href="{% url replay %}"
+                   class="{% if current_show == None %}active{% endif %}">Toutes les émissions</a>
+            </li>
+            {% for show in shows %}
+                <li>
+                    <a href="{% url replay-show show=show.slug %}"
+                       class="{% if show == current_show %}active{% endif %}">{{ show.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 
     {% for episode in episodes %}
     <article class="one-download">

@@ -1,9 +1,9 @@
 # Create your views here.
 from datetime import datetime
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template import Context, loader
-from deck.models import Carton, Episode
+from deck.models import Carton, Episode, Show
 
 def home(request):
     cartons = Carton.objects.filter(visible = True).order_by("episode__time").all()
@@ -18,10 +18,17 @@ def live_player(request):
 def channel(request):
     return render(request, "channel.html", {})
 
-def replay(request):
-    episodes = Episode.objects.filter(time__lte = datetime.now()).order_by("time").reverse().all()
+def replay(request, page=1, show=None):
+    query = Episode.objects.filter(time__lte = datetime.now())
+    shows = Show.objects.all()
 
-    return render(request, "replay.html", {'episodes': episodes})
+    if show is not None:
+        show = get_object_or_404(Show, slug=show)
+        query = query.filter(show = show)
+
+    episodes = query.order_by("time").reverse().all()
+
+    return render(request, "replay.html", {'episodes': episodes, 'shows': shows, 'current_show': show})
 
 def view_show(request):
     return render(request, "show.html", {})

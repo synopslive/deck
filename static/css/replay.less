@@ -42,6 +42,39 @@ body.letter-space-please .cover h2 {
         font-weight: normal;
     }
 
+    div.filter-by-show {
+        margin-left: 70px;
+        margin-right: 70px;
+        margin-bottom: 40px;
+
+        ul { margin: 0; padding:0; }
+
+        li {
+            display: inline-block;
+            margin: 0;
+
+            a {
+                display: inline-block;
+                border-right: 1px solid #424242;
+                padding: 10px;
+                font-size: 10pt;
+            }
+
+            &:first-child a {
+                padding-left: 0px;
+            }
+
+            &:last-child a {
+                padding-right: 0px;
+                border-right: 0 none;
+            }
+        }
+
+        li a.active {
+            font-weight: bold;
+        }
+    }
+
     article.one-download {
         padding-bottom: 25px;
         margin-left: 70px;

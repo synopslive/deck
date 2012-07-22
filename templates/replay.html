@@ -1,0 +1,58 @@
+{% extends "page.html" %}
+{% load format_natural %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/less" media="screen" href="/static/css/replay.less" charset="utf-8">
+{% endblock %}
+
+{% block page_classes %}replay{% endblock %}
+
+{% block page_content %}
+    <div class="cover">
+        <h2>SynopsLive, le replay</h2>
+    </div>
+
+    <p class="big-message">Retrouvez toutes les émissions diffusées, des plus récentes à nos archives. <small>({{ episodes.count }} pour être exact)</small></p>
+
+
+    {% for episode in episodes %}
+    <article class="one-download">
+        <div style="float: left;">
+        </div>
+        <h3>
+            <span class="diffused-at-info">
+                <time class="jour">
+                    {{ episode.time|date:"D"|lower }}
+                    <strong>{{ episode.time|date:"d" }}</strong>
+                    <span class="mois">{{ episode.time|date:" M. y"|lower }}</span>
+                    <span class="heure">{{ episode.time.hour }}h{{ episode.time.minute|zfill:2 }}</span>
+                </time>
+            </span>
+            <span class="titre-and-summary">
+                <span class="titre"><strong>{{ episode.show.name }}</strong> #{{ episode.number }}</span>
+                <span class="summary"><em>{{ episode.summary }}</em></span>
+            </span>
+        </h3>
+        <div class="links-to-downloads">
+            {% for download in episode.visible_downloads.all %}
+                <p><a href="{{ download.url }}" class="do do-download as-block"><strong>Télécharger {{ download.name|lower }}</strong> ({{ download.extension }}, {{ download.size }})</a></p>
+            {% empty %}
+                <p class="no-downloads-yet">
+                    <em>Aucun téléchargement disponible pour le moment</em><br />
+                    <small>Ne ratez pas sa sortie : abonnez-vous au podcast !</small>
+                </p>
+                <p></p>
+            {% endfor %}
+            <p class="center-please">
+                {% if episode.show.podcast_itunes %}<a href="{{ episode.show.podcast_itunes }}" class="do do-podcast">Podcaster avec iTunes</a>{% endif %}
+                {% if episode.show.podcast_rss %}<a href="{{ episode.show.podcast_rss }}" class="do do-podcast">Podcaster avec un flux RSS</a>{% endif %}
+            </p>
+        </div>
+        <div class="description">
+            <p>
+                {{ episode.content }}
+            </p>
+        </div>
+    </article>
+    {% endfor %}
+{% endblock %}

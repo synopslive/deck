@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<head>
+    <title>SynopsLive.net - Toujours quelque chose à découvrir</title>
+    <!-- There is no poney here. -->
+    <meta charset="utf-8" />
+    <meta name="keywords" content="synopslive, podcast, nouveau, fun, chroniques, culture web, coucou_bardyl, papydesvosges" />
+    <meta name="author" content="oncledesalpes" />
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic,700italic' rel='stylesheet' type='text/css' />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="http://trichelieu.net/trichbar.js.php?synopslive" type="text/javascript"></script>
+    <script type="text/javascript">
+        var thedate = Date.UTC(2012,  0, 14, 19,  0,  0); // sam. 14 janvier 2012 à 21h00 (GMT+2), bien vu @Naouak
+        function updateCompteur(){
+            // Idée originale du compteur qui défile vite en blanc sur noir en hexadécimal © Nolife (et Cyril Lambin)
+            // ABONNEZ-VOUS À NOLIFE ONLINE, c'est des gens bien => http://online.nolife-tv.com/
+            // [Oui, ils ne voudront jamais me prendre en stage après un truc pareil. Si c'est quand même le cas :]
+            //
+            // Bidouille rapide by Stanislas Signoud <stan@stanisoft.net> http://www.stanisoft.net/ (@Signez)
+
+            var thetimeleft = (Math.round(thedate - Date.now())).toString(8); // Hexa is soooo 2011
+            if((thedate - Date.now()) < 0)
+                $("#tictac").html("Ting !").css({color: "red"});
+            else{
+                while(thetimeleft.length < 8)
+                    thetimeleft = "0".concat(thetimeleft);
+                if($("#tictac").text().length == 0)
+                    $("#tictac").hide().fadeIn(10000);
+                $("#tictac").html(thetimeleft);
+            };
+        }
+        window.setInterval(updateCompteur, 50);
+        //window.setInterval(function(){ window.location.reload(); }, 60000);
+        window.setTimeout(function(){ window.location = "/home"; }, 1000);
+    </script>
+    <style type="text/css">
+        body {
+            font-family: 'Ubuntu Mono','Courier New','Lucida Console',sans-serif;
+            text-align: center;
+        }
+        #tictac {
+            font-size: 60pt;
+            margin-bottom: 10px;
+        }
+        .its-not-a-poney {
+            margin-top: 300px;
+        }
+        .little-listener {
+            font-size: 9pt;
+        }
+    </style>
+</head>
+<body>
+<div class="its-not-a-poney">
+    <p id="tictac"></p>
+    <p class="a-cup"><strong>Tea</strong> will be available, too.</p>
+    <p class="little-listener"><a href="http://synopslive.net/ecouter/endirect">Écouter en direct le flux permanent →</a></p>
+</div>
+</body>
+<!-- Vous trouvez ça lame ? Ouais, nous aussi, mais dans deux ans, personne n'aurait compris. -->
+</html>

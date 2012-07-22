@@ -1,0 +1,84 @@
+{% extends "page.html" %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/less" media="screen" href="/static/css/show.less" charset="utf-8">
+{% endblock %}
+
+{% block page_classes %}show{% endblock %}
+
+{% block page_content %}
+<section>
+    <div class="cover">
+        <h2>Que le Grand Geek me Croque</h2>
+    </div>
+    
+    <p class="recurrence">Le premier vendredi du mois, en direct</p>
+
+    <aside class="next-episode">
+        <img class="show-img" src="/static/cartons-ng/shows/cafe-synops.png" alt="Café Synops" />
+        <h2>Prochaine émission</h2>
+        <h3><time>Vendredi 4 février, à 21h</time></h3>
+        <h4><strong>QLGGMC</strong> #14</h4>
+        <p class="summary">
+            Avec Shiegeru Miyamoto, et un débat sur les pots de fleurs
+        </p>
+    </aside>
+
+    <article class="podcasting">
+        <h3>S'abonner à l'émission</h3>
+        <p>Vous avez un lecteur compatible avec les podcasts, comme <em>iTunes</em>, <em>Miro</em> ou
+           <em>Rythmbox</em> ?</p>
+        <p>Dans ce cas, abonnez-vous à l'émission pour ne pas rater leur sortie en différé !</p>
+        <p class="center-please">
+            <a href="#" class="do do-podcast with-itunes">Podcaster avec iTunes</a>
+            <a href="#" class="do do-podcast with-rss">Podcaster avec un RSS</a>
+        </p>
+    </article>
+
+    <article class="downloads">
+        <h3>Émissions précédentes</h3>
+        <ul class="episodes-list">
+            <li class="episode">
+                <p><strong>QLGGMC</strong> #13 <em>(<time>vendredi 8 janvier</time>)</em></p>
+                <p class="summary">
+                    Que le Grand Quizz me Croque #3, ou une suite de bonne humeur.
+                </p>
+                <p><a href="#" class="do do-download as-block"><strong>Télécharger l'émission</strong> <em>(256 mo)</em></a></p>
+            </li>
+        </ul>
+    </article>
+
+    <article class="description">
+        <h3>Description de l'émission</h3>
+        <p>
+            Montez à bord ! Alexleserveur et InkS vous emmènent dans leur talk-show nocturne et chaloupé.
+            Les horizons du Grand Geek sont larges : de l'actualité, la rétrospective d'une saga célèbre,
+            une question d'ordre culturelle et même l'interview d'un invité exceptionnel.
+        </p>
+    </article>
+
+
+
+    <article class="avec">
+        <h3>L'équipe</h3>
+        <ul class="guys-list">
+            <li class="guy">
+                <strong>Alexleserveur</strong> <em>(Loup Lassinat Foubert)</em>
+                <span class="websites">Gamekult, Mangas (la chaîne)</span>
+            </li>
+            <li class="guy">
+                <strong>InkS</strong> <em>(Yann Rieder)</em>
+                <span class="websites">SynopsLive & Radio01.net</span>
+            </li>
+            <li class="guy">
+                <strong>Alvin</strong> <em>(Alvin Haddadène)</em>
+                <span class="websites">La Traversée du Stick</span>
+            </li>
+            <li class="guy">
+                <strong>Chloé W.</strong> <em>(Chloé Woitier)</em>
+                <span class="websites">Le Figaro.fr</span>
+            </li>
+        </ul>
+    </article>
+</section>
+{% endblock %}

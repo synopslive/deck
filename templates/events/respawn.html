@@ -1,0 +1,191 @@
+{% load compress %}
+<!doctype html>
+<html>
+<head>
+    <title>Respawn | Ecouter en direct !</title>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/public/favicon.png" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <!-- Webfonts are beautiful. -->
+    <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Overlock:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    {% compress css %}
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/main.less" charset="utf-8">
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/header.less" charset="utf-8">
+        {% block custom_css %}
+        {% endblock %}
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="/static/js/synops.js"></script>
+    {% endcompress %}
+    <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+    <link href="/public/minisites/respawn/respawn.css" type="text/css" rel="stylesheet" media="screen" />
+
+    <style type="text/css">
+        html, body {
+            background-attachment: fixed;
+        }
+        html { 
+            background-color: #445253; 
+        }
+
+        body #the-player {
+            background-color: rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5) inset;
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5) inset;
+        }
+        #wrapper {
+            width: auto;
+            min-width: 600px;
+            max-width: 1200px;
+            padding-left: 50px;
+            padding-right: 50px;
+            margin: auto;
+        }
+
+        #header, #footer {
+            position: relative;
+            width: auto;
+            min-width: 600px;
+            max-width: 1200px;
+        }
+
+        #footer {
+            margin: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
+        }
+    </style>
+    <script src="http://trichelieu.net/trichbar.js.php?synopslive" type="text/javascript"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h1><a href="/home"><img src="{{ STATIC_URL }}/imgs/logo.png" alt="SynopsLive" /></a></h1>
+            <ul>
+                <li><a style="margin: 0;" href="http://synopslive.net/respawn"><img src="/public/minisites/respawn/LogoRespawnHoriz.png" alt="Respawn" /></a></li>
+                <li id="back-to-website"><a href="/home">Retourner au site</a></li>
+            </ul>
+        </div>
+        <div class="cl-left">
+            <h2>Notre incroyable lecteur intégré</h2>
+            <p>Vérifiez bien d'activer Flash pour pouvoir utiliser ce player.</p>
+            <script src="http://embed.synopslive.net/player"></script>
+            <p style="text-align: right;">
+                <a href="http://synopslive.net:8000/synopslive-permanent.mp3.m3u" class="do do-listen">Lien vers le flux mp3</a>
+                <a href="http://synopslive.net/public/firewalled.m3u" class="do do-listen">Version anti-firewall</a>
+            </p>
+            <div class="synopsis">
+                <h3>Respawn in Paris - samedi 23 juin 2012, dès 16h30</h3>
+                <p><b>Au programme</b> de cette émission :</p>
+                <ul>
+                    <li><em>Part. 1</em> : Débrief' des prédictions ;</li>
+                    <li><em>Part. 2</em> : Quid des conférences ? ;</li>
+                    <li><em>Part. 3</em> : Impressions sur le salon ;</li>
+                </ul>
+				<p>Cette émission sera intégralement réalisée depuis <a href="http://www.ecole-multimedia.com/"><b>l'Ecole Multimédia</b></a></p>
+
+                <p>Pour nous accompagner, <b>nous recevons</b> :</p>
+                <ul>
+                                    <li><a href ="https://twitter.com/#!/Gyotoa">Adrien Guilloteau</a> (<a href="http://www.lefigaro.fr">LeFigaro.fr</a>, <a href="http://blog.lefigaro.fr/jeuxvideo/">Le joueur se lève</a>) ;</li>
+                                    									<li><a href="https://twitter.com/AlexisBlanchet">Alexis Blanchet</a> (<a href="http://www.editionspixnlove.com/Tous-nos-ouvrages/Des-Pixels-a-Hollywood/flypage.tpl.html">Des pixels à Hollywood</a>, <a href="http://jeuvideal.com/">Jeu Vidéal</a>) ;</li>
+
+									<li><a href ="https://twitter.com/#!/alexleserveur">Alexleserveur</a> (<a href="http://radio01.net/QueleGrandGeekmeCroque">QlGGmC</a>, <a href="http://mangas.fr">Mangas</a>, <a href="http://www.gamekult.com/">Gamekult</a>) ;</li>
+									<li><a href ="https://twitter.com/#!/alvin_stick">Alvin</a>  (<a href="http://radio01.net/QueleGrandGeekmeCroque">QlGGmC</a>, <a href="http://www.latraverseedustick.com/">La Traversée du Stick</a>, PC Jeux) ;</li>
+									<li><a href ="https://twitter.com/#!/bexisnuts">Bexisnuts</a> (<a href="http://drumsanddrinks.wordpress.com/">Drums and Drinks</a>) ;</li>
+									<li><a href ="https://twitter.com/#!/flameche">Boulapoire</a> (<a href="http://www.gamekult.com/">Gamekult</a>) ;</li>
+									<li><a href ="https://twitter.com/#!/LaDebauche">Concombre</a> (<a href="http://usineaproblemes.fr/">L'Usine à Problèmes</a>, <a href="http://www.journaldujapon.com/">Le Journal du Japon</a>) ;</li>
+									<li><a href ="https://twitter.com/#!/Kitsuntsun">Kitusntsun</a> (<a href="http://www.tsuntsun.fr/">Tsuntsun no Blog</a>) ;</li>
+									<li><a href="https://twitter.com/#!/MaSQuEdePuSTA">MaSQuE</a> (<a href="http://www.push-start.be">Push-Start.be</a>) ;</li>
+									<li><a href="https://twitter.com/#!/Pipomantis">Pipomantis</a> (<a href="http://www.barredevie.com/in/news/">Console Magazine</a> dans <a href="http://canardpc.com/">Canard PC</a>) ;</li>
+									<li><a href="https://twitter.com/#!/Traquenard_D">Traquenard Désinvolte</a> (<a href="http://www.traquenarddesinvolte.fr/">Chez Traquenard</a>) ;</li>
+									<li><a href="https://twitter.com/#!/Willvs">William Audureau</a> (<a href="http://www.editionspixnlove.com/Tous-nos-ouvrages/L-histoire-de-Mario/flypage.tpl.html">L'Histoire de Mario</a>, <a href="http://www.gamekult.com/">Gamekult</a>) ;</li>
+									 <li><a href="http://twitter.com/#!/leyeti">Le Yéti</a> (<a href="http://iamleyeti.com/lesplanetes/">Les Planètes</a>, <a href="http://merlanfrit.net/Anthony-Jauneaud">Merlanfrit</a>,  scénariste et narrative designer) ;</li>
+									 <li><a href="https://twitter.com/#!/Zelphir">Zelphir</a> (<a href="http://www.artofgaming.fr/">Art of Gaming</a>) ;</li>
+								    <li>...ainsi que <b>deux</b> personnages cachés !</li>
+                </ul>
+                <p>Le tout, fomenté par <strong>un présentateur</strong> à la voix d'or :</p>
+                <ul>
+                    <li><a href="http://twitter.com/#!/InkSHD">InkS</a> (<a href="http://www.radio01.net/">Radio01.net</a>).</li>
+                </ul>
+                <p><b>Ne manquez rien</b> des prochains numéros :</p>
+                <ul>
+                    <li><a href="http://twitter.com/#!/Radio01net">Suivez-nous sur <b>Twitter</b> @Radio01net</a></li>
+                    <li><a href="http://www.facebook.com/Radio01net">Devenez fan de l'émission sur <b>Facebook</b></a></li>
+                    <li><a href="http://itunes.apple.com/fr/podcast/id377609609#">Abonnez-vous à l'émission en podcast, sur <b>iTunes</b></a>
+                </ul>
+            </div>
+        </div>
+        <div class="cl-right">
+            <h2>Actuellement sur Twitter</h2>
+            <div class="twittering">
+                <a class="do do-twitter as-block" href="https://twitter.com/intent/tweet?text=%23RespawnLive%20Mon%20Message"
+                   style="margin-bottom: 10px;">
+                    Twitter en mentionnant <strong>#RespawnLive</strong>
+                </a>
+                <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+                <script>
+                    new TWTR.Widget({
+                        version: 2,
+                        type: 'search',
+                        search: 'RespawnLive OR #RespawnLive OR #RespawnInParis OR @SynopsLive OR @Radio01net',
+                        interval: 6000,
+                        title: 'Participez au débat',
+                        subject: 'Vos réactions en direct',
+                        width: 'auto',
+                        height: 500,
+                        theme: {
+                            shell: {
+                                background: '#161b1c',
+                                color: '#ffffff'
+                            },
+                            tweets: {
+                                background: '#161b1c',
+                                color: '#DDDDDD',
+                                links: '#facd89'
+                            }
+                        },
+                        features: {
+                            scrollbar: true,
+                            loop: false,
+                            live: true,
+                            hashtags: true,
+                            timestamp: true,
+                            avatars: true,
+                            toptweets: true,
+                            behavior: 'all'
+                        }
+                    }).render().start();
+                </script>
+            </div>
+        </div>
+        <div id="footer">
+            <p style="float: right;">
+                <a class="radio01net" href="http://radio01.net/"><img src="/public/minisites/qlggmc/radio01-blanc.png" alt="Radio01.net" /></a>
+            </p>
+            <p>
+                <a href="http://radio01.net/Respawn">Respawn</a> est une émission produite et réalisée par <a href="http://www.radio01.net">Radio01.net</a>,
+                avec les moyens techniques de (et diffusée sur) <a href="http://www.synopslive.net/">SynopsLive</a>.</p>
+            <p>
+                Radio01.net/SynopsLive © 2011-2012. Certains droits réservés (<a href="http://creativecommons.org/licenses/by-nc/2.5/ch/deed.fr">CC BY-NC</a>).
+            </p>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-2963283-5']);
+      _gaq.push(['_setDomainName', 'synopslive.net']);
+      _gaq.push(['_trackPageview']);
+
+     (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+     })();
+
+    </script>
+  </body>
+</html>

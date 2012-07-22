@@ -1,0 +1,82 @@
+{% extends "page.html" %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/less" media="screen" href="/static/css/live.less" charset="utf-8">
+{% endblock %}
+
+{% block page_classes %}live{% endblock %}
+
+{% block page_content %}
+    <div class="cover">
+        <h2>SynopsLive, le direct</h2>
+    </div>
+    <!--<div class="right-now">
+        <p class="big-message">
+            <a href="http://synopslive.net/respawn">Vivez ce soir l'expérience Respawn sur sa page spéciale, <em>synopslive.net/respawn</em></a>
+        </p>
+    </div>-->
+    <!--<div class="right-now">
+        <p class="big-message">
+            <a href="http://synopslive.net/qlggmc"><strong>Montez à bord</strong> à travers la page dédiée au live de <em>Que Le Grand Geek Me Croque</em>, <small>en cliquant ici.</small></a>
+        </p>
+    </div>-->
+
+    <article class="twitter-box">
+        <h3>Vos réactions en direct</h3>
+        <p>
+            <a href="https://twitter.com/intent/tweet?text=Un%20petit%20message%20avec%20%23SL5ans" class="do do-twitter as-block">
+                Intervenez en tweetant <strong>#LesTauliers</strong>
+            </a>
+        </p>
+        <script src="http://widgets.twimg.com/j/2/widget.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            new TWTR.Widget({
+                version: 2,
+                type: 'search',
+                search: 'SynopsLive OR @SynopsLive OR #LesTauliers OR @LesTauliers',
+                interval: 6000,
+                title: 'SynopsLive, toujours quelque chose à découvrir',
+                subject: 'Vos réactions en direct',
+                width: 'auto',
+                height: 450,
+                theme: {
+                    shell: {
+                        background: '#171717',
+                        color: '#ffffff'
+                    },
+                    tweets: {
+                        background: '#171717',
+                        color: '#DDDDDD',
+                        links: '#facd89'
+                    }
+                },
+                features: {
+                    scrollbar: true,
+                    loop: false,
+                    live: true,
+                    hashtags: true,
+                    timestamp: true,
+                    avatars: true,
+                    toptweets: true,
+                    behavior: 'all'
+                }
+            }).render().start();
+        </script>
+    </article>
+
+    <article class="player">
+        <h3>Notre lecteur intégré</h3>
+        <p>Vérifiez bien d'activer Flash pour utiliser ce player.</p>
+        <script src="http://embed.synopslive.net/player"></script>
+        <p style="text-align: right;">
+            <a href="http://embed.synopslive.net/synopslive.m3u" class="do do-listen">Lien vers le flux mp3</a>
+            <a href="http://synopslive.net/public/firewalled.m3u" class="do do-listen">Version anti-firewall</a>
+        </p>
+    </article>
+
+    <article class="show-content">
+
+    </article>
+
+
+{% endblock %}

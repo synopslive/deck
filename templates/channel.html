@@ -1,0 +1,16 @@
+{% extends "page.html" %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/less" media="screen" href="/static/css/live.less" charset="utf-8">
+{% endblock %}
+
+{% block page_classes %}live{% endblock %}
+
+{% block page_content %}
+    <div class="cover" style="margin-bottom: 0px;">
+        <h2>Channel IRC</h2>
+    </div>
+
+  <iframe src="http://188.165.249.118:8080?channels=synops&uio=MTE9MjA16a" width="1000" height="620"
+          style="border: 0px none; "></iframe>
+{% endblock %}

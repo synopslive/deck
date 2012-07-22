@@ -1,0 +1,77 @@
+{% extends "page.html" %}
+{% load format_natural %}
+
+{% block custom_css %}
+<link rel="stylesheet" type="text/less" media="screen" href="/static/css/home.less" charset="utf-8">
+{% endblock %}
+
+{% block page_classes %}home{% endblock %}
+
+{% block page_content %}
+    <p id="introducing">
+        Découvrez la webradio de toutes les cultures numériques, en direct et en podcast.
+        
+    </p>
+    <div id="display-board">
+        {% for carton in cartons %}
+            <section class="carton{% if forloop.first and not has_highlights %} selected{% endif %}{% if carton.highlighted %} highlighted{% endif %}"
+                     style="background-image: url({{ carton.bg_image.url }})" data-cartonid="{{ carton.id }}">
+                <div class="masque"></div>
+                <h1>{{ carton.grand_titre }}</h1>
+                <div class="tagline">{{ carton.tagline }}</div>
+
+                <aside class="infos">
+                    <img class="show-img" src="{{ carton.episode.show.icon_image.url }}" alt="{{ carton.show.slug }}" />
+                    <h3>
+                        <time>
+                         {% if carton.episode.termined %}
+                             {{ carton.episode.time|date:"l d M. à H:i"|lower }}
+                         {% else %}
+                             {{ carton.episode.time|format_time }}
+                         {% endif %}
+                        </time>
+                    </h3>
+                    <h4><strong>{{ carton.episode.show.short }}</strong> #{{ carton.episode.number }}</h4>
+                    <p class="summary">
+                        {{ carton.episode.summary }}
+                        <!--<a href="http://synopslive.net/">(plus d'infos)</a>-->
+                    </p>
+                </aside>
+                {% if carton.fb_url %}
+                <aside class="social-event">
+                    <a href="{{ carton.fb_url }}" class="add-on-facebook">{{ carton.fb_msg|safe }}</a>
+                </aside>
+                {% endif %}
+                {% if carton.tw_url %}
+                <aside class="social-talk">
+                    <a href="{{ carton.tw_url }}" class="chat-on-twitter">{{ carton.tw_msg|safe }}</a>
+                </aside>
+                {% endif %}
+            </section>
+        {% endfor %}
+        <ul id="planning">
+            {% for carton in cartons %}
+                <li class="planning-info" data-cartonid="{{ carton.id }}">
+                    <p class="horaire">{{ carton.episode.time.hour }}<em>h{{ carton.episode.time.minute|zfill:2 }}</em></p>
+                    <p class="jour"><time>{{ carton.episode.time|date:"l d M. Y"|lower }}</time></p>
+                {% if not carton.standalone %}
+                    <p class="titre"><strong>{{ carton.episode.show.short }}</strong> #{{ carton.episode.number }}</p>
+                {% else %}
+                    <p class="titre">{{ carton.title }}</p>
+                {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+      </div>
+    <!--<div id="transversal" class="soutien">
+         <a class="soutien" href="http://ecole-multimedia.com/">
+            <span class="majeur">
+               Les émissions spéciales des 5 ans sont réalisées avec le soutien logistique de l'École Multimédia.
+            </span>
+            <span class="mineur">
+               À travers une formation aux métiers du design, l'École Multimédia à Paris forme les étudiants d'aujourd'hui
+               à devenir les professionnels de la création de demain. <em>En découvrir plus sur le site officiel →</em>
+            </span>
+         </a>
+    </div>-->
+{% endblock %}

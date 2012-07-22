@@ -1,0 +1,115 @@
+{% load compress %}
+<!doctype html>
+<html>
+<head>
+    <title>SynopsLive</title>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/public/favicon.png" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <!-- Webfonts are beautiful. -->
+    <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Overlock:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    {% compress css %}
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/main.less" charset="utf-8">
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/header.less" charset="utf-8">
+        {% block custom_css %}
+        {% endblock %}
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="/static/js/synops.js"></script>
+    {% endcompress %}
+    <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+    <script src="http://trichelieu.net/trichbar.js.php?synopslive" type="text/javascript"></script>
+    <style type="text/css">
+        #header ul li#channel-irc a {
+	    background: -moz-linear-gradient(center top , white, #EDEDED) repeat scroll 0 0 transparent;
+	    background: #fff;
+            background: -webkit-gradient(linear, left top, left bottom, from(white), to(#ededed));
+            background: -moz-linear-gradient(top, white, #ededed);
+	    border-radius: 6px 6px 6px 6px;
+	    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+	    color: rgb(96, 96, 96);
+	    cursor: pointer;
+	    display: inline-block;
+	    font-size: 12pt;
+	    font-weight: bold;
+	    margin: 13px 5px;
+	    outline: medium none;
+	    padding: 8px 10px;
+	    text-align: center;
+	    text-decoration: none;
+	    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);	
+	    vertical-align: baseline;
+
+	    border-radius: 0;
+	    margin-left: 0;
+            margin-right: 0;
+	    padding-left: 11px;
+            float: right;
+	}
+	#header ul li#channel-irc { float: right; }
+        div#trichbar { position: fixed !important; }
+    </style>
+</head>
+<body>
+<div id="wrapper">
+    <div id="header">
+        <h1><a href="/home"><img src="{{ STATIC_URL }}/imgs/logo.png" alt="SynopsLive" /></a></h1>
+        <ul>
+            <!--<li id="toutes-emissions"><a href="/decouvrir/nos-emissions">Vos émissions</a></li>
+            <li id="toutes-equipe"><a href="/decouvrir/nos-emissions">Votre équipe</a></li>
+            <li id="toutes-communaute"><a href="/decouvrir/nos-emissions">Votre webradio</a></li>-->
+            <li id="listen-now" class="bouton"><a href="/ecouter/en-direct">Écouter en direct</a></li>
+            <li id="channel-irc" class="bouton"><a href="/discuter/channel">Channel IRC</a></li>
+            <li id="download-now"><a href="/ecouter/telecharger">Replay</a></li>
+        </ul>
+    </div>
+    {% block main_content %}{% endblock %}
+    <div id="footer">
+        <div id="partenaires">
+            <p>
+                SynopsLive, toujours quelque chose à découvrir depuis 2007
+            </p>
+            <p class="contboutons">
+                <a href="http://www.stanisoft.net">
+                    Stanisoft.net
+                </a>
+                <a href="http://www.netophonix.com/">
+                    Netophonix
+                </a>
+                <a href="http://www.magoyond.com/">
+                    Magoyond
+                </a>
+                <a href="http://www.macp3.info/">
+                    MacP3.info
+                </a>
+                <a href="http://www.radio01.net/">
+                    Radio01.net
+                </a>
+            </p>
+        </div>
+        <div id="mentions-legales">
+            <p>Nos contenus (musiques, émissions, sites) sont sous licences libres.</p>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-2963283-5']);
+  _gaq.push(['_setDomainName', 'synopslive.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+{% load compress %}
+<!doctype html>
+<html>
+<head>
+    <title>Que le Grand Quiz me Croque | Ecouter en direct !</title>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/public/favicon.png" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <!-- Webfonts are beautiful. -->
+    <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Overlock:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    {% compress css %}
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/main.less" charset="utf-8">
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/header.less" charset="utf-8">
+        {% block custom_css %}
+        {% endblock %}
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="/static/js/synops.js"></script>
+    {% endcompress %}
+    <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+    <link href="/public/minisites/qlggmc/qlggmc.css" type="text/css" rel="stylesheet" media="screen" />
+
+    <style type="text/css">
+        body #the-player {
+            background-color: rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5) inset;
+            box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5) inset;
+        }
+        #wrapper {
+            width: auto;
+            min-width: 600px;
+            max-width: 1200px;
+            padding-left: 50px;
+            padding-right: 50px;
+            margin: auto;
+        }
+
+        #header, #footer {
+            position: relative;
+            width: auto;
+            min-width: 600px;
+            max-width: 1200px;
+        }
+
+        #footer {
+            margin: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
+        }
+    </style>
+    <script src="http://trichelieu.net/trichbar.js.php?synopslive" type="text/javascript"></script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <h1><a href="/home"><img src="{{ STATIC_URL }}/imgs/logo.png" alt="SynopsLive" /></a></h1>
+            <ul>
+                <li><a style="margin: 0;" href="http://synopslive.net/qlggmc"><img src="/public/minisites/qlggmc/qlggmclogo-petit.png" alt="Que le Grand Geek Me Croque" /></a></li>
+                <li id="back-to-website"><a href="/home">Retourner au site</a></li>
+            </ul>
+        </div>
+        <div class="cl-left">
+            <h2>Notre incroyable lecteur intégré, qui émet du son</h2>
+            <p>Vérifiez bien d'activer Flash pour utiliser ce player.</p>
+            <script src="http://embed.synopslive.net/player"></script>
+            <p style="text-align: right;">
+                <a href="http://synopslive.net:8000/synopslive-permanent.mp3.m3u" class="do do-listen">Lien vers le flux mp3</a>
+                <a href="http://synopslive.net/public/firewalled.m3u" class="do do-listen">Version anti-firewall</a>
+            </p>
+            <div class="synopsis">
+                <h3>QlGQmC#4 - vendredi 27 juillet 2012, dès 21h00</h3>
+                <p><b>Au programme</b> de cette émission :</p>
+                <ul>
+                    <li><em>Sept manches</em> opposant <em>deux équipes</em> prêtes à tout pour emporter la victoire ;</li>
+                    <li><em>Cinq jeux à gagner</em> au cours de l'émission ;</li>
+                    <li>Des <em>interludes</em> inédites ;</li>
+                </ul>
+                <p>Et pour se tirer la bourre, <b>nous recevons</b> :</p>
+                <ul>
+                    <li><a href="http://twitter.com/#!/FrostisAdvance">Frostis Advance</a> (<a href="http://www.nintendomaine.com/">NintenDomaine</a>, <a href="http://www.gameweb.fr/">GameWeb</a> et <a href="http://www.3dsinnantes.fr/">3DS in Nantes</a>) ;</li>
+                    <li><a href="http://twitter.com/#!/LaDebauche">Concombre Masqué</a> (<a href="http://usineaproblemes.fr/">L'Usine à Problèmes</a> et <a href="http://www.journaldujapon.com/">Le Journal du Japon</a>) ;</li>
+					<li><a href="http://twitter.com/#!/PLVME">Plume</a> (<a href="http://www.gameblog.fr/">Gameblog.fr</a>) ;</li>
+					<li><a href="http://twitter.com/#!/LeReilly">Benjamin LeReilly</a> (<a href="http://www.thebestplace.fr/">The Best Place</a>) ;</li>
+                </ul>
+                <p>Avec <strong>vos animateurs</strong> préférés :</p>
+                <ul>
+                    <li><a href="http://twitter.com/#!/InkSHD">InkS</a> (<a href="http://www.radio01.net/">Radio01.net</a>) ;</li>
+                    <li><a href="http://twitter.com/#!/Alexleserveur">Alexleserveur</a> (La chaîne <a href="http://www.mangas.fr/">Mangas</a>, <a href="http://www.gamekult.com">Gamekult</a>),</li>
+                    <li><a href="http://twitter.com/#!/W_Chloe">Chloé</a> (<a href="http://plus.lefigaro.fr/page/chloe-woitier/">Le Figaro</a>).</li>
+                </ul>
+                <p><b>Ne manquez rien</b> des prochains numéros :</p>
+                <ul>
+                    <li><a href="http://twitter.com/#!/quelegrandgeek">Suivez-nous sur <b>Twitter</b> @QueleGrandGeek</a></li>
+                    <li><a href="http://www.facebook.com/qlggmc">Devenez fan de l'émission sur <b>Facebook</b></a></li>
+                    <li><a href="http://itunes.apple.com/fr/podcast/que-le-grand-geek-me-croque/id411225168">Abonnez-vous à l'émission en podcast, sur <b>iTunes</b></a>
+                </ul>
+				<link rel="image_src" href="http://www.radio01.net/Q.png" />
+            </div>
+        </div>
+        <div class="cl-right">
+            <h2>Actuellement sur Twitter</h2>
+            <div class="twittering">
+                <a class="do do-twitter as-block" href="https://twitter.com/intent/tweet?text=Mon%20message%20%23QueleGrandGeek"
+                   style="margin-bottom: 10px;">
+                    Twitter avec le hashtag <strong>#QueLeGrandGeek</strong>
+                </a>
+                <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+                <script>
+                    new TWTR.Widget({
+                        version: 2,
+                        type: 'search',
+                        search: 'QueLeGrandGeek OR @QueLeGrandGeek OR #QueLeGrandGeek OR "Que Le Grand Geek Me Croque" OR QLGGMC OR #qlggmc',
+                        interval: 6000,
+                        title: 'Vous êtes à bord',
+                        subject: 'Vos réactions en direct',
+                        width: 'auto',
+                        height: 500,
+                        theme: {
+                            shell: {
+                                background: 'rgba(0, 0, 0, 0.5)',
+                                color: '#ffffff'
+                            },
+                            tweets: {
+                                background: 'rgba(0, 0, 0, 0.5)',
+                                color: '#DDDDDD',
+                                links: '#facd89'
+                            }
+                        },
+                        features: {
+                            scrollbar: true,
+                            loop: false,
+                            live: true,
+                            hashtags: true,
+                            timestamp: true,
+                            avatars: true,
+                            toptweets: true,
+                            behavior: 'all'
+                        }
+                    }).render().start();
+                </script>
+            </div>
+        </div>
+        <div id="footer">
+            <p style="float: right;">
+                <a class="radio01net" href="http://radio01.net/"><img src="/public/minisites/qlggmc/radio01-blanc.png" alt="Radio01.net" /></a>
+            </p>
+            <p>
+                <a href="http://radio01.net/QueleGrandGeekmeCroque">Que le Grand Geek me Croque</a> est une émission produite et réalisée par <a href="http://www.radio01.net">Radio01.net</a>,
+                avec les moyens techniques de (et diffusée sur) <a href="http://www.synopslive.net/">SynopsLive</a>.</p>
+            <p>
+                Radio01.net/SynopsLive © 2011-2012. Certains droits réservés (<a href="http://creativecommons.org/licenses/by-nc/2.5/ch/deed.fr">CC BY-NC</a>).
+            </p>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-2963283-5']);
+      _gaq.push(['_setDomainName', 'synopslive.net']);
+      _gaq.push(['_trackPageview']);
+
+     (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+     })();
+
+    </script>
+</body>
+</html>

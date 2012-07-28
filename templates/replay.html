@@ -58,6 +58,11 @@
                 </time>
             </span>
             <span class="titre-and-summary">
+                {% if episode.show.category %}
+                    <span class="category-icon category-{{ episode.show.category.slug }}"
+                         style="background-image: url('/static/imgs/{{ episode.show.category.icon }}');"
+                         title="{{ episode.show.category.name }}"></span>
+                {% endif %}
                 <span class="titre"><strong>{{ episode.show.name }}</strong> #{{ episode.number }}</span>
                 <span class="summary"><em>{{ episode.summary }}</em></span>
             </span>

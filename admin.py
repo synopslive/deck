@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-from deck.models import Show, Carton, Episode, Download
+from deck.models import Show, Carton, Episode, Download, Category
 from models import UserProfile
 
 class UserProfileInline(admin.StackedInline):
@@ -25,6 +25,7 @@ class CustomEpisodeAdmin(admin.ModelAdmin):
 admin.site.register(Show)
 admin.site.register(Carton)
 admin.site.register(Episode, CustomEpisodeAdmin)
+admin.site.register(Category)
 
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)

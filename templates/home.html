@@ -20,6 +20,11 @@
                 <div class="tagline">{{ carton.tagline }}</div>
 
                 <aside class="infos">
+                    {% if carton.episode.show.category %}
+                        <div class="category" style="background-color: {{ carton.episode.show.category.color }};
+                                                     background-image: url('/static/imgs/{{ carton.episode.show.category.icon }}');"
+                                title="{{ carton.episode.show.category.name }}"></div>
+                    {% endif %}
                     <img class="show-img" src="{{ carton.episode.show.icon_image.url }}" alt="{{ carton.show.slug }}" />
                     <h3>
                         <time>

@@ -39,6 +39,8 @@ class Show(models.Model):
 
     equipe = models.ManyToManyField(User)
 
+    category = models.ForeignKey("Category", blank=True, null=True, on_delete=models.SET_NULL)
+
     def __unicode__(self):
         return self.name
 
@@ -116,5 +118,15 @@ class Carton(models.Model):
             return u"%s" % self.episode + ((u" - %s" % self.title) if self.title else u"")
 
     pass
+
+class Category(models.Model):
+    name = models.CharField("Nom de la catégorie", max_length=50)
+    slug = models.SlugField("Slug de la catégorie", max_length=30, unique=True)
+    color = models.CharField("Couleur CSS de la catégorie", max_length=20, default="#CCCCCC")
+    icon = models.CharField("URL de l'icône de la catégorie", max_length=255, blank=True)
+
+    def __unicode__(self):
+        return self.name
+
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])

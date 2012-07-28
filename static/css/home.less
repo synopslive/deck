@@ -256,53 +256,69 @@ section.carton {
             text-decoration: none;
         }
     }
+
+    .category {
+        @circle-diameter: 46px;
+        display: block;
+        background-color: #cccccc;
+        width: @circle-diameter;
+        height: @circle-diameter;
+        position: absolute;
+        top: (0 - @circle-diameter) / 2;
+        left: (0 - @circle-diameter) / 2;
+        border-radius: @circle-diameter / 2;
+        box-shadow: 2px 2px 3px rgba(0,0,0,0.3);
+        z-index: -2;
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
 }
 
-        #transversal {
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-            background-color: rgba(255, 255, 255, 0.5);
-            background-image: url(/static/imgs/partenaires/LogoEcoleMultimedia.png);
-            background-position: 55px center;
-            background-repeat: no-repeat;
-            border-radius: 10px 10px 10px 10px;
-            margin: auto;
-            overflow: hidden;
-            margin-bottom: 15px;
-            font-family:"Lucida Grande","Ubuntu","Trebuchet MS",sans-serif;
-            padding: 6px;
-            margin-top: 10px;
-        }
+#transversal {
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.5);
+    background-image: url(/static/imgs/partenaires/LogoEcoleMultimedia.png);
+    background-position: 55px center;
+    background-repeat: no-repeat;
+    border-radius: 10px 10px 10px 10px;
+    margin: auto;
+    overflow: hidden;
+    margin-bottom: 15px;
+    font-family:"Lucida Grande","Ubuntu","Trebuchet MS",sans-serif;
+    padding: 6px;
+    margin-top: 10px;
+}
 
-        #transversal a {
-            padding: 8px;
-            padding-left: 180px;
-            padding-right: 50px;
-            text-align: justify;
-            display: block;
-            background-color: transparent;
-            -moz-transition: background-color 0.2s;
-            border-radius: 10px 10px 10px 10px;
-        }
+#transversal a {
+    padding: 8px;
+    padding-left: 180px;
+    padding-right: 50px;
+    text-align: justify;
+    display: block;
+    background-color: transparent;
+    -moz-transition: background-color 0.2s;
+    border-radius: 10px 10px 10px 10px;
+}
 
-        #transversal a:hover {
-            background-image: url(/static/imgs/partenaires/LogoEcoleMultimedia-colored.png);
-            background-position: 49px center;
-            background-repeat: no-repeat;
-            text-decoration: none;
-            background-color: white;
-        }
+#transversal a:hover {
+    background-image: url(/static/imgs/partenaires/LogoEcoleMultimedia-colored.png);
+    background-position: 49px center;
+    background-repeat: no-repeat;
+    text-decoration: none;
+    background-color: white;
+}
 
-        #transversal .majeur {
-            font-size: 13pt;
-            font-weight: bold;
-            display: block;
-            letter-spacing: -1px;
-            margin-top: 13px;
-        }
+#transversal .majeur {
+    font-size: 13pt;
+    font-weight: bold;
+    display: block;
+    letter-spacing: -1px;
+    margin-top: 13px;
+}
 
-        #transversal .mineur {
-            font-size: 10pt;
-            display: block;
-            margin-top: 3px;
-            margin-bottom: 13px;
-	}
+#transversal .mineur {
+    font-size: 10pt;
+    display: block;
+    margin-top: 3px;
+    margin-bottom: 13px;
+}

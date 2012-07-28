@@ -19,7 +19,7 @@ def channel(request):
     return render(request, "channel.html", {})
 
 def replay(request, page=1, show=None):
-    query = Episode.objects.filter(time__lte = datetime.now())
+    query = Episode.objects.filter(time__lte = datetime.now()).select_related('show')
     shows = Show.objects.all()
 
     if show is not None:

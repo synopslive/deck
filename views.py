@@ -39,5 +39,5 @@ def only_qlggmc(request):
 def only_respawn(request):
     return render(request, "events/respawn.html", {})
 
-def go404(request):
+def force404(request):
     return render(request, "404.html", {})

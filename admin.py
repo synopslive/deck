@@ -27,18 +27,22 @@ class CartonInline(admin.StackedInline):
 
 class CustomEpisodeAdmin(admin.ModelAdmin):
     inlines = [DownloadInline, CartonInline]
-    list_filter = ('show__name', 'termined')
+    list_filter = ('termined', 'show__category', 'show__name')
     ordering = ('-time', )
     date_hierarchy = 'time'
     list_display = ('__unicode__', 'summary', 'time')
 
 class CustomCartonAdmin(admin.ModelAdmin):
-    list_filter = ('episode__show__name', 'visible')
+    list_filter = ('visible', 'episode__show__category', 'episode__show__name')
     ordering = ('-published_at', )
     date_hierarchy = 'published_at'
     list_display = ('__unicode__', 'grand_titre', 'published_at', 'visible')
 
-admin.site.register(Show)
+class CustomShowAdmin(admin.ModelAdmin):
+    list_filter = ('category',)
+    list_display = ('short', 'name', 'category')
+
+admin.site.register(Show, CustomShowAdmin)
 admin.site.register(Carton, CustomCartonAdmin)
 admin.site.register(Episode, CustomEpisodeAdmin)
 admin.site.register(Category)

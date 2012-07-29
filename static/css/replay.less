@@ -35,8 +35,9 @@ body.letter-space-please .cover h2 {
     p.big-message {
         font-family: 'Overlock','Trebuchet MS',sans-serif;
         font-size: 17pt;
-        margin-top: 45px;
-        margin-bottom: 40px;
+        line-height: 28px;
+        margin-top: 54px;
+        margin-bottom: 64px;
         margin-left: 70px;
         font-weight: normal;
     }
@@ -46,6 +47,7 @@ body.letter-space-please .cover h2 {
         color: black;
         min-height: 82px;
         margin-top: 0px;
+        margin-bottom: 30px;
         padding-left: 70px;
         padding-right: 70px;
         padding-top: 20px;
@@ -91,29 +93,30 @@ body.letter-space-please .cover h2 {
     }
 
     div.filter-by-show {
-        margin-left: 70px;
-        margin-right: 70px;
-        margin-bottom: 40px;
+        padding-left: 70px;
+        padding-right: 70px;
+        border-bottom: 1px solid #424242;
 
         ul { margin: 0; padding:0; }
 
         li {
             display: inline-block;
             margin: 0;
+            border-right: 1px solid #424242;
+            vertical-align: bottom;
 
             a {
                 display: inline-block;
-                border-right: 1px solid #424242;
                 padding: 10px;
                 font-size: 10pt;
+                vertical-align: center;
             }
 
             &:first-child a {
                 padding-left: 0px;
             }
 
-            &:last-child a {
-                padding-right: 0px;
+            &:last-child, &:last-child a {
                 border-right: 0 none;
             }
         }

@@ -19,11 +19,27 @@ class DownloadInline(admin.TabularInline):
     fk_name = 'episode'
     extra = 0
 
+class CartonInline(admin.StackedInline):
+    model = Carton
+    fk_name = 'episode'
+    extra = 0
+    exclude = ('standalone',)
+
 class CustomEpisodeAdmin(admin.ModelAdmin):
-    inlines = [DownloadInline,]
+    inlines = [DownloadInline, CartonInline]
+    list_filter = ('show__name', 'termined')
+    ordering = ('-time', )
+    date_hierarchy = 'time'
+    list_display = ('__unicode__', 'summary', 'time')
+
+class CustomCartonAdmin(admin.ModelAdmin):
+    list_filter = ('episode__show__name', 'visible')
+    ordering = ('-published_at', )
+    date_hierarchy = 'published_at'
+    list_display = ('__unicode__', 'grand_titre', 'published_at', 'visible')
 
 admin.site.register(Show)
-admin.site.register(Carton)
+admin.site.register(Carton, CustomCartonAdmin)
 admin.site.register(Episode, CustomEpisodeAdmin)
 admin.site.register(Category)
 

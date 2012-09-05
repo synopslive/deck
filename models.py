@@ -41,6 +41,11 @@ class Show(models.Model):
 
     category = models.ForeignKey("Category", blank=True, null=True, on_delete=models.SET_NULL)
 
+    livepage_url = models.URLField("URL de la page du live",
+                                   help_text="Cette URL sera utilisée sur les sites externes, sur les players et sur " \
+                                             "le carton pour inviter les internautes à rejoindre le mini-site.",
+                                   blank=True, null=True, max_length=255)
+
     def __unicode__(self):
         return self.name
 
@@ -50,13 +55,21 @@ class Episode(models.Model):
     show = models.ForeignKey(Show)
     number = models.CharField("Numéro de l'épisode", max_length="10")
     time = models.DateTimeField("Date et heure de diffusion")
-    termined = models.BooleanField(default=False)
+    termined = models.BooleanField("Émission terminée", default=False)
 
     summary = models.CharField("Resumé de l'émission", max_length=140)
     content = MarkupField("Contenu de l'émission", markup_type="markdown")
 
     created = models.DateTimeField("Créé en base le", auto_now_add=True)
     modified = models.DateTimeField("Dernière modification le", auto_now=True)
+
+    specific_livepage_url = models.URLField("URL spécifique de la page du live",
+                                            help_text="Vous pouvez laisser ce champ vide ; l'URL habituelle du Live pour " \
+                                                      "ce show sera alors utilisée.",
+                                            blank=True, null=True, max_length=255)
+
+    def livepage_url(self):
+        return self.specific_livepage_url if self.specific_livepage_url is not None else self.show.livepage_url
 
     def visible_downloads(self):
         return self.download_set.filter(visible=True)

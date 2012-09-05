@@ -1,5 +1,7 @@
 # Create your views here.
-from datetime import datetime
+from datetime import datetime, timedelta
+import json
+from django.core import serializers
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.template import Context, loader
@@ -41,3 +43,33 @@ def only_respawn(request):
 
 def force404(request):
     return render(request, "404.html", {})
+
+
+def export_cartons(request):
+    cartons = Carton.objects.filter(visible = True) \
+                            .filter(episode__time__gte = datetime.now()) \
+                            .filter(episode__time__lte = datetime.now() + timedelta(days = 3))\
+                            .select_related('episode')\
+                            .select_related('show') \
+                            .order_by("episode__time") \
+                            .all()
+
+    result = []
+
+    # Custom serializing
+    # TODO: Use some formatter to relocate that code
+    for carton in cartons:
+        result.append({
+            'id': carton.id,
+            'bg_image': carton.bg_image.url,
+            'show_id': carton.episode.show.id,
+            'show_name': carton.episode.show.name,
+            'show_slug': carton.episode.show.slug,
+            'episode_time': carton.episode.time.isoformat(),
+            'episode_number': carton.episode.number,
+            'episode_content': unicode(carton.episode.content),
+            'episode_summary': carton.episode.summary,
+            'livepage_url': carton.episode.livepage_url,
+        })
+
+    return HttpResponse(json.dumps(result))

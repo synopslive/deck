@@ -68,6 +68,7 @@ class Episode(models.Model):
                                                       "ce show sera alors utilisée.",
                                             blank=True, null=True, max_length=255)
 
+    @property
     def livepage_url(self):
         return self.specific_livepage_url if self.specific_livepage_url is not None else self.show.livepage_url
 

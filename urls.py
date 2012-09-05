@@ -17,5 +17,7 @@ urlpatterns = patterns('',
     url(r'^qlggmc/?', views.only_qlggmc),
     url(r'^respawn/?', views.only_respawn),
 
+    url(r'^feeds/cartons.json$', views.export_cartons),
+
     url(r'^force-404/?', views.force404),
 )

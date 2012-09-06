@@ -70,7 +70,7 @@ class Episode(models.Model):
 
     @property
     def livepage_url(self):
-        return self.specific_livepage_url if self.specific_livepage_url is not None else self.show.livepage_url
+        return self.show.livepage_url if not self.specific_livepage_url else self.specific_livepage_url
 
     def visible_downloads(self):
         return self.download_set.filter(visible=True)

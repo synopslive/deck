@@ -46,8 +46,8 @@ def force404(request):
 
 
 def export_cartons(request):
-    cartons = Carton.objects.filter(visible = True) \
-                            .filter(episode__time__gte = datetime.now()) \
+    cartons = Carton.objects.filter(visible = True)\
+                            .filter(episode__termined = False) \
                             .filter(episode__time__lte = datetime.now() + timedelta(days = 3))\
                             .select_related('episode')\
                             .select_related('show') \

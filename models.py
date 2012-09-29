@@ -35,16 +35,21 @@ class Show(models.Model):
 
     icon_image = models.ImageField(upload_to="cartons-ng/shows",
         default="http://synopslive.net/static/medias/cartons-ng/shows/unknown.png",
+        help_text="Cette image sera utilisée comme « icône » sur le site à tous les emplacements.",
         blank=True)
 
     equipe = models.ManyToManyField(User)
 
-    category = models.ForeignKey("Category", blank=True, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey("Category", verbose_name="Catégorie", blank=True, null=True, on_delete=models.SET_NULL)
 
     livepage_url = models.URLField("URL de la page du live",
                                    help_text="Cette URL sera utilisée sur les sites externes, sur les players et sur " \
                                              "le carton pour inviter les internautes à rejoindre le mini-site.",
                                    blank=True, null=True, max_length=255)
+
+    class Meta:
+        verbose_name = "show"
+        verbose_name_plural = "shows"
 
     def __unicode__(self):
         return self.name
@@ -52,13 +57,22 @@ class Show(models.Model):
     pass
 
 class Episode(models.Model):
-    show = models.ForeignKey(Show)
-    number = models.CharField("Numéro de l'épisode", max_length="10")
+    show = models.ForeignKey(Show, verbose_name="Show associé")
+    number = models.CharField("Numéro de l'épisode", max_length="10",
+                             help_text="Numéro (ou indicatif) de l'épisode. Inutile de précéder ce numéro par un « n° » ou « # ».")
     time = models.DateTimeField("Date et heure de diffusion")
-    termined = models.BooleanField("Émission terminée", default=False)
+    termined = models.BooleanField("Épisode diffusé (terminé)", default=False,
+                             help_text="Indique que la diffusion de l'émission est terminée, " \
+                                       "et qu'il ne faut plus l'afficher comme « en cours » sur le site. " \
+                                       "À cocher systématiquement une fois un épisode effectué.")
 
-    summary = models.CharField("Resumé de l'émission", max_length=140)
-    content = MarkupField("Contenu de l'émission", markup_type="markdown")
+    summary = models.CharField("Titre de l'épisode", max_length=140,
+                               help_text="Une ligne de texte décrivant l'épisode et le différenciant des autres.")
+    content = MarkupField("Contenu de l'épisode", markup_type="markdown",
+                         help_text="Ce texte est utilisé dans la page \"Replay\" comme texte d'accompagnement et " \
+                                   "de description pour chacune des émissions. Il est pertinent d'y inscrire quelques" \
+                                   "paragraphes de texte avec par exemple, la liste des invités ou des participants. " \
+                                   "Supporte le Markdown.")
 
     created = models.DateTimeField("Créé en base le", auto_now_add=True)
     modified = models.DateTimeField("Dernière modification le", auto_now=True)
@@ -67,6 +81,10 @@ class Episode(models.Model):
                                             help_text="Vous pouvez laisser ce champ vide ; l'URL habituelle du Live pour " \
                                                       "ce show sera alors utilisée.",
                                             blank=True, null=True, max_length=255)
+
+    class Meta:
+        verbose_name = "épisode"
+        verbose_name_plural = "épisodes"
 
     @property
     def livepage_url(self):
@@ -81,7 +99,7 @@ class Episode(models.Model):
     pass
 
 class Download(models.Model):
-    episode = models.ForeignKey(Episode)
+    episode = models.ForeignKey(Episode, verbose_name="Épisode associé")
 
     name = models.CharField("Type de téléchargement", max_length=30, default="L'émission")
     url = models.CharField("URL du fichier", max_length=500, blank=True)
@@ -93,6 +111,10 @@ class Download(models.Model):
     created = models.DateTimeField("Créé en base le", auto_now_add=True)
     modified = models.DateTimeField("Dernière modification le", auto_now=True)
 
+    class Meta:
+        verbose_name = "téléchargement"
+        verbose_name_plural = "téléchargements"
+
     def __unicode__(self):
         return u"%s de %s %s" % (self.name, self.episode.show, self.created)
 
@@ -102,28 +124,45 @@ class Carton(models.Model):
 
     published_at = models.DateTimeField(u"Publié le", default=datetime.datetime.now)
 
-    visible = models.BooleanField(u"Affiché en page d'accueil", default=False)
+    visible = models.BooleanField(u"Affiché en page d'accueil", default=False,
+                                  help_text="Si coché, ce carton sera effectivement affiché sur la page d'accueil.")
 
-    highlighted = models.BooleanField(u"Affiché au chargement de la page", default=False)
+    highlighted = models.BooleanField(u"Affiché au chargement de la page", default=False,
+                                  help_text="Si coché, le carton est « prioritaire »  et affiché en premier dès l'affichage.")
 
-    title = models.CharField("Titre du carton (optionnel)", max_length=255, blank=True)
+    title = models.CharField("Titre interne du carton (optionnel)", max_length=255, blank=True,
+                             help_text="Dans le cas où le carton n'est pas attaché à une émission, remplir ce champ avec " \
+                                       "une description de son objet.")
 
-    bg_image = models.ImageField(upload_to="cartons-ng/fonds",
+    bg_image = models.ImageField(verbose_name="Image de fond",
+                                 upload_to="cartons-ng/fonds",
                                  default="http://synopslive.net/static/medias/cartons-ng/fonds/terrasse.jpg",
-                                 blank=True)
+                                 blank=True,
+                                 help_text="Cette image de fond devrait suivre le " \
+                                           "<a href=\"http://www.1mage.net/images/infocarton.png\">patron</a> " \
+                                           "pour une plus grande efficacité.")
 
     fb_msg = models.CharField("Bouton Facebook", max_length=255,
-                              default=u"S'inscrire à l'événement <strong>Facebook</strong>", blank=True)
-    fb_url = models.CharField("Lien Facebook", max_length=255, blank=True)
+                              default=u"S'inscrire à l'événement <strong>Facebook</strong>", blank=True,
+                              help_text="Message affiché sur le bouton Facebook présent sur le carton. HTML autorisé.")
+    fb_url = models.CharField("Lien Facebook", max_length=255, blank=True,
+                              help_text="URL associée au bouton Facebook. Le bouton Facebook ne sera pas affiché si ce champ est vide.")
 
-    tw_msg = models.CharField("Bouton Twitter", max_length=255, default="Twitter avec", blank=True)
-    tw_url = models.CharField("Lien Twitter", max_length=255, blank=True)
+    tw_msg = models.CharField("Bouton Twitter", max_length=255, default="Twitter avec", blank=True,
+                              help_text="Message affiché sur le bouton Twitter présent sur le carton. HTML autorisé.")
+    tw_url = models.CharField("Lien Twitter", max_length=255, blank=True,
+                              help_text="URL associée au bouton Twitter. Le bouton Twitter ne sera pas affiché si ce champ est vide." \
+                                        "<br/> Note : il est possible d'utiliser les URLs d'intent Twitter.")
 
     created = models.DateTimeField(u"Créé en base le", auto_now_add=True)
     modified = models.DateTimeField(u"Dernière modification le", auto_now=True)
 
-    grand_titre = models.CharField("Grand Titre", max_length="255", blank=True)
-    tagline = MarkupField(markup_type="markdown", blank=True)
+    grand_titre = models.CharField("Grand titre", max_length="255", blank=True,
+                              help_text="Texte affiché comme titre sur le carton. Il s'agit souvent d'un bon mot ou d'une référence" \
+                                        "culturelle pour faire sourire l'auditeur.")
+
+    tagline = MarkupField(verbose_name="Texte du carton", markup_type="markdown", blank=True,
+                          help_text="Texte affiché sous le grand titre. Supporte le Markdown.")
 
     def __unicode__(self):
         if self.standalone:
@@ -138,6 +177,10 @@ class Category(models.Model):
     slug = models.SlugField("Slug de la catégorie", max_length=30, unique=True)
     color = models.CharField("Couleur CSS de la catégorie", max_length=20, default="#CCCCCC")
     icon = models.CharField("URL de l'icône de la catégorie", max_length=255, blank=True)
+
+    class Meta:
+        verbose_name = "catégorie"
+        verbose_name_plural = "catégories"
 
     def __unicode__(self):
         return self.name

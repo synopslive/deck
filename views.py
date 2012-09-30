@@ -2,10 +2,10 @@
 from datetime import datetime, timedelta
 import json
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.template import Context, loader
-from deck.models import Carton, Episode, Show
+from deck.models import Carton, Episode, Show, LivePage
 
 def home(request):
     cartons = Carton.objects.filter(visible = True).order_by("episode__time").all()
@@ -16,6 +16,15 @@ def home(request):
 
 def live_player(request):
     return render(request, "live.html", {})
+
+def live_page(request, show):
+    show = get_object_or_404(Show, slug=show)
+    try:
+        page = show.livepage
+    except LivePage.DoesNotExist, e:
+        raise Http404
+
+    return render(request, "live-page.html", {"show": show, 'page': page})
 
 def channel(request):
     return render(request, "channel.html", {})
@@ -34,12 +43,6 @@ def replay(request, page=1, show=None):
 
 def view_show(request):
     return render(request, "show.html", {})
-
-def only_qlggmc(request):
-    return render(request, "events/qlggmc.html", {})
-
-def only_respawn(request):
-    return render(request, "events/respawn.html", {})
 
 def force404(request):
     return render(request, "404.html", {})

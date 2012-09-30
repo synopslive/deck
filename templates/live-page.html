@@ -1,0 +1,110 @@
+{% load compress %}
+<!doctype html>
+<html>
+<head>
+    <title>{{ show.name }} ⋅ SynopsLive</title>
+    <meta charset="utf-8" />
+    <link rel="icon" href="/public/favicon.png" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <!-- Webfonts are beautiful. -->
+    <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Condensed' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Overlock:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+
+    {% compress css %}
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/main.less" charset="utf-8">
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/header.less" charset="utf-8">
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/live-page.less" charset="utf-8">
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="/static/js/synops.js"></script>
+    {% endcompress %}
+    {% compress css %}
+    <style type="text/css">
+        {{ page.css|safe }}
+    </style>
+    {% endcompress %}
+    <script src="http://trichelieu.net/trichbar.js.php?synopslive" type="text/javascript"></script>
+</head>
+<body>
+<div id="wrapper">
+    <div id="header">
+        <h1><a href="/home"><img src="{{ STATIC_URL }}/imgs/logo.png" alt="SynopsLive" /></a></h1>
+        <ul>
+            <li><a style="margin: 0;" href="{{ page.top_link_url }}"><img src="{{ page.top_image }}" alt="{{ show.name }}" /></a></li>
+            <li id="back-to-website"><a href="/home">Retourner au site</a></li>
+        </ul>
+    </div>
+    <div class="cl-left">
+        <h2>Écouter en direct du son (authentique)</h2>
+        <p>Ce player diffuse la webradio <a href="http://synopslive.net/">SynopsLive</a> (avec Flash).
+           <small>Pas de Flash ? Utilisez les liens au dessous.</small></p>
+        <script src="http://embed.synopslive.net/player"></script>
+        <p style="text-align: right;">
+            <a href="http://synopslive.net:8000/synopslive-permanent.mp3.m3u" class="do do-listen">Lien vers le flux mp3</a>
+            <a href="http://synopslive.net/public/firewalled.m3u" class="do do-listen">Version anti-firewall</a>
+        </p>
+        <div class="synopsis">
+            {{ page.synopsis }}
+        </div>
+    </div>
+    <div class="cl-right">
+        <h2>Actuellement sur Twitter</h2>
+        <div class="twittering">
+            <a class="do do-twitter as-block" href="https://twitter.com/intent/tweet?text={{ page.twitter_button_message|urlencode }}">
+                {{ page.twitter_button_label|safe }}
+            </a>
+            <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+            <script>
+                new TWTR.Widget({
+                    version: 2,
+                    type: 'search',
+                    search: '{{ page.twitter_query|escapejs }}',
+                    interval: 6000,
+                    title: '{{ page.twitter_title|escapejs }}',
+                    subject: '{{ page.twitter_subject|escapejs }}',
+                    width: 'auto',
+                    height: 500,
+                    theme: {{ page.twitter_theme|safe }},
+                    features: {
+                        scrollbar: true,
+                        loop: false,
+                        live: true,
+                        hashtags: true,
+                        timestamp: true,
+                        avatars: true,
+                        toptweets: true,
+                        behavior: 'all'
+                    }
+                }).render().start();
+            </script>
+        </div>
+    </div>
+    <div id="footer">
+        <p style="float: right;">
+            <a class="producer" href="{{ page.producer_url }}">
+                <img src="{{ page.producer_image }}" alt="{{ page.producer_name }}" />
+            </a>
+        </p>
+        {{ page.footer }}
+    </div>
+</div>
+
+<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
+<script type="text/javascript">
+
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-2963283-5']);
+    _gaq.push(['_setDomainName', 'synopslive.net']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+
+</script>
+</body>
+</html>

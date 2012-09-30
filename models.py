@@ -148,7 +148,7 @@ class Carton(models.Model):
     fb_url = models.CharField("Lien Facebook", max_length=255, blank=True,
                               help_text="URL associée au bouton Facebook. Le bouton Facebook ne sera pas affiché si ce champ est vide.")
 
-    tw_msg = models.CharField("Bouton Twitter", max_length=255, default="Twitter avec", blank=True,
+    tw_msg = models.CharField("Bouton Twitter", max_length=255, default="Tweeter avec", blank=True,
                               help_text="Message affiché sur le bouton Twitter présent sur le carton. HTML autorisé.")
     tw_url = models.CharField("Lien Twitter", max_length=255, blank=True,
                               help_text="URL associée au bouton Twitter. Le bouton Twitter ne sera pas affiché si ce champ est vide." \
@@ -171,6 +171,39 @@ class Carton(models.Model):
             return u"%s" % self.episode + ((u" - %s" % self.title) if self.title else u"")
 
     pass
+
+class LivePage(models.Model):
+    show = models.OneToOneField(Show, primary_key=True)
+
+    synopsis = MarkupField(verbose_name="Synopsis", markup_type="markdown", blank=True,
+                           help_text="Texte affiché sur la colonne de gauche. Supporte le Markdown.")
+
+    twitter_query = models.CharField("Requête Twitter", max_length=255, default="SynopsLive OR @SynopsLive")
+    twitter_title = models.CharField("Titre Twitter", max_length=255, default="Vos réactions à l'émission")
+    twitter_subject = models.CharField("Sur-titre Twitter", max_length=255, default="Réagissez en direct")
+
+    twitter_button_message = models.CharField("Message par défaut (Twitter)", max_length=255)
+    twitter_button_label = models.CharField("Label du bouton Twitter", max_length=255)
+    twitter_theme = models.TextField("Thème de Twitter (JSON)", default="{}")
+
+    producer_image = models.CharField("Logo du producteur", max_length=255, blank=True)
+    producer_name = models.CharField("Nom du producteur", max_length=255, blank=True, default='SynopsLive')
+    producer_url = models.CharField("URL du producteur", max_length=255, blank=True, default='http://synopslive.net')
+
+    top_image = models.CharField("Logo de l'émission (en haut)", max_length=255, blank=True)
+    top_link_url = models.CharField("Lien de l'émission (en haut)", max_length=255, blank=True)
+
+    footer = MarkupField(verbose_name="Texte du footer", markup_type="markdown", blank=True,
+                         help_text="Texte affiché tout en bas de la page. Supporte le Markdown.")
+
+    css = models.TextField("Style CSS spécifique", default="/* Code CSS ici */")
+
+    def __unicode__(self):
+        return u"Page de %s" % self.show
+
+    class Meta:
+        verbose_name = "page de direct"
+        verbose_name_plural = "pages de direct"
 
 class Category(models.Model):
     name = models.CharField("Nom de la catégorie", max_length=50)

@@ -179,8 +179,6 @@ class LivePage(models.Model):
                            help_text="Texte affiché sur la colonne de gauche. Supporte le Markdown.")
 
     twitter_query = models.CharField("Requête Twitter", max_length=255, default="SynopsLive OR @SynopsLive")
-    twitter_title = models.CharField("Titre Twitter", max_length=255, default="Vos réactions à l'émission")
-    twitter_subject = models.CharField("Sur-titre Twitter", max_length=255, default="Réagissez en direct")
 
     twitter_button_message = models.CharField("Message par défaut (Twitter)", max_length=255)
     twitter_button_label = models.CharField("Label du bouton Twitter", max_length=255)

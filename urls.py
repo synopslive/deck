@@ -7,7 +7,7 @@ urlpatterns = patterns('',
     url(r'^emissions/qlggmc$', views.view_show,  name='show'),
 
     url(r'^direct/?$', views.live_player, name='live'),
-    url(r'^direct/?(?P<show>(-|\w)+)$', views.live_page, name='live-page'),
+    url(r'^direct/(?P<show>(-|\w)+)$', views.live_page, name='live-page'),
 
     url(r'^replay(?:/(?P<page>\d+))?/?$', views.replay, name='replay'),
 

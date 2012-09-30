@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import json
 from django.core import serializers
 from django.http import HttpResponse, Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.template import Context, loader
 from deck.models import Carton, Episode, Show, LivePage
 
@@ -15,6 +15,21 @@ def home(request):
     return render(request, "home.html", {'cartons': cartons, 'has_highlights': has_highlights})
 
 def live_player(request):
+    try:
+        episode = Episode.objects.filter(time__lte = datetime.now() + timedelta(hours=12)) \
+                                 .filter(time__gte = datetime.now() - timedelta(hours=4)) \
+                                 .exclude(termined = True).order_by("time").select_related('show')[0]
+
+        try:
+            livepage = episode.show.livepage
+
+            if livepage:
+                return redirect('live-page', show=episode.show.slug)
+        except LivePage.DoesNotExist:
+            pass
+    except IndexError:
+        pass
+
     return render(request, "live.html", {})
 
 def live_page(request, show):

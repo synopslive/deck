@@ -37,24 +37,43 @@ body.letter-space-please h1, body.letter-space-please .tagline p {
 }
 
 #planning {
-    bottom: 0;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    position: absolute;
-    width: 1000px;
-    height: 50px;
-    bottom: 0;
-    box-shadow: inset 0px 8px 4px rgba(0,0,0, 0.1), inset 0px 16px 8px rgba(0,0,0, 0.2);
-    color: #555555;
-    cursor: default;
-    z-index: 14;
+  bottom: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  width: 1000px;
+  height: 50px;
+  bottom: 0;
+  box-shadow: inset 0px 8px 4px rgba(0, 0, 0, 0.1), inset 0px 16px 8px rgba(0, 0, 0, 0.2);
+  color: #555555;
+  cursor: default;
+  z-index: 14;
 
-    li {
+  li {
+    float: left;
+
+    & > time {
+      font-size: 8pt;
+      line-height: 19px;
+      display: block;
+      border-bottom: 1px solid #555555;
+      padding-left: 7px;
+    }
+
+    ul {
+      & {
+        clear: left;
+        margin-left: 0;
+        padding-left: 0;
+      }
+
+      li {
         padding: 0;
         list-style: none;
-        height: 50px;
-        width: 240px;
+        height: 37px;
+      /*width: 180px;*/
+        margin-right: 10px;
         float: left;
 
         cursor: pointer;
@@ -64,13 +83,40 @@ body.letter-space-please h1, body.letter-space-please .tagline p {
         transition: color 0.5s;
 
         &:hover {
-            color: #d1d1d1;
+          color: #d1d1d1;
         }
 
         &.selected {
-            color: white;
+          color: white;
         }
+
+        .horaire {
+          font-family: "Ubuntu Condensed", Impact, sans-serif;
+          font-size: 18pt;
+          margin: 0;
+          display: block;
+          float: left;
+          padding-left: 6px;
+          padding-top: 2px;
+
+          em {
+            font-style: normal;
+            font-size: 14pt;
+          }
+        }
+
+        .titre {
+          display: block;
+          margin: 0;
+          line-height: 24px;
+          font-size: 10pt;
+          margin-left: 60px;
+          margin-top: 3px;
+          font-weight: normal;
+        }
+      }
     }
+  }
 }
 
 section.carton {

@@ -54,15 +54,17 @@
             </section>
         {% endfor %}
         <ul id="planning">
-            {% for carton in cartons %}
-                <li class="planning-info" data-cartonid="{{ carton.id }}">
-                    <p class="horaire">{{ carton.episode.time.hour }}<em>h{{ carton.episode.time.minute|zfill:2 }}</em></p>
-                    <p class="jour"><time>{{ carton.episode.time|date:"l d M. Y"|lower }}</time></p>
-                {% if not carton.standalone %}
-                    <p class="titre"><strong>{{ carton.episode.show.short }}</strong> #{{ carton.episode.number }}</p>
-                {% else %}
-                    <p class="titre">{{ carton.title }}</p>
-                {% endif %}
+            {% regroup cartons by episode.time|day_and_timeslot as timeslots_grouped %}
+            {% for timeslot in timeslots_grouped %}
+                <li class="jour"><time>{{ timeslot.grouper }}</time>
+                    <ul>
+                        {% for carton in timeslot.list %}
+                            <li class="refcarton" data-cartonid="{{ carton.id }}">
+                                <p class="horaire">{{ carton.episode.time.hour }}<em>h{{ carton.episode.time.minute|zfill:2 }}</em></p>
+                                <p class="titre"><strong>{{ carton.episode.show.short }}</strong> #{{ carton.episode.number }}</p>
+                            </li>
+                        {% endfor %}
+                    </ul>
                 </li>
             {% endfor %}
         </ul>

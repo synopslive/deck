@@ -30,7 +30,36 @@ def format_natural(value, arg=None):
                u'%s' % (str(value1.minute).zfill(2) if value1.minute > 0 else '')
     else:
         return u'%s' % defaultfilters.date(value1, 'l d M.').lower() + u' à %sh' % str(value1.hour).zfill(2) + \
-               (u'%s' % str(value1.minute).zfill(2) if value1.minute < 0 else u'')
+               (u'%s' % str(value1.minute).zfill(2) if value1.minute > 0 else u'')
+
+def timeslot(value):
+    if isinstance(value, datetime):
+        if 5 <= value.hour <= 11:
+            return "morning"
+        elif 12 <= value.hour <= 17:
+            return "afternoon"
+        elif 18 <= value.hour <= 20:
+            return "evening"
+        elif value.hour == 21:
+            return "prime"
+        else:
+            return "night"
+    else:
+        return "unknown (" + str(type(value)) + ")"
+
+i18n_today = { 'morning': 'ce matin', 'afternoon': 'cet après-midi', 'evening': 'en début de soirée', 'prime': 'ce soir', 'night': 'cette nuit'  }
+i18n_later = { 'morning': 'matin', 'afternoon': 'après-midi', 'evening': 'en début de soirée', 'prime': 'soir', 'night': 'en fin de soirée' }
+
+def day_and_timeslot(value):
+    global i18n_today, i18n_later
+    if isinstance(value, datetime):
+        delta_date = value.date() - date.today()
+        if not delta_date.days:
+            return i18n_today[timeslot(value)].capitalize()
+        else:
+            return defaultfilters.date(value, 'l').capitalize() + i18n_later[timeslot(value)]
+    else:
+        return "unknown (" + str(type(value)) + ")"
 
 def leading_zeros(value, desired_digits):
     """
@@ -45,4 +74,6 @@ def leading_zeros(value, desired_digits):
     return "".join(padded_value)
 
 register.filter('format_time', format_natural)
+register.filter('timeslot', timeslot)
+register.filter('day_and_timeslot', day_and_timeslot)
 register.filter('zfill', leading_zeros)

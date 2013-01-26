@@ -20,11 +20,13 @@ function changeTo(id){
 
     current_id = id;
 
-    if($(".carton").length > 1){
+    var $carton = $(".carton");
+
+    if($carton.length > 1){
         next.addClass("next").removeClass('up');
 
-        $("ul#planning li").removeClass("selected");
-        $("ul#planning li[data-cartonid=" + id +  "]").addClass("selected");
+        $(".refcarton").removeClass("selected");
+        $(".refcarton[data-cartonid=" + id +  "]").addClass("selected");
 
         current.removeClass('up');
         timeout_change1 = window.setTimeout(function(){
@@ -35,7 +37,7 @@ function changeTo(id){
                 }, 1000);
         }, 250);
     }else{
-        $(".carton").addClass("selected").addClass("up");
+        $carton.addClass("selected").addClass("up");
     }
 }
 
@@ -43,9 +45,9 @@ var current_id = 0;
 var change_interval = null;
 
 function nextCarton(){
-    var nextone = $("ul#planning li[data-cartonid=" + current_id + "]").next();
+    var nextone = $(".refcarton[data-cartonid=" + current_id + "]").next();
     if(!nextone.length){
-        nextone = $("ul#planning li:first");
+        nextone = $(".refcarton:first");
     }
 
     changeTo(nextone.attr("data-cartonid"));
@@ -67,12 +69,12 @@ $(document).ready(function(){
     if($("#page.home .carton.highlighted").length){
         changeTo($("#page.home .carton.highlighted:first").attr("data-cartonid"));
     }else{
-        changeTo($("ul#planning li:first").attr("data-cartonid"));
+        changeTo($(".refcarton:first").attr("data-cartonid"));
     }
 
     resetChangeInterval();
 
-    $("ul#planning li").click(function(){
+    $(".refcarton").click(function(){
        changeTo($(this).attr("data-cartonid"));
 
        resetChangeInterval();

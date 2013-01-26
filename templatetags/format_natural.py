@@ -57,7 +57,11 @@ def day_and_timeslot(value):
         if not delta_date.days:
             return i18n_today[timeslot(value)].capitalize()
         else:
-            return defaultfilters.date(value, 'l').capitalize() + " " + i18n_later[timeslot(value)].decode('utf-8')
+            dat_timeslot = i18n_later[timeslot(value)].decode('utf-8')
+            if delta_date.days > 7:
+                return defaultfilters.date(value, 'l').capitalize() + " " + dat_timeslot
+            else:
+                return defaultfilters.date(value, 'l d M.').capitalize() + " " + dat_timeslot
     else:
         return "unknown (" + str(type(value)) + ")"
 

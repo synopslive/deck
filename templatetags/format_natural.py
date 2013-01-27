@@ -34,21 +34,21 @@ def format_natural(value, arg=None):
 
 def timeslot(value):
     if isinstance(value, datetime):
-        if 5 <= value.hour <= 11:
+        if value.hour <= 4:
+            return "early"
+        elif 5 <= value.hour <= 11:
             return "morning"
         elif 12 <= value.hour <= 17:
             return "afternoon"
         elif 18 <= value.hour <= 20:
             return "evening"
-        elif value.hour == 21:
-            return "prime"
         else:
-            return "night"
+            return "prime"
     else:
         return "unknown (" + str(type(value)) + ")"
 
-i18n_today = { 'morning': 'ce matin', 'afternoon': 'cet après-midi', 'evening': 'en début de soirée', 'prime': 'ce soir', 'night': 'cette nuit'  }
-i18n_later = { 'morning': 'matin', 'afternoon': 'après-midi', 'evening': 'en début de soirée', 'prime': 'soir', 'night': 'en fin de soirée' }
+i18n_today = { 'early': 'très tôt', 'morning': 'ce matin', 'afternoon': 'cet après-midi', 'evening': 'en début de soirée', 'prime': 'ce soir' }
+i18n_later = { 'early': 'très tôt', 'morning': 'matin', 'afternoon': 'après-midi', 'evening': 'en début de soirée', 'prime': 'soir' }
 
 def day_and_timeslot(value):
     global i18n_today, i18n_later

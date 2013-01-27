@@ -68,11 +68,9 @@ def day_and_timeslot(value):
 
 def before_now(value):
     if isinstance(value, datetime):
-        delta_date = value.date() - date.today()
         delta = value - datetime.now()
-        if not delta_date.days:
-            if delta.total_seconds() < 0:
-                return 1
+        if delta.total_seconds() < 0:
+            return 1
     return 0
 
 def leading_zeros(value, desired_digits):

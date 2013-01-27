@@ -41,16 +41,20 @@
                         <!--<a href="http://synopslive.net/">(plus d'infos)</a>-->
                     </p>
                 </aside>
-                {% if carton.fb_url %}
-                <aside class="social-event">
-                    <a href="{{ carton.fb_url }}" class="add-on-facebook">{{ carton.fb_msg|safe }}</a>
+                <aside class="quick-buttons">
+                    {% if carton.episode.time|before_now and not carton.episode.termined %}
+                        <a href="{% url live %}" class="do do-listen-live">Écouter sur <strong>en direct</strong> sur SynopsLive</a>
+                    {% endif %}
+                    {% if carton.episode.time|before_now and carton.episode.download_set.count > 0 %}
+                        <a href="{% url replay-show show=carton.episode.show.slug %}" class="do do-download">Télécharger sur <strong>le Replay</strong></a>
+                    {% endif %}
+                    {% if carton.fb_url %}
+                        <a href="{{ carton.fb_url }}" class="do do-add-on-facebook">{{ carton.fb_msg|safe }}</a>
+                    {% endif %}
+                    {% if carton.tw_url %}
+                        <a href="{{ carton.tw_url }}" class="do do-twitter">{{ carton.tw_msg|safe }}</a>
+                    {% endif %}
                 </aside>
-                {% endif %}
-                {% if carton.tw_url %}
-                <aside class="social-talk">
-                    <a href="{{ carton.tw_url }}" class="chat-on-twitter">{{ carton.tw_msg|safe }}</a>
-                </aside>
-                {% endif %}
             </section>
         {% endfor %}
         <ul id="planning">

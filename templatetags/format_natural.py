@@ -65,6 +65,16 @@ def day_and_timeslot(value):
     else:
         return "unknown (" + str(type(value)) + ")"
 
+
+def before_now(value):
+    if isinstance(value, datetime):
+        delta_date = value.date() - date.today()
+        delta = value - datetime.now()
+        if not delta_date.days:
+            if delta.total_seconds() < 0:
+                return 1
+    return 0
+
 def leading_zeros(value, desired_digits):
     """
     Given an integer, returns a string representation, padded with [desired_digits] zeros.
@@ -80,4 +90,5 @@ def leading_zeros(value, desired_digits):
 register.filter('format_time', format_natural)
 register.filter('timeslot', timeslot)
 register.filter('day_and_timeslot', day_and_timeslot)
+register.filter('before_now', before_now)
 register.filter('zfill', leading_zeros)

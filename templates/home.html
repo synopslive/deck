@@ -61,7 +61,7 @@
                         {% for carton in timeslot.list %}
                             <li class="refcarton" data-cartonid="{{ carton.id }}">
                                 <p class="horaire">{{ carton.episode.time.hour }}<em>h{{ carton.episode.time.minute|zfill:2 }}</em></p>
-                                <p class="titre"><strong>{{ carton.episode.show.short }}</strong> #{{ carton.episode.number }}</p>
+                                <p class="titre"><strong>{{ carton.episode.show.short }}</strong> #{{ carton.episode.number }} ({{ carton.id }})</p>
                             </li>
                         {% endfor %}
                     </ul>

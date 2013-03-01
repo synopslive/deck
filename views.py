@@ -21,6 +21,12 @@ def live_player(request):
                                  .exclude(termined = True).order_by("time").select_related('show')[0]
 
         try:
+            if episode.show.livepage_url is not None and len(episode.show.livepage_url) > 1:
+                return redirect(episode.show.livepage_url)
+
+            if episode.livepage_url is not None and len(episode.livepage_url) > 1:
+                return redirect(episode.livepage_url)
+
             livepage = episode.show.livepage
 
             if livepage:

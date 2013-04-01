@@ -81,13 +81,9 @@ function nextCarton(){
     var currentIndex = carton_ids.indexOf(parseInt(current_id, 10));
     var newIndex = 0;
 
-    console.log("Current idx > " + currentIndex);
-
     if(currentIndex + 1 < carton_ids.length) {
         newIndex = currentIndex + 1;
     }
-
-    console.log("  New index > " + newIndex + " = " + carton_ids[newIndex]);
 
     var nextone = $(".refcarton[data-cartonid=" + carton_ids[newIndex] + "]");
     if(!nextone.length){
@@ -95,7 +91,6 @@ function nextCarton(){
     }
 
     changeTo(nextone.attr("data-cartonid"));
-    console.log("Current_id > " + current_id)
 }
 
 function resetChangeInterval(){
@@ -119,9 +114,6 @@ $(document).ready(function(){
         if(carton_ids.indexOf(cid) === -1) {
             carton_ids.push(cid);
         }
-        console.log(carton_ids);
-        console.log(carton_ids.length);
-        console.log(carton_ids.indexOf(cid));
     });
 
     if($(".carton.highlighted").length){

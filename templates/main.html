@@ -5,7 +5,7 @@
     <title>SynopsLive</title>
     <meta charset="utf-8" />
     <link rel="icon" href="/public/favicon.png" />
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
     <!-- Webfonts are beautiful. -->
     <link href="http://fonts.googleapis.com/css?family=Ubuntu:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css" />
@@ -15,6 +15,7 @@
     {% compress css %}
         <link rel="stylesheet" type="text/less" media="screen" href="/static/css/main.less" charset="utf-8">
         <link rel="stylesheet" type="text/less" media="screen" href="/static/css/header.less" charset="utf-8">
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/font-awesome.less" charset="utf-8">
         {% block custom_css %}
         {% endblock %}
     {% endcompress %}
@@ -62,9 +63,9 @@
             <!--<li id="toutes-emissions"><a href="/decouvrir/nos-emissions">Vos émissions</a></li>
             <li id="toutes-equipe"><a href="/decouvrir/nos-emissions">Votre équipe</a></li>
             <li id="toutes-communaute"><a href="/decouvrir/nos-emissions">Votre webradio</a></li>-->
-            <li id="listen-now" class="bouton"><a href="{% url live %}">Écouter en direct</a></li>
-            <li id="channel-irc" class="bouton"><a href="{% url channel %}">Channel IRC</a></li>
-            <li id="download-now"><a href="{% url replay %}">Replay</a></li>
+            <li id="listen-now" class="bouton"><a href="{% url "live" %}">Écouter en direct</a></li>
+            <li id="channel-irc" class="bouton"><a href="{% url "channel" %}">Channel IRC</a></li>
+            <li id="download-now"><a href="{% url "replay" %}">Replay</a></li>
         </ul>
     </div>
     {% block main_content %}{% endblock %}

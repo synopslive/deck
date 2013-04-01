@@ -43,10 +43,10 @@
                 </aside>
                 <aside class="quick-buttons">
                     {% if carton.episode.time|before_now and not carton.episode.termined %}
-                        <a href="{% url live %}" class="do do-listen-live">Écouter sur <strong>en direct</strong> sur SynopsLive</a>
+                        <a href="{% url "live" %}" class="do do-listen-live">Écouter sur <strong>en direct</strong> sur SynopsLive</a>
                     {% endif %}
                     {% if carton.episode.time|before_now and carton.episode.download_set.count > 0 %}
-                        <a href="{% url replay-show show=carton.episode.show.slug %}" class="do do-download">Télécharger sur <strong>le Replay</strong></a>
+                        <a href="{% url "replay-show" show=carton.episode.show.slug %}" class="do do-download">Télécharger sur <strong>le Replay</strong></a>
                     {% endif %}
                     {% if carton.fb_url %}
                         <a href="{{ carton.fb_url }}" class="do do-add-on-facebook">{{ carton.fb_msg|safe }}</a>

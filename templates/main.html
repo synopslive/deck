@@ -25,33 +25,6 @@
     <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
     <script src="http://trichelieu.net/trichbar.js.php?synopslive" type="text/javascript"></script>
     <style type="text/css">
-        #header ul li#channel-irc a {
-	    background: -moz-linear-gradient(center top , white, #EDEDED) repeat scroll 0 0 transparent;
-	    background: #fff;
-            background: -webkit-gradient(linear, left top, left bottom, from(white), to(#ededed));
-            background: -moz-linear-gradient(top, white, #ededed);
-	    border-radius: 6px 6px 6px 6px;
-	    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
-	    color: rgb(96, 96, 96);
-	    cursor: pointer;
-	    display: inline-block;
-	    font-size: 12pt;
-	    font-weight: bold;
-	    margin: 13px 5px;
-	    outline: medium none;
-	    padding: 8px 10px;
-	    text-align: center;
-	    text-decoration: none;
-	    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);	
-	    vertical-align: baseline;
-
-	    border-radius: 0;
-	    margin-left: 0;
-            margin-right: 0;
-	    padding-left: 11px;
-            float: right;
-	}
-	#header ul li#channel-irc { float: right; }
         div#trichbar { position: fixed !important; }
     </style>
 </head>
@@ -63,9 +36,9 @@
             <!--<li id="toutes-emissions"><a href="/decouvrir/nos-emissions">Vos émissions</a></li>
             <li id="toutes-equipe"><a href="/decouvrir/nos-emissions">Votre équipe</a></li>
             <li id="toutes-communaute"><a href="/decouvrir/nos-emissions">Votre webradio</a></li>-->
-            <li id="listen-now" class="bouton"><a href="{% url "live" %}">Écouter en direct</a></li>
-            <li id="channel-irc" class="bouton"><a href="{% url "channel" %}">Channel IRC</a></li>
-            <li id="download-now"><a href="{% url "replay" %}">Replay</a></li>
+            <li id="listen-now" class="bouton"><a href="{% url "live" %}"><i class="icon-play"></i> Écouter en direct</a></li>
+            <li id="channel-irc" class="bouton"><a href="{% url "channel" %}"><i class="icon-comment-alt"></i> Channel IRC</a></li>
+            <li id="download-now"><a href="{% url "replay" %}"><i class="icon-download-alt"></i> Replay</a></li>
         </ul>
     </div>
     {% block main_content %}{% endblock %}

@@ -55,30 +55,9 @@
             <a class="do do-twitter as-block" href="https://twitter.com/intent/tweet?text={{ page.twitter_button_message|urlencode }}">
                 {{ page.twitter_button_label|safe }}
             </a>
-            <script src="http://widgets.twimg.com/j/2/widget.js"></script>
-            <script>
-                new TWTR.Widget({
-                    version: 2,
-                    type: 'search',
-                    search: '{{ page.twitter_query|escapejs }}',
-                    interval: 6000,
-                    title: 'Vos réactions sur Twitter',
-                    subject: 'À propos de {{ show.name|escapejs }}',
-                    width: 'auto',
-                    height: 500,
-                    theme: {{ page.twitter_theme|safe }},
-                    features: {
-                        scrollbar: true,
-                        loop: false,
-                        live: true,
-                        hashtags: true,
-                        timestamp: true,
-                        avatars: true,
-                        toptweets: true,
-                        behavior: 'all'
-                    }
-                }).render().start();
-            </script>
+            <div class="wrap-twitter">
+                {{ page.twitter_widget|safe }}
+            </div>
         </div>
     </div>
     <div id="footer">

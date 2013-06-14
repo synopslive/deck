@@ -139,7 +139,7 @@ class Carton(models.Model):
                                  default="http://synopslive.net/static/medias/cartons-ng/fonds/terrasse.jpg",
                                  blank=True,
                                  help_text="Cette image de fond devrait suivre le " \
-                                           "<a href=\"http://www.1mage.net/images/infocarton.png\">patron</a> " \
+                                           "<a href=\"http://www.1mage.fr/images/infocarton.png\">patron</a> " \
                                            "pour une plus grande efficacité.")
 
     fb_msg = models.CharField("Bouton Facebook", max_length=255,
@@ -178,11 +178,11 @@ class LivePage(models.Model):
     synopsis = MarkupField(verbose_name="Synopsis", markup_type="markdown", blank=True,
                            help_text="Texte affiché sur la colonne de gauche. Supporte le Markdown.")
 
-    twitter_query = models.CharField("Requête Twitter", max_length=255, default="SynopsLive OR @SynopsLive")
-
     twitter_button_message = models.CharField("Message par défaut (Twitter)", max_length=255)
     twitter_button_label = models.CharField("Label du bouton Twitter", max_length=255)
-    twitter_theme = models.TextField("Thème de Twitter (JSON)", default="{}")
+    twitter_widget = models.TextField("Widget Twitter (HTML)", blank=True,
+                                    help_text="Générez le widget sur <a href=\"https://twitter.com/settings/widgets\" " \
+                                              "la page dédiée sur Twitter</a> et collez-le dans ce champ.")
 
     producer_image = models.CharField("Logo du producteur", max_length=255, blank=True)
     producer_name = models.CharField("Nom du producteur", max_length=255, blank=True, default='SynopsLive')

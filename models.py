@@ -181,7 +181,7 @@ class LivePage(models.Model):
     twitter_button_message = models.CharField("Message par défaut (Twitter)", max_length=255)
     twitter_button_label = models.CharField("Label du bouton Twitter", max_length=255)
     twitter_widget = models.TextField("Widget Twitter (HTML)", blank=True,
-                                    help_text="Générez le widget sur <a href=\"https://twitter.com/settings/widgets\" " \
+                                    help_text="Générez le widget sur <a href=\"https://twitter.com/settings/widgets\"> " \
                                               "la page dédiée sur Twitter</a> et collez-le dans ce champ.")
 
     producer_image = models.CharField("Logo du producteur", max_length=255, blank=True)

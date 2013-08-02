@@ -19,3 +19,7 @@ urlpatterns = patterns('',
 
     url(r'^force-404/?', views.force404),
 )
+
+urlpatterns += patterns('django.contrib.flatpages.views',
+    (r'^(?P<url>.*)$', 'flatpage'),
+)

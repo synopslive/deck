@@ -1,0 +1,41 @@
+.pagination {
+    clear: both;
+
+    p {
+      text-align: center;
+      margin-bottom: 20px;
+      margin-left: 70px;
+      margin-right: 70px;
+      min-height: 4em;
+      font-size: 10.5pt;
+      line-height: 1.2em;
+
+      .current {
+        display: inline-block;
+        padding: 5px 5px;
+        margin-left: 200px;
+        margin-right: 200px;
+      }
+
+      a {
+        border: 1px solid rgba(255,255,255,0.2);
+        display: inline-block;
+        padding: 5px 5px;
+        border-radius: 5px;
+      }
+
+      a.previous-page {
+        float: left;
+      }
+
+      a.next-page {
+        float: right;
+      }
+
+      a:hover, a:focus, a:active {
+        background-color: rgba(255,255,255,0.1);
+        text-decoration: inherit;
+        outline: none;
+      }
+    }
+  }

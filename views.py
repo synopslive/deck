@@ -1,24 +1,25 @@
 # Create your views here.
 from datetime import datetime, timedelta
 import json
-from django.core import serializers
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
-from django.template import Context, loader
 from deck.models import Carton, Episode, Show, LivePage
 
-def home(request):
-    cartons = Carton.objects.filter(visible = True).order_by("episode__time").all()
 
-    has_highlights = Carton.objects.filter(visible = True, highlighted = True).count() > 0
+def home(request):
+    cartons = Carton.objects.filter(visible=True).order_by("episode__time").all()
+
+    has_highlights = Carton.objects.filter(visible=True, highlighted=True).count() > 0
 
     return render(request, "home.html", {'cartons': cartons, 'has_highlights': has_highlights})
 
+
 def live_player(request):
     try:
-        episode = Episode.objects.filter(time__lte = datetime.now() + timedelta(hours=12)) \
-                                 .filter(time__gte = datetime.now() - timedelta(hours=4)) \
-                                 .exclude(termined = True).order_by("time").select_related('show')[0]
+        episode = Episode.objects.filter(time__lte=datetime.now() + timedelta(hours=12)) \
+            .filter(time__gte=datetime.now() - timedelta(hours=4)) \
+            .exclude(termined=True).order_by("time").select_related('show')[0]
 
         try:
             if episode.show.livepage_url is not None and len(episode.show.livepage_url) > 1:
@@ -38,6 +39,7 @@ def live_player(request):
 
     return render(request, "live.html", {})
 
+
 def live_page(request, show):
     show = get_object_or_404(Show, slug=show)
     try:
@@ -47,36 +49,59 @@ def live_page(request, show):
 
     return render(request, "live-page.html", {"show": show, 'page': page})
 
+
 def channel(request):
     return render(request, "channel.html", {})
 
+
 def replay(request, page=1, show=None):
-    query = Episode.objects.filter(time__lte = datetime.now()).select_related('show')
+    episodes = Episode.objects.filter(time__lte=datetime.now()).select_related('show')
     shows = Show.objects.all()
 
     if show is not None:
         show = get_object_or_404(Show, slug=show)
-        query = query.filter(show = show)
+        episodes = episodes.filter(show=show)
 
-    episodes = query.order_by("time").reverse().all()
+    episodes = episodes.order_by("time").reverse()
 
-    return render(request, "replay.html", {'episodes': episodes, 'shows': shows, 'current_show': show})
+    paged = Paginator(episodes, 10)
+
+    page = request.GET.get('page')
+    try:
+        current_page_episodes = paged.page(page)
+    except PageNotAnInteger:
+        current_page_episodes = paged.page(1)
+    except EmptyPage:
+        current_page_episodes = paged.page(paged.num_pages)
+
+    return render(request, "replay.html", {
+        'episodes': current_page_episodes,
+        'shows': shows,
+        'current_show': show,
+        'total': episodes.count()
+    })
+
 
 def view_show(request):
     return render(request, "show.html", {})
+
 
 def force404(request):
     return render(request, "404.html", {})
 
 
+def force500(request):
+    return render(request, "500.html", {})
+
+
 def export_cartons(request):
-    cartons = Carton.objects.filter(visible = True)\
-                            .filter(episode__termined = False) \
-                            .filter(episode__time__lte = datetime.now() + timedelta(days = 3))\
-                            .select_related('episode')\
-                            .select_related('show') \
-                            .order_by("episode__time") \
-                            .all()
+    cartons = Carton.objects.filter(visible=True) \
+        .filter(episode__termined=False) \
+        .filter(episode__time__lte=datetime.now() + timedelta(days=3)) \
+        .select_related('episode') \
+        .select_related('show') \
+        .order_by("episode__time") \
+        .all()
 
     result = []
 

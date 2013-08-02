@@ -13,9 +13,10 @@
     <link href='http://fonts.googleapis.com/css?family=Overlock:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
 
     {% compress css %}
-        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/main.less" charset="utf-8">
-        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/header.less" charset="utf-8">
-        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/font-awesome.less" charset="utf-8">
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/main.less" />
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/header.less" />
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/font-awesome.less" />
+        <link rel="stylesheet" type="text/less" media="screen" href="/static/css/pagination.less" />
         {% block custom_css %}
         {% endblock %}
     {% endcompress %}
@@ -37,7 +38,6 @@
             <li id="toutes-equipe"><a href="/decouvrir/nos-emissions">Votre équipe</a></li>
             <li id="toutes-communaute"><a href="/decouvrir/nos-emissions">Votre webradio</a></li>-->
             <li id="listen-now" class="bouton"><a href="{% url "live" %}"><i class="icon-play"></i> Écouter en direct</a></li>
-            <li id="channel-irc" class="bouton"><a href="{% url "channel" %}"><i class="icon-comment-alt"></i> Channel IRC</a></li>
             <li id="download-now"><a href="{% url "replay" %}"><i class="icon-download-alt"></i> Replay</a></li>
         </ul>
     </div>
@@ -48,17 +48,11 @@
                 SynopsLive, toujours quelque chose à découvrir depuis 2007
             </p>
             <p class="contboutons">
-                <a href="http://www.stanisoft.net">
-                    Stanisoft.net
-                </a>
                 <a href="http://www.netophonix.com/">
                     Netophonix
                 </a>
                 <a href="http://www.magoyond.com/">
                     Magoyond
-                </a>
-                <a href="http://www.macp3.info/">
-                    MacP3.info
                 </a>
                 <a href="http://www.radio01.net/">
                     Radio01.net

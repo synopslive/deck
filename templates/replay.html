@@ -25,7 +25,7 @@
     {% if current_show == None %}
         <p class="big-message">
             Retrouvez toutes les émissions diffusées, des plus récentes à nos archives.
-            <small>({{ episodes.count }} pour être exact)</small>
+            <small>({{ total }} pour être exact)</small>
         </p>
     {% else %}
         <div class="show-description">
@@ -83,5 +83,29 @@
             {{ episode.content }}
         </div>
     </article>
+    {% empty %}
+        <p class="big-message">Aucune émission déjà disponible.</p>
     {% endfor %}
+
+    {% if episodes.has_previous or episodes.has_next %}
+    <div class="pagination">
+        <p>
+            {% if episodes.has_previous %}
+                <a class="previous-page" href="?page={{ episodes.previous_page_number }}">
+                    <i class="icon-chevron-left"></i>&nbsp; Émissions plus récentes
+                </a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ episodes.number }} sur {{ episodes.paginator.num_pages }}
+            </span>
+
+            {% if episodes.has_next %}
+                <a class="next-page" href="?page={{ episodes.next_page_number }}">
+                    Émissions plus anciennes &nbsp;<i class="icon-chevron-right"></i>
+                </a>
+            {% endif %}
+        </p>
+    </div>
+    {% endif %}
 {% endblock %}

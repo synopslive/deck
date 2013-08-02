@@ -1,0 +1,10 @@
+{% extends "main.html" %}
+
+{% block main_content %}
+    <div id="document">
+        <div id="page" class="{% block page_classes %}generic{% endblock %}">
+            {% block page_content %}
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,6 +1,8 @@
 {% extends "page.html" %}
 {% load format_natural %}
 
+{% block title %}{% if current_show == None %}Replay{% else %}{{ current_show.name }} en replay{% endif %}{% endblock %}
+
 {% block custom_css %}
     <link rel="stylesheet" type="text/less" media="screen" href="/static/css/replay.less" />
 {% endblock %}

@@ -97,7 +97,7 @@ def force500(request):
 def export_cartons(request):
     cartons = Carton.objects.filter(visible=True) \
         .filter(episode__termined=False) \
-        .filter(episode__time__lte=datetime.now() + timedelta(days=3)) \
+        .filter(episode__time__lte=datetime.now() + timedelta(days=45)) \
         .select_related('episode') \
         .select_related('show') \
         .order_by("episode__time") \

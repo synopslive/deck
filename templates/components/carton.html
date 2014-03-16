@@ -1,0 +1,47 @@
+{% load format_natural %}
+{% load safe_markdown %}
+
+<article class="carton"
+         data-episode-id="{{ episode.id }}">
+    <div class="bgimg">
+        <img src="{{ episode.auto_carton_image.url }}" alt="" />
+    </div>
+    <div class="carton-info">
+        <div class="maximizer">
+            <div class="carton-header">
+                <div class="pull-left">
+                    <h1>
+                        <a href="{% url "show" episode.show.slug %}" style="color: white; text-decoration: none;" tabindex="-1">
+                            {{ episode.show.name }}
+                            <i class="fa fa-fw fa-chevron-right" style="font-size: 0.7em; vertical-align: 0.15em;"></i>
+                        </a>
+                    </h1>
+                </div>
+
+                <div class="pull-right">
+                    <time>
+                        <span class="date">
+                        {% if episode.termined %}
+                            {{ episode.time|date:"l d M."|lower }}
+                        {% else %}
+                            {{ episode.time|format_time }}
+                        {% endif %}
+                        </span>
+                        <span class="hour">
+                            {{ episode.time.hour }}<em>h{{ episode.time.minute|zfill:2 }}</em>
+                        </span>
+                    </time>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="maximizer">
+            <div class="carton-content">
+                <h2>{{ episode.auto_carton_title }}</h2>
+                <div class="tagline">
+                    {{ episode.auto_carton_content | safe_markdown }}
+                </div>
+            </div>
+        </div>
+    </div>
+</article>

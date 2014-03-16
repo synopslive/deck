@@ -1,10 +1,16 @@
 from django.conf.urls import patterns, include, url
 import views
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
+
     url(r'^(?:home)?$', views.home, name='home'),
 
-    url(r'^emissions/qlggmc$', views.view_show,  name='show'),
+    url(r'^decouvrir/emissions$', views.list_shows, name='shows'),
+    url(r'^decouvrir/grille$', views.planning, name='planning'),
+
+    url(r'^emission/(?P<show>(-|\w)+)$', views.view_show, name='show'),
+    url(r'^emission/(?P<show>(-|\w)+)/(?P<page>\d+)?/?', views.view_show, name='show-page'),
 
     url(r'^direct/?$', views.live_player, name='live'),
     url(r'^direct/(?P<show>(-|\w)+)$', views.live_page, name='live-page'),
@@ -13,9 +19,10 @@ urlpatterns = patterns('',
 
     url(r'^replay/(?P<show>(-|\w)+)/(?P<page>\d+)?/?$', views.replay, name='replay-show'),
 
-    url(r'^discuter/channel/?$', views.channel,  name='channel'),
+    url(r'^discuter/channel/?$', views.channel, name='channel'),
 
-    url(r'^feeds/cartons.json$', views.export_cartons),
+    url(r'^feeds/cartons\.json$', views.export_cartons),
+    url(r'^feeds/current_episode\.json$', views.export_current_episode),
 
     url(r'^force-404/?', views.force404),
 )

@@ -7,6 +7,7 @@ import re
 
 register = template.Library()
 
+
 def format_natural(value, arg=None):
     try:
         value1 = datetime(value.year, value.month, value.day, value.hour, value.minute, value.second)
@@ -21,16 +22,12 @@ def format_natural(value, arg=None):
     if not delta_date.days:
         if delta.total_seconds() < 0:
             return u'Actuellement'
-        elif delta.total_seconds() / 60. / 60. < 1:
-            return u'Dans %d minutes' % int(delta.total_seconds() / 60.)
-        return u'Ce soir, à %sh' % str(value1.hour).zfill(2) + \
-               u'%s' % (str(value1.minute).zfill(2) if value1.minute > 0 else '')
+        return u'Ce soir'
     elif delta_date.days == 1:
-        return u'Demain, à %sh' % str(value1.hour).zfill(2) + \
-               u'%s' % (str(value1.minute).zfill(2) if value1.minute > 0 else '')
+        return u'Demain'
     else:
-        return u'%s' % defaultfilters.date(value1, 'l d M.').lower() + u' à %sh' % str(value1.hour).zfill(2) + \
-               (u'%s' % str(value1.minute).zfill(2) if value1.minute > 0 else u'')
+        return u'%s' % defaultfilters.date(value1, 'l d M.').lower()
+
 
 def timeslot(value):
     if isinstance(value, datetime):
@@ -47,8 +44,22 @@ def timeslot(value):
     else:
         return "unknown (" + str(type(value)) + ")"
 
-i18n_today = { 'early': 'très tôt', 'morning': 'ce matin', 'afternoon': 'cet après-midi', 'evening': 'en début de soirée', 'prime': 'ce soir' }
-i18n_later = { 'early': 'très tôt', 'morning': 'matin', 'afternoon': 'après-midi', 'evening': 'en début de soirée', 'prime': 'soir' }
+i18n_today = {
+    'early': 'très tôt',
+    'morning': 'ce matin',
+    'afternoon': 'cet après-midi',
+    'evening': 'en début de soirée',
+    'prime': 'ce soir'
+}
+
+i18n_later = {
+    'early': 'très tôt',
+    'morning': 'matin',
+    'afternoon': 'après-midi',
+    'evening': 'en début de soirée',
+    'prime': 'soir'
+}
+
 
 def day_and_timeslot(value):
     global i18n_today, i18n_later
@@ -72,6 +83,7 @@ def before_now(value):
         if delta.total_seconds() < 0:
             return 1
     return 0
+
 
 def leading_zeros(value, desired_digits):
     """

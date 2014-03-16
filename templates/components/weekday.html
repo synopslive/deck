@@ -1,0 +1,16 @@
+<li class="weekday">
+    <span>{{ day|date:"l j" }}</span>
+
+    <ul>
+        {% for episode in episodes %}
+            {% if episode.time.date == day %}
+                <li class="calendar-episode"
+                    data-episode-id="{{ episode.id }}"
+                    style="background-color: {{ episode.show.category.color }}">
+                    <b>{{ episode.show.short }}</b>
+                    <small>{{ episode.summary }}</small>
+                </li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</li>

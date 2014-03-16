@@ -1,8 +1,12 @@
 {% extends "main.html" %}
+{% load staticfiles %}
 
 {% block title %}{{ flatpage.title }}{% endblock %}
+{% block custom_css %}
+    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/panorama.less" %}" />
+{% endblock %}
 
-{% block main_content %}
+{% block page_content %}
     <div id="document">
         {{ flatpage.content }}
     </div>

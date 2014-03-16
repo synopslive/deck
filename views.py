@@ -1,53 +1,69 @@
-# Create your views here.
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time
 import json
+import re
+import urllib2
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404, redirect
-from deck.models import Carton, Episode, Show, LivePage
+from django.utils.encoding import force_unicode
+import markdown2
+from deck.models import Episode, Show, LivePage
 
 
 def home(request):
-    cartons = Carton.objects.filter(visible=True).order_by("episode__time").all()
+    today = datetime.today().date()
+    if today.weekday() in [5, 6]:
+        monday = today
+    else:
+        monday = today - timedelta(days=today.weekday())
 
-    has_highlights = Carton.objects.filter(visible=True, highlighted=True).count() > 0
+    next_episodes = Episode.objects.filter(
+        time__gte=datetime.combine(monday, time(0, 0)),
+        time__lt=datetime.combine(monday + timedelta(days=7), time(0, 0))
+    ).order_by("time")
 
-    return render(request, "home.html", {'cartons': cartons, 'has_highlights': has_highlights})
+    last_episodes = Episode.objects.filter(time__lte=datetime.now()).select_related('show').order_by("time").reverse()[:5]
+
+    return render(request, "home.html", {
+        'next_episodes': next_episodes,
+        'last_episodes': last_episodes,
+        'weekdays': [monday + timedelta(days=i) for i in range(7)]
+    })
+
+
+def planning(request):
+    monday = datetime.today().date() - timedelta(days=datetime.today().weekday())
+    episodes = Episode.objects.filter(
+        time__gte=datetime.combine(monday, time(0,0)),
+        time__lt=datetime.combine(monday + timedelta(days=7*4), time(0, 0))
+    ).order_by("time")
+
+    return render(request, "planning.html", {
+        'episodes': episodes,
+        'days': [monday + timedelta(days=i) for i in range(7*4)]
+    })
 
 
 def live_player(request):
-    try:
-        episode = Episode.objects.filter(time__lte=datetime.now() + timedelta(hours=12)) \
-            .filter(time__gte=datetime.now() - timedelta(hours=4)) \
-            .exclude(termined=True).order_by("time").select_related('show')[0]
-
-        try:
-            if episode.show.livepage_url is not None and len(episode.show.livepage_url) > 1:
-                return redirect(episode.show.livepage_url)
-
-            if episode.livepage_url is not None and len(episode.livepage_url) > 1:
-                return redirect(episode.livepage_url)
-
-            livepage = episode.show.livepage
-
-            if livepage:
-                return redirect('live-page', show=episode.show.slug)
-        except LivePage.DoesNotExist:
-            pass
-    except IndexError:
-        pass
-
     return render(request, "live.html", {})
 
 
 def live_page(request, show):
     show = get_object_or_404(Show, slug=show)
     try:
-        page = show.livepage
-    except LivePage.DoesNotExist, e:
-        raise Http404
+        episode = Episode.objects \
+            .filter(show=show) \
+            .filter(time__lte=datetime.now() + timedelta(hours=2)) \
+            .filter(end_time__gte=datetime.now() - timedelta(hours=2)) \
+            .order_by("time").select_related('show')[0]
 
-    return render(request, "live-page.html", {"show": show, 'page': page})
+        if episode:
+            return redirect('live')
+    except IndexError:
+        pass
+
+    return redirect('show', show=show.slug)
 
 
 def channel(request):
@@ -66,7 +82,6 @@ def replay(request, page=1, show=None):
 
     paged = Paginator(episodes, 10)
 
-    page = request.GET.get('page')
     try:
         current_page_episodes = paged.page(page)
     except PageNotAnInteger:
@@ -82,8 +97,30 @@ def replay(request, page=1, show=None):
     })
 
 
-def view_show(request):
-    return render(request, "show.html", {})
+def view_show(request, show, page=1):
+    show = get_object_or_404(Show, slug=show)
+    episodes = Episode.objects.select_related('show').filter(show=show)\
+        .order_by("time").reverse()
+
+    paged = Paginator(episodes, 10)
+
+    try:
+        current_page_episodes = paged.page(page)
+    except PageNotAnInteger:
+        current_page_episodes = paged.page(1)
+    except EmptyPage:
+        current_page_episodes = paged.page(paged.num_pages)
+
+    return render(request, "show.html", {
+        'show': show,
+        'episodes': current_page_episodes
+    })
+
+
+def list_shows(request):
+    shows = Show.objects.all().order_by("short")
+
+    return render(request, "shows.html", {"all_shows": shows})
 
 
 def force404(request):
@@ -94,31 +131,65 @@ def force500(request):
     return render(request, "500.html", {})
 
 
-def export_cartons(request):
-    cartons = Carton.objects.filter(visible=True) \
-        .filter(episode__termined=False) \
-        .filter(episode__time__lte=datetime.now() + timedelta(days=45)) \
-        .select_related('episode') \
+def export_current_episode(request):
+    episodes = Episode.objects.filter(shown=True) \
+        .filter(end_time__gte=datetime.now()) \
         .select_related('show') \
-        .order_by("episode__time") \
+        .order_by("time")
+
+    response = {}
+
+    if episodes.count() > 0:
+        episode = episodes[0]
+        response = {
+            'id': episode.id,
+            'bg_image': episode.auto_livepage_bg_image.url,
+            'show_name': episode.show.name,
+            'show_slug': episode.show.slug,
+            'twitter_widget': episode.show.twitter_widget,
+            'number': episode.number,
+            'content': markdown2.markdown(force_unicode(episode.content)),
+            'time': episode.time.isoformat(),
+            'end_time': episode.end_time.isoformat()
+        }
+
+    prog = re.compile(r'^mount=.+?, artist=(?P<artist>.*?), title=(?P<title>.*?), listeners=(?P<listeners>.*?)$')
+
+    try:
+        content = urllib2.urlopen("http://live.synopslive.net:8000/status4.xsl").readlines()
+        interesting_line = [prog.match(line) for line in content if line.startswith("mount=/synopslive-permanent.ogg")][0]
+
+        response["artist"] = interesting_line.group("artist")
+        response["title"] = interesting_line.group("title")
+        response["listeners"] = int(interesting_line.group("listeners"))
+    except Exception:
+        pass
+
+    return HttpResponse(json.dumps(response), content_type="application/json")
+
+
+def export_cartons(request):
+    episodes = Episode.objects.filter(shown=True) \
+        .filter(end_time__gt=datetime.now()) \
+        .filter(time__lte=datetime.now() + timedelta(days=3)) \
+        .select_related('show') \
+        .order_by("time") \
         .all()
 
     result = []
 
-    # Custom serializing
-    # TODO: Use some formatter to relocate that code
-    for carton in cartons:
+    for episode in episodes:
         result.append({
-            'id': carton.id,
-            'bg_image': carton.bg_image.url,
-            'show_id': carton.episode.show.id,
-            'show_name': carton.episode.show.name,
-            'show_slug': carton.episode.show.slug,
-            'episode_time': carton.episode.time.isoformat(),
-            'episode_number': carton.episode.number,
-            'episode_content': unicode(carton.episode.content),
-            'episode_summary': carton.episode.summary,
-            'livepage_url': carton.episode.livepage_url,
+            'id': episode.id,
+            'bg_image': episode.auto_carton_image.url,
+            'show_id': episode.show.id,
+            'show_name': episode.show.name,
+            'show_slug': episode.show.slug,
+            'episode_time': episode.time.isoformat(),
+            'episode_number': episode.number,
+            'episode_content': unicode(episode.content),
+            'episode_summary': episode.summary,
+            'livepage_url': reverse('show', args=(episode.show.slug,)),
         })
 
-    return HttpResponse(json.dumps(result))
+    return HttpResponse(json.dumps(result), content_type="application/json")

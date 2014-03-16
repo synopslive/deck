@@ -1,0 +1,42 @@
+{% load safe_markdown %}
+<article class="replay-episode">
+    <a class="headline-link" href="{% url "show" episode.show.slug %}">
+        {% include "components/headline.html" with show_only=True show=episode.show episode=episode %}
+    </a>
+    <div class="links-to-downloads">
+        {% for download in episode.visible_downloads.all %}
+            <p>
+                <a href="{{ download.url }}" class="btn go-download as-block">
+                    <i class="fa fa-download fa-fw"></i>
+                    <strong>Télécharger {{ download.name|lower }}</strong>
+                    ({{ download.extension }}, {{ download.size }})
+                </a>
+            </p>
+        {% empty %}
+            <p class="no-downloads-yet">
+                <em>Aucun téléchargement disponible pour le moment</em><br />
+                <small>Ne ratez pas sa sortie : abonnez-vous au podcast !</small>
+            </p>
+            <p></p>
+        {% endfor %}
+        <p>
+            {% if episode.show.podcast_itunes %}
+                <a href="{{ episode.show.podcast_itunes }}" class="btn go-podcast">
+                    <i class="fa fa-apple fa-fw"></i>
+                    Podcaster avec iTunes
+                </a>
+            {% endif %}
+            {% if episode.show.podcast_rss %}
+                <a href="{{ episode.show.podcast_rss }}" class="btn go-podcast">
+                    <i class="fa fa-rss fa-fw"></i>
+                    Podcaster via RSS
+                </a>{% endif %}
+        </p>
+    </div>
+    <h2>
+        #{{ episode.number }} − {{ episode.summary }}
+    </h2>
+    <div class="description">
+        {{ episode.content | safe_markdown }}
+    </div>
+</article>

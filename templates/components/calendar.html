@@ -1,0 +1,13 @@
+<section class="calendar">
+    <ul class="weekdays">
+        {% for weekday in weekdays %}
+            {% include "components/weekday.html" with day=weekday episodes=next_episodes %}
+        {% endfor %}
+    </ul>
+    <div class="calendar-legend">
+        <p class="calendar-week">Semaine du <strong>{{ weekdays.0|date:"l j F" }}</strong></p>
+        <p class="calendar-more nega-right nega-top">
+            <a class="btn flat" href="#">Grille des programmes &nbsp;<i class="fa fa fa-chevron-right"></i></a>
+        </p>
+    </div>
+</section>

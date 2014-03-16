@@ -1,113 +1,58 @@
-{% extends "page.html" %}
+{% extends "main.html" %}
 {% load format_natural %}
+{% load safe_markdown %}
+{% load static %}
 
 {% block title %}{% if current_show == None %}Replay{% else %}{{ current_show.name }} en replay{% endif %}{% endblock %}
 
 {% block custom_css %}
-    <link rel="stylesheet" type="text/less" media="screen" href="/static/css/replay.less" />
+    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/replay.less" %}" />
+    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/episode.less" %}" />
+    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/headline.less" %}" />
 {% endblock %}
 
 {% block page_classes %}replay{% endblock %}
 
 {% block page_content %}
-    <div class="cover">
-        <h2>SynopsLive, le replay</h2>
-    </div>
 
-    <div class="filter-by-show">
-        <ul>
-            <li>
-                <a href="{% url "replay" %}"
-                   class="{% if current_show == None %}active{% endif %}">Toutes les émissions</a>
-            </li>{% for show in shows %}<li><a href="{% url "replay-show" show=show.slug %}"
-                       class="{% if show == current_show %}active{% endif %}">{{ show.short }}</a></li>{% endfor %}
-        </ul>
-    </div>
+<section class="simple-header maximizer">
+    <h2>Replay : téléchargez les émissions que vous avez raté</h2>
 
-    {% if current_show == None %}
-        <p class="big-message">
-            Retrouvez toutes les émissions diffusées, des plus récentes à nos archives.
-            <small>({{ total }} pour être exact)</small>
-        </p>
-    {% else %}
-        <div class="show-description">
-            <img class="show-img" src="{{ current_show.icon_image.url }}" alt="{{ current_show.slug }}" />
-            <h3>{{ current_show.name }}</h3>
-            <p>{{ current_show.description }}</p>
-            <p class="show-podcast-links">
-                {% if current_show.podcast_itunes %}<a href="{{ current_show.podcast_itunes }}" class="do do-podcast">Podcaster avec iTunes</a>{% endif %}
-                {% if current_show.podcast_rss %}<a href="{{ current_show.podcast_rss }}" class="do do-podcast">Podcaster avec un flux RSS</a>{% endif %}
-            </p>
-        </div>
-    {% endif %}
+    <p>
+        Vous avez oublié de mettre votre réveil, vous aviez piscine, un « diner d'affaires »
+        important, voire un rendez-vous amoureux qui vous a empêché d'écouter le dernier TVNR ?
+        Retrouvez sur cette page toutes les dernières émissions par ordre anti-chronologique.
+    </p>
+</section>
 
+<section class="replay-episodes maximizer">
     {% for episode in episodes %}
-    <article class="one-download">
-        <div style="float: left;">
-        </div>
-        <h3>
-            <span class="diffused-at-info">
-                <time class="jour">
-                    {{ episode.time|date:"D"|lower }}
-                    <strong>{{ episode.time|date:"d" }}</strong>
-                    <span class="mois">{{ episode.time|date:" M. y"|lower }}</span>
-                    <span class="heure">{{ episode.time.hour }}h{{ episode.time.minute|zfill:2 }}</span>
-                </time>
-            </span>
-            {% if episode.show.category %}
-                <span class="category-icon category-{{ episode.show.category.slug }}"
-                      style="background-image: url('/static/imgs/{{ episode.show.category.icon }}');"
-                      title="{{ episode.show.category.name }}"></span>
-            {% endif %}
-            <span class="titre-and-summary">
-                <span class="titre"><strong>{{ episode.show.name }}</strong> #{{ episode.number }}</span>
-                <span class="summary"><em>{{ episode.summary }}</em></span>
-            </span>
-        </h3>
-        <div class="links-to-downloads">
-            {% for download in episode.visible_downloads.all %}
-                <p><a href="{{ download.url }}" class="do do-download as-block"><strong>Télécharger {{ download.name|lower }}</strong> ({{ download.extension }}, {{ download.size }})</a></p>
-            {% empty %}
-                <p class="no-downloads-yet">
-                    <em>Aucun téléchargement disponible pour le moment</em><br />
-                    <small>Ne ratez pas sa sortie : abonnez-vous au podcast !</small>
-                </p>
-                <p></p>
-            {% endfor %}
-            {% if current_show == None %}
-                <p class="center-please">
-                    {% if episode.show.podcast_itunes %}<a href="{{ episode.show.podcast_itunes }}" class="do do-podcast">Podcaster avec iTunes</a>{% endif %}
-                    {% if episode.show.podcast_rss %}<a href="{{ episode.show.podcast_rss }}" class="do do-podcast">Podcaster avec un flux RSS</a>{% endif %}
-                </p>
-            {% endif %}
-        </div>
-        <div class="description">
-            {{ episode.content }}
-        </div>
-    </article>
-    {% empty %}
-        <p class="big-message">Aucune émission déjà disponible.</p>
+        {% include "components/episode.html" %}
     {% endfor %}
 
     {% if episodes.has_previous or episodes.has_next %}
     <div class="pagination">
-        <p>
+        <p style="position: relative; text-align: center; padding-top: 10px;">
             {% if episodes.has_previous %}
-                <a class="previous-page" href="?page={{ episodes.previous_page_number }}">
-                    <i class="icon-chevron-left"></i>&nbsp; Émissions plus récentes
+                <a class="btn go-previous-page nega-top"
+                   href="{% url "replay" episodes.previous_page_number %}"
+                   style="display: inline-block; position: absolute; left: 0;">
+                    <i class="fa fa-fw fa-chevron-left"></i> Émissions plus récentes
                 </a>
             {% endif %}
-
-            <span class="current">
-                Page {{ episodes.number }} sur {{ episodes.paginator.num_pages }}
-            </span>
 
             {% if episodes.has_next %}
-                <a class="next-page" href="?page={{ episodes.next_page_number }}">
-                    Émissions plus anciennes &nbsp;<i class="icon-chevron-right"></i>
+                <a class="btn go-next-page nega-top" href="{% url "replay" episodes.next_page_number %}"
+                   style="display: inline-block; position: absolute; right: 0;">
+                    Émissions plus anciennes <i class="fa fa-fw fa-chevron-right"></i>
                 </a>
             {% endif %}
+
+            <span class="current" style="display: block; margin: auto;">
+                Page {{ episodes.number }} sur {{ episodes.paginator.num_pages }}
+            </span>
         </p>
     </div>
     {% endif %}
+</section>
 {% endblock %}

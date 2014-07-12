@@ -1,17 +1,21 @@
-{% extends "page.html" %}
+{% extends "main.html" %}
 
 {% block title %}Page introuvable{% endblock %}
 
-{% block custom_css %}
-    <link rel="stylesheet" type="text/less" media="screen" href="/static/css/404.less" charset="utf-8">
-{% endblock %}
+{% block custom_css %}{% endblock %}
 
 {% block page_classes %}error404{% endblock %}
 
 {% block page_content %}
-    <div class="cover">
-        <h2>Page introuvable</h2>
-    </div>
-
-    <p class="big-message">La page que vous avez demandé est introuvable. <small>(Peut-être arrivera-t'elle bientôt ?)</small></p>
+<section class="simple-header maximizer">
+   <h1>Page introuvable :(</h1>
+   <p>La page que vous avez demandé est introuvable.</p>
+   <p>
+       <small>
+           Si vous avez suivi un lien depuis le site de SynopsLive lui-même, c'est sans doute que nous avons oublié
+           de transférer une page depuis notre ancienne version. N'hésitez pas à vous plaindre à notre <a href="mailto:stan@synopslive.net">e-responsable</a>
+           en lui indiquant qu'il devrait mieux faire son boulot.
+       </small>
+   </p>
+</section>
 {% endblock %}

@@ -1,19 +1,23 @@
 # -*- coding: utf-8 -*-
-import datetime
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib import admin
-from django.db.models.signals import post_save
-from markupfield.fields import MarkupField
 
-# Create your models here.
+
+class EmptyImage:
+    def __init__(self):
+        pass
+
+    @property
+    def url(self):
+        return None
+
 
 class UserProfile(models.Model):
     user = models.ForeignKey(User, unique=True)
 
     pseudo = models.CharField("Pseudo d'antenne", max_length=30)
-    websites = MarkupField("Sites internet (en une ligne)", blank=True, markup_type="markdown")
-    description = MarkupField("Description", blank=True, markup_type="markdown")
+    websites = models.TextField("Sites internet (en une ligne)", blank=True)
+    description = models.TextField("Description", blank=True)
 
     avatar = models.ImageField(upload_to='avatars', blank=True)
 
@@ -28,67 +32,303 @@ class Show(models.Model):
     short = models.CharField("Nom court du show", max_length=25)
     slug = models.SlugField("Slug du show", max_length=30, unique=True)
 
-    description = MarkupField(blank=True, markup_type="markdown")
+    description = models.TextField(blank=True)
+
+    producer = models.ForeignKey("Producer",
+                                 verbose_name="Producteur associé",
+                                 blank=True,
+                                 null=True,
+                                 on_delete=models.SET_NULL,
+                                 help_text="""
+                                 Indique quel est le producteur (entité) est actuellement à l'origine de l'émission.
+                                 Cela définiera quel logo sera affiché sur la page de l'émission et la page de direct.
+                                 """)
 
     podcast_itunes = models.CharField("URL iTunes du podcast", max_length=500, blank=True)
     podcast_rss = models.CharField("URL du RSS du podcast", max_length=500, blank=True)
 
+    archived = models.BooleanField("Archivé",
+                                   default=False,
+                                   help_text="""
+                                   Un show archivé n'apparaît pas dans la liste des émissions sur la page d'accueil. <br>
+                                   Regroupées alors sous la notion « d'émissions d'archives », les émissions ne devrait
+                                   être avoir cette case cochée qu'un mois ou plus après leur dernière émission.
+                                   """)
+
     icon_image = models.ImageField(upload_to="cartons-ng/shows",
-        default="http://synopslive.net/static/medias/cartons-ng/shows/unknown.png",
-        help_text="Cette image sera utilisée comme « icône » sur le site à tous les emplacements.",
-        blank=True)
+                                   default="http://synopslive.net/static/medias/cartons-ng/shows/unknown.png",
+                                   editable=False,
+                                   help_text="""
+                                   DÉPRÉCIÉ : Cette image n'est plus utilisée actuellement sur le site.
+                                   """,
+                                   blank=True)
+
+    average_duration = models.IntegerField(verbose_name="Durée moyenne, en minutes",
+                                           blank=True,
+                                           default=60,
+                                           help_text="""
+                                           Cette donnée est utilisée pour pré-remplir le formulaire de création
+                                           d'épisode, et est également affiché sur la page d'émission.
+                                           """)
 
     equipe = models.ManyToManyField(User)
 
     category = models.ForeignKey("Category", verbose_name="Catégorie", blank=True, null=True, on_delete=models.SET_NULL)
 
-    livepage_url = models.URLField("URL de la page du live",
-                                   help_text="Cette URL sera utilisée sur les sites externes, sur les players et sur " \
-                                             "le carton pour inviter les internautes à rejoindre le mini-site.",
-                                   blank=True, null=True, max_length=255)
+    external_url = models.URLField("URL de la page externe du show",
+                                   blank=True,
+                                   help_text="""
+                                   Si cette URL est indiquée, un bouton sera affiché sur la page d'émission et la
+                                   page de direct pour que les auditeurs puissent se rendre sur le micro-site dédié
+                                   ou la rubrique chez le producteur.
+                                   """)
+
+    external_url_title = models.CharField("Intitulé du lien vers la page externe du show",
+                                          blank=False,
+                                          max_length=255,
+                                          default="Visiter le site dédié à l'émission",
+                                          help_text="""
+                                          Permet de contextualiser le lien. Le bouton n'est pas affiché si l'URL n'est
+                                          pas précisée.
+                                          """)
+
+    carton_title = models.CharField("Titre par défaut des cartons",
+                                    max_length=255,
+                                    blank=True,
+                                    help_text="""
+                                    Texte affiché en grand sur le carton, par défaut. <br>
+                                    Il s'agit traditionnellement d'un bon mot ou d'une référence culturelle
+                                    pour faire sourire l'auditeur. <br>
+                                    Rappel : les titres ne se terminent jamais par un point simple.
+                                    """)
+
+    carton_content = models.TextField(verbose_name="Texte par défaut des cartons",
+                                      blank=True,
+                                      default="",
+                                      help_text="""
+                                      Texte affiché sous le titre du carton, par défaut.
+                                      Soignez votre orthographe et votre typographie, et n'oubliez pas de vérifier la
+                                      taille résultante sur la page d'accueil. <br>
+                                      Supporte le Markdown.
+                                      """)
+
+    carton_image = models.ImageField(verbose_name="Image par défaut des cartons",
+                                     upload_to="cartons-ng/fonds",
+                                     blank=True,
+                                     default="",
+                                     help_text="""
+                                     Image de fond du carton qui en donne toute sa couleur et son intensité, par défaut.
+                                     La résolution minimale est 1000x500px. Vérifiez que ces proportions sont respectées.
+                                     Seule la bande horizontale la plus centrale sera utilisée sur les entêtes de
+                                     replay et sur les pages d'émissions.
+                                     """)
+
+    livepage_bg_image = models.ImageField(verbose_name="Image de fond du direct",
+                                          upload_to="v7/backgrounds/",
+                                          default="",
+                                          blank=True,
+                                          help_text="""
+                                              Cette image sera utilisée en fond de la page de direct lorsque le show
+                                              est en cours de diffusion. Au besoin, elle peut être écrasée par une
+                                              autre image définie au niveau de l'épisode.
+                                          """)
+
+    twitter_button_label = models.CharField("Libellé du bouton Twitter",
+                                            max_length=255,
+                                            blank=True,
+                                            default="",
+                                            help_text="""
+                                            Ce bouton Twitter apparait sur la page de direct, sur la page du show
+                                            ainsi que sur la page de l'épisode pour inviter l'auditeur à participer
+                                            avec un hashtag. <br>
+                                            Si ce champ est vide, le bouton n'est pas affiché.
+                                            """)
+
+    twitter_button_message = models.CharField("Message par défaut via Twitter",
+                                              max_length=255,
+                                              blank=True,
+                                              help_text="""
+                                              Message pré-rempli par défaut à l'utilisateur au clic sur le
+                                              bouton « Tweeter avec... » sur la page de direct. N'oubliez pas
+                                              de préciser un hashtag dans le message !
+                                              """)
+
+    twitter_widget = models.TextField("Widget Twitter (HTML)", blank=True,
+                                      help_text="""
+                                      Générez le widget sur <a href="https://twitter.com/settings/widgets">
+                                      la page dédiée sur Twitter</a> et collez-le dans ce champ.
+                                      """)
+
+    copyright = models.TextField(verbose_name="Footer (copyright)",
+                                 blank=True,
+                                 help_text="""
+                                 Texte affiché en bas des pages d'émissions et sous le texte de l'épisode
+                                 sur la page de direct. <br>
+                                 Supporte le Markdown.
+                                 """)
 
     class Meta:
-        verbose_name = "show"
-        verbose_name_plural = "shows"
+        verbose_name = u"émission"
+        verbose_name_plural = u"émissions"
 
     def __unicode__(self):
         return self.name
 
     pass
 
+
 class Episode(models.Model):
-    show = models.ForeignKey(Show, verbose_name="Show associé")
-    number = models.CharField("Numéro de l'épisode", max_length="10",
-                             help_text="Numéro (ou indicatif) de l'épisode. Inutile de précéder ce numéro par un « n° » ou « # ».")
-    time = models.DateTimeField("Date et heure de diffusion")
-    termined = models.BooleanField("Épisode diffusé (terminé)", default=False,
-                             help_text="Indique que la diffusion de l'émission est terminée, " \
-                                       "et qu'il ne faut plus l'afficher comme « en cours » sur le site. " \
-                                       "À cocher systématiquement une fois un épisode effectué.")
+    show = models.ForeignKey(Show,
+                             verbose_name="Émission associée",
+                             help_text="""
+                             Notez que l'émission contient déjà un carton par défaut et définit des paramètres
+                             par défaut pour l'apparence de la page de direct.
+                             """)
 
-    summary = models.CharField("Titre de l'épisode", max_length=140,
-                               help_text="Une ligne de texte décrivant l'épisode et le différenciant des autres.")
-    content = MarkupField("Contenu de l'épisode", markup_type="markdown",
-                         help_text="Ce texte est utilisé dans la page \"Replay\" comme texte d'accompagnement et " \
-                                   "de description pour chacune des émissions. Il est pertinent d'y inscrire quelques" \
-                                   "paragraphes de texte avec par exemple, la liste des invités ou des participants. " \
-                                   "Supporte le Markdown.")
+    number = models.CharField("Numéro de l'épisode",
+                              max_length="10",
+                              help_text="Numéro (ou indicatif) de l'épisode. Inutile de précéder ce numéro par un « n° » ou « # ».")
 
-    created = models.DateTimeField("Créé en base le", auto_now_add=True)
-    modified = models.DateTimeField("Dernière modification le", auto_now=True)
+    time = models.DateTimeField("Date et heure de diffusion",
+                                help_text="""
+                                Heure à laquelle l'émission est censée démarrer.
+                                À partir de la seconde indiquée, l'émission est considérée comme en cours
+                                de lecture sur le player et une notification s'affiche sur la page d'accueil.
+                                Cette heure est également utilisée dans la grille des programmes.
+                                """)
 
-    specific_livepage_url = models.URLField("URL spécifique de la page du live",
-                                            help_text="Vous pouvez laisser ce champ vide ; l'URL habituelle du Live pour " \
-                                                      "ce show sera alors utilisée.",
-                                            blank=True, null=True, max_length=255)
+    end_time = models.DateTimeField("Date et heure de fin de diffusion",
+                                    help_text="""
+                                    Heure à laquelle l'émission est censée se terminer.
+                                    Une fois cette heure dépassée, l'émission sera considérée comme terminée par
+                                    le site Internet, les notifications en page d'accueil et le carton associé
+                                    disparaîtront, et l'épisode apparaîtra sur le replay.
+                                    """)
 
-    class Meta:
-        verbose_name = "épisode"
-        verbose_name_plural = "épisodes"
+    summary = models.CharField("Titre de l'épisode",
+                               max_length=140,
+                               help_text="""
+                               Une ligne de texte décrivant l'épisode et le différenciant des autres,
+                               utilisée dans la grille des programmes, le résumé en page d'accueil ainsi
+                               que sur le replay. <br>
+                               Traditionnellement plus simple et sérieux que le titre du carton.
+                               """)
+
+    content = models.TextField("Contenu de l'épisode",
+                               blank=True,
+                               default="",
+                               help_text="""
+                               Ce texte est utilisé à quatre endroits différents : <br>
+                               &nbsp;− sur la page de direct durant l'émission ; <br>
+                               &nbsp;− sur la page dédiée à l'épisode ; <br>
+                               &nbsp;− sur la page de l'émission, dans la liste des derniers épisodes ; <br>
+                               &nbsp;− sur la page de replay, dans la liste des derniers programmes diffusés. <br>
+                               Il est pertinent d'y inscrire quelques paragraphes de texte
+                               avec par exemple, la liste des invités ou des participants. <br>
+                               Supporte le Markdown.
+                               """)
+
+    created = models.DateTimeField("Créé en base le",
+                                   editable=False,
+                                   auto_now_add=True)
+
+    modified = models.DateTimeField("Dernière modification le",
+                                    editable=False,
+                                    auto_now=True)
+
+    shown = models.BooleanField("Affiché",
+                                default=True,
+                                blank=None,
+                                help_text="""
+                                Si cette case est décochée, l'épisode disparaîtra complètement du site,
+                                de la grille, et du replay.
+                                """)
+
+    carton_title = models.CharField("Titre du carton",
+                                    max_length=255,
+                                    blank=True,
+                                    default="",
+                                    help_text="""
+                                    Texte affiché en grand sur le carton. Il s'agit traditionnellement d'un bon mot
+                                    ou d'une référence culturelle pour faire sourire l'auditeur. <br>
+                                    Rappel : les titres ne se terminent jamais par un point simple. <br>
+                                    Si ce texte n'est pas rempli, le titre du carton associé à l'émission sera utilisé.
+                                    """)
+
+    carton_content = models.TextField(verbose_name="Texte du carton",
+                                      default="",
+                                      blank=True,
+                                      help_text="""
+                                      Texte affiché sous le titre du carton.
+                                      Soignez votre orthographe et votre typographie, et n'oubliez pas de vérifier la taille
+                                      résultante sur la page d'accueil. <br>
+                                      Supporte le Markdown. <br>
+                                      Si ce texte n'est pas rempli, le texte du carton associé à l'émission sera utilisé.
+                                      """)
+
+    carton_image = models.ImageField(verbose_name="Image du carton",
+                                     upload_to="cartons-ng/fonds",
+                                     max_length=255,
+                                     blank=True,
+                                     default="",
+                                     help_text="""
+                                     Image de fond du carton qui en donne toute sa couleur et son intensité.
+                                     La résolution minimale est 1000x500px. Vérifiez que ces proportions sont respectées.
+                                     Seule la bande horizontale la plus centrale sera utilisée sur les entêtes de
+                                     replay et sur les pages d'émissions. <br>
+                                     Si aucune image n'est associée, l'image du carton associé à l'émission sera utilisée.
+                                     """)
+
+    livepage_bg_image = models.ImageField(verbose_name="Image spécifique de fond du direct",
+                                          upload_to="v7/backgrounds/",
+                                          default="",
+                                          blank=True,
+                                          help_text="""
+                                              Cette image sera utilisée en fond de la page de direct lorsque l'épisode
+                                              est en cours de diffusion. Elle écrase celle définit au niveau de l'émission,
+                                              permettant d'avoir des habillages exceptionnels pour certains épisodes.
+                                          """)
+
+    priority = models.IntegerField(verbose_name="Priorité",
+                                   default=1,
+                                   help_text="""
+                                   Plus le niveau de priorité est élevé, plus le carton sera affiché en
+                                   premier sur la page d'accueil. <br>
+                                   Une priorité supérieure à 4 mettera en avant l'émission dans la grille. <br>
+                                   Une priorité nulle masque le nom de l'épisode dans la grille : seul le
+                                   nom de l'émission est affiché.
+                                   """)
 
     @property
-    def livepage_url(self):
-        return self.show.livepage_url if not self.specific_livepage_url else self.specific_livepage_url
+    def auto_carton_image(self):
+        if self.carton_image:
+            return self.carton_image
+        elif self.show.carton_image:
+            return self.show.carton_image
+        else:
+            return EmptyImage()
+
+    @property
+    def auto_carton_content(self):
+        if self.carton_content:
+            return self.carton_content
+        elif self.show.carton_content:
+            return self.show.carton_content
+        else:
+            return EmptyImage()
+
+    @property
+    def auto_livepage_bg_image(self):
+        if self.livepage_bg_image:
+            return self.livepage_bg_image
+        elif self.show.livepage_bg_image:
+            return self.show.livepage_bg_image
+        else:
+            return EmptyImage()
+
+    class Meta:
+        verbose_name = u"épisode"
+        verbose_name_plural = u"épisodes"
 
     def visible_downloads(self):
         return self.download_set.filter(visible=True)
@@ -97,6 +337,7 @@ class Episode(models.Model):
         return self.show.short + " #" + self.number
 
     pass
+
 
 class Download(models.Model):
     episode = models.ForeignKey(Episode, verbose_name="Épisode associé")
@@ -112,77 +353,25 @@ class Download(models.Model):
     modified = models.DateTimeField("Dernière modification le", auto_now=True)
 
     class Meta:
-        verbose_name = "téléchargement"
-        verbose_name_plural = "téléchargements"
+        verbose_name = u"téléchargement"
+        verbose_name_plural = u"téléchargements"
 
     def __unicode__(self):
         return u"%s de %s %s" % (self.name, self.episode.show, self.created)
 
-class Carton(models.Model):
-    episode = models.ForeignKey(Episode, blank=True)
-    standalone = models.BooleanField(default=False)
-
-    published_at = models.DateTimeField(u"Publié le", default=datetime.datetime.now)
-
-    visible = models.BooleanField(u"Affiché en page d'accueil", default=False,
-                                  help_text="Si coché, ce carton sera effectivement affiché sur la page d'accueil.")
-
-    highlighted = models.BooleanField(u"Affiché au chargement de la page", default=False,
-                                  help_text="Si coché, le carton est « prioritaire »  et affiché en premier dès l'affichage.")
-
-    title = models.CharField("Titre interne du carton (optionnel)", max_length=255, blank=True,
-                             help_text="Dans le cas où le carton n'est pas attaché à une émission, remplir ce champ avec " \
-                                       "une description de son objet.")
-
-    bg_image = models.ImageField(verbose_name="Image de fond",
-                                 upload_to="cartons-ng/fonds",
-                                 default="http://synopslive.net/static/medias/cartons-ng/fonds/terrasse.jpg",
-                                 blank=True,
-                                 help_text="Cette image de fond devrait suivre le " \
-                                           "<a href=\"http://www.1mage.fr/images/infocarton.png\">patron</a> " \
-                                           "pour une plus grande efficacité.")
-
-    fb_msg = models.CharField("Bouton Facebook", max_length=255,
-                              default=u"S'inscrire à l'événement <strong>Facebook</strong>", blank=True,
-                              help_text="Message affiché sur le bouton Facebook présent sur le carton. HTML autorisé.")
-    fb_url = models.CharField("Lien Facebook", max_length=255, blank=True,
-                              help_text="URL associée au bouton Facebook. Le bouton Facebook ne sera pas affiché si ce champ est vide.")
-
-    tw_msg = models.CharField("Bouton Twitter", max_length=255, default="Tweeter avec", blank=True,
-                              help_text="Message affiché sur le bouton Twitter présent sur le carton. HTML autorisé.")
-    tw_url = models.CharField("Lien Twitter", max_length=255, blank=True,
-                              help_text="URL associée au bouton Twitter. Le bouton Twitter ne sera pas affiché si ce champ est vide." \
-                                        "<br/> Note : il est possible d'utiliser les URLs d'intent Twitter.")
-
-    created = models.DateTimeField(u"Créé en base le", auto_now_add=True)
-    modified = models.DateTimeField(u"Dernière modification le", auto_now=True)
-
-    grand_titre = models.CharField("Grand titre", max_length="255", blank=True,
-                              help_text="Texte affiché comme titre sur le carton. Il s'agit souvent d'un bon mot ou d'une référence" \
-                                        "culturelle pour faire sourire l'auditeur.")
-
-    tagline = MarkupField(verbose_name="Texte du carton", markup_type="markdown", blank=True,
-                          help_text="Texte affiché sous le grand titre. Supporte le Markdown.")
-
-    def __unicode__(self):
-        if self.standalone:
-            return u"Standalone : %s" % self.title
-        else:
-            return u"%s" % self.episode + ((u" - %s" % self.title) if self.title else u"")
-
-    pass
 
 class LivePage(models.Model):
     show = models.OneToOneField(Show, primary_key=True)
 
-    synopsis = MarkupField(verbose_name="Synopsis", markup_type="markdown", blank=True,
-                           help_text="Texte affiché sur la colonne de gauche. Supporte le Markdown.")
+    synopsis = models.TextField(verbose_name="Synopsis",
+                                blank=True,
+                                help_text="Texte affiché sur la colonne de gauche. Supporte le Markdown.")
 
     twitter_button_message = models.CharField("Message par défaut (Twitter)", max_length=255)
     twitter_button_label = models.CharField("Label du bouton Twitter", max_length=255)
     twitter_widget = models.TextField("Widget Twitter (HTML)", blank=True,
-                                    help_text="Générez le widget sur <a href=\"https://twitter.com/settings/widgets\"> " \
-                                              "la page dédiée sur Twitter</a> et collez-le dans ce champ.")
+                                      help_text="Générez le widget sur <a href=\"https://twitter.com/settings/widgets\"> " \
+                                                "la page dédiée sur Twitter</a> et collez-le dans ce champ.")
 
     producer_image = models.CharField("Logo du producteur", max_length=255, blank=True)
     producer_name = models.CharField("Nom du producteur", max_length=255, blank=True, default='SynopsLive')
@@ -191,8 +380,9 @@ class LivePage(models.Model):
     top_image = models.CharField("Logo de l'émission (en haut)", max_length=255, blank=True)
     top_link_url = models.CharField("Lien de l'émission (en haut)", max_length=255, blank=True)
 
-    footer = MarkupField(verbose_name="Texte du footer", markup_type="markdown", blank=True,
-                         help_text="Texte affiché tout en bas de la page. Supporte le Markdown.")
+    footer = models.TextField(verbose_name="Texte du footer",
+                              blank=True,
+                              help_text="Texte affiché tout en bas de la page. Supporte le Markdown.")
 
     css = models.TextField("Style CSS spécifique", default="/* Code CSS ici */")
 
@@ -203,6 +393,7 @@ class LivePage(models.Model):
         verbose_name = "page de direct"
         verbose_name_plural = "pages de direct"
 
+
 class Category(models.Model):
     name = models.CharField("Nom de la catégorie", max_length=50)
     slug = models.SlugField("Slug de la catégorie", max_length=30, unique=True)
@@ -210,11 +401,45 @@ class Category(models.Model):
     icon = models.CharField("URL de l'icône de la catégorie", max_length=255, blank=True)
 
     class Meta:
-        verbose_name = "catégorie"
-        verbose_name_plural = "catégories"
+        verbose_name = u"catégorie"
+        verbose_name_plural = u"catégories"
 
     def __unicode__(self):
         return self.name
 
+
+class Producer(models.Model):
+    name = models.CharField("Nom du producteur", max_length=100,
+                            help_text="""
+                            Ne créez pas de producteur si celui-ci n'a pas de site Internet. Tout l'intérêt
+                            de cet objet est de lier vers un site externe et afficher un logo distinctif.
+                            """)
+    slug = models.SlugField("Slug du producteur", max_length=50)
+
+    logo = models.ImageField(verbose_name="Logo du producteur",
+                             upload_to="v7/producers/",
+                             default="",
+                             blank=True,
+                             help_text="""
+                             Affiché sur la page de l'émission et la page de direct, il doit être en monochrome
+                             inversé (donc, en blanc et nuance de gris).
+                             """)
+
+    external_url = models.URLField("URL du site du producteur")
+
+    regroup_shows = models.BooleanField("Regrouper les émissions",
+                                        help_text="""
+                                        Regroupe ensemble les émissions de ce producteur. Si cette case est décochée,
+                                        le producteur sera toujours affiché sur les pages des différentes émissions
+                                        mais il n'apparaîtra pas dans les filtres sur le site. <br>
+                                        Cochez cette case s'il s'agit d'un producteur à émission unique sur l'antenne.
+                                        """)
+
+    class Meta:
+        verbose_name = "producteur"
+        verbose_name_plural = "producteurs"
+
+    def __unicode__(self):
+        return self.name
 
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])

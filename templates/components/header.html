@@ -1,0 +1,84 @@
+{% load staticfiles %}
+<header>
+    <div class="maximizer">
+        <h1>
+            <a href="{% url "home" %}">
+                <img src="{% static "imgs/logo-header.svg" %}" alt="SynopsLive, la radio du monde numérique" />
+            </a>
+        </h1>
+        {% spaceless %}
+        <nav class="content-menu">
+            <a href="/decouvrir/antenne" class="btn flat go-antenna">
+                L'antenne <i class="fa fa-fw fa-caret-down"></i>
+            </a>
+            <a href="{% url "shows" %}" class="btn flat go-shows">
+                Les émissions <i class="fa fa-fw fa-caret-down"></i>
+            </a>
+        </nav>
+        <nav class="main-menu">
+            <a href="{% url "replay" %}" class="btn flat go-replay">
+                <i class="fa fa-fw fa-download"></i> Replay
+            </a>
+            <a href="{% url "live" %}" class="btn go-live">
+                <i class="fa fa-fw fa-play"></i> Écouter en direct
+            </a>
+        </nav>
+        {% endspaceless %}
+    </div>
+</header>
+<nav class="menu-submenu menu-antenna" style="display: none;">
+    <div class="maximizer">
+        <ul>
+            <li class="menu-submenu-element">
+                <a href="/decouvrir/antenne" class="btn flat">
+                    <img src="{% static "imgs/icons/menu-story.svg" %}" alt="" />
+                    L'histoire
+                </a>
+            </li>
+            <li class="menu-submenu-element">
+                <a href="/decouvrir/equipe" class="btn flat">
+                    <img src="{% static "imgs/icons/menu-team.svg" %}" alt="" />
+                    L'équipe
+                </a>
+            </li>
+            <li class="menu-submenu-element">
+                <a href="/decouvrir/grille" class="btn flat">
+                    <img src="{% static "imgs/icons/menu-grid.svg" %}" alt="" />
+                    La grille
+                </a>
+            </li>
+            <li>
+                <a class="menu-submenu-also btn flat" href="/podcasteurs">
+                    <i class="fa fa-fw fa-microphone"></i>
+                    Podcasteurs →
+                </a>
+                <a class="menu-submenu-also btn flat" href="/presse">
+                    <i class="fa fa-fw fa-file-o"></i>
+                    Presse →
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<nav class="menu-submenu menu-shows" style="display: none;">
+    <div class="maximizer">
+        {% regroup all_shows by category as categories %}
+        {% for category in categories %}
+        <ul class="show-category-group {% if category.list|length > 6 %}show-category-large{% endif %} {% if category.list|length == 1 %}show-category-mini{% endif %}">
+            <li class="show-category-title">{{ category.grouper }}</li>
+            {% for show in category.list %}
+            <li class="show-category-element">
+                <a href="{% url 'show' show.slug %}" class="btn flat">
+                    {{ show.name }}
+                </a>
+            </li>
+            {% endfor %}
+            {% if forloop.last %}
+            <li class="show-archived">
+                <a href="{% url "shows" %}"><i class="fa fa-fw fa-archive"></i> Émissions archivées...</a>
+            </li>
+            {% endif %}
+        </ul>
+        {% endfor %}
+    </div>
+</nav>

@@ -1,0 +1,35 @@
+{% extends "main.html" %}
+{% load format_natural %}
+{% load safe_markdown %}
+{% load static %}
+
+{% block title %}{% if current_show == None %}Replay{% else %}{{ current_show.name }} en replay{% endif %}{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/replay.less" %}" />
+    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/episode.less" %}" />
+    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/headline.less" %}" />
+{% endblock %}
+
+{% block page_classes %}replay{% endblock %}
+
+{% block page_content %}
+
+<section class="simple-header maximizer">
+    <h2>Toutes nos émissions</h2>
+
+    <p>
+        Envie de découvrir tout l'éventail des émissions que nous proposons ? Cette page reprends l'entièreté des
+        émissions qui ont été diffusées sur SynopsLive.
+    </p>
+</section>
+
+<section class="maximizer">
+    {% for show in all_shows %}
+        <a class="headline-link" href="{% url "show" show.slug %}">
+            {% include "components/headline.html" with show=show %}
+        </a>
+    {% endfor %}
+</section>
+
+{% endblock %}

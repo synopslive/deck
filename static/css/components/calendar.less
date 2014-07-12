@@ -1,0 +1,106 @@
+@import (reference) "../base.less";
+
+.calendar {
+  margin: auto;
+  position: relative;
+
+  .weekdays {
+    margin-left:0;
+    padding-left:0;
+    position: relative;
+    display: table;
+    width: 100%;
+  }
+
+  .weekday {
+    width: 13.5%;
+    list-style-type: none;
+    position: relative;
+    display: table-cell;
+    border-top:1px solid #282828;
+    border-bottom:1px solid #282828;
+    border-right:1px solid #282828;
+    padding-bottom: 5px;
+    height: 150px;
+
+    &:first-child {
+      border-left:1px solid #282828;
+    }
+
+    span {
+      display: block;
+      padding: 5px 0 5px 10px;
+      color:#565656;
+    }
+
+    ul {
+      margin-left:0;
+      position: relative;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    .calendar-episode {
+      min-height: 25px;
+      list-style-type: none;
+      margin: 5px 0;
+      border:1px solid black inset;
+      color:#fff;
+      font-size: .8em;
+      border-radius: 5px;
+      padding: 5px 7px 10px;
+      box-shadow: inset 0 -5px rgba(0,0,0,0.3);
+
+      -webkit-transition: transform 0.2s;
+      -moz-transition: transform 0.2s;
+      -ms-transition: transform 0.2s;
+      -o-transition: transform 0.2s;
+      transition: transform 0.2s;
+
+      background-image: url(../../imgs/overs/darker.png);
+
+      cursor: pointer;
+
+      small {
+        display: inline-block;
+        line-height: 1;
+      }
+
+      b {
+        text-shadow: 0 1px rgba(0,0,0, 0.2);
+      }
+
+      &.selected {
+        transform: translateY(3px);
+        -moz-transform: translateY(3px);
+        box-shadow: inset 0 -2px rgba(0,0,0,0.3);
+
+        padding-bottom: 7px;
+
+        margin-bottom: 8px;
+
+        background-image: none;
+
+        cursor: default;
+      }
+    }
+  }
+
+  .calendar-legend {
+    .clearfix;
+    color:#565656;
+
+    p {
+      display: inline-block;
+      margin: 0;
+    }
+
+    .calendar-week {
+      float: left;
+    }
+    .calendar-more {
+      float: right;
+      position: relative;
+    }
+  }
+}

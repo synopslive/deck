@@ -1,365 +1,79 @@
-#page.home {
-    margin: 0;
-    background-color: transparent;
-    box-shadow: none;
+@import (reference) "base.less";
+
+#cartonstand {
+  width: 100%;
+  overflow: hidden;
+  z-index: 2;
+  position: relative;
+
+  height: 500px;
+
+  @media @sub1000 {
+    height: 400px;
+  }
+  @media @landscape {
+    height: 300px;
+  }
+  @media @mobile {
+    height: 200px;
+  }
+
+  background: url(../imgs/empty-space.png) center center no-repeat;
 }
 
-body.letter-space-please h1, body.letter-space-please .tagline p {
-    letter-spacing: -2px;
-}
+#weekplanning {
+  padding-top: 20px;
+  background-color: #171717;
+  z-index: 12;
+  position: relative;
+  box-shadow: 0 -20px 20px -20px rgba(0,0,0,0.5);
+  .clearfix;
 
-#display-board {
-    position: relative;
-    overflow: hidden;
-    min-height: 500px;
-    background-color: #171717;
-    border-radius: 5px;
-    box-shadow: none;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-    -webkit-box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-}
+  h2 {
+    font-weight: 100;
+    font-size: 1.2rem;
 
-#introducing {
-    color: #BBBBBB;
-    font-size: 10pt;
-    margin-top: 0px;
-    margin-left: 5px;
-    margin-bottom: 0px;
-    letter-spacing: 1px;
-    position: relative;
-    top: -6px;
-    margin-bottom: 3px;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-}
-#introducing a {
-    color: #999999;
-    font-style: italic;
-}
-
-#planning {
-  bottom: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  position: absolute;
-  width: 1000px;
-  height: 50px;
-  bottom: 0;
-  box-shadow: inset 0px 8px 4px rgba(0, 0, 0, 0.1), inset 0px 16px 8px rgba(0, 0, 0, 0.2);
-  color: #555555;
-  cursor: default;
-  z-index: 14;
-
-  li {
-    float: left;
-
-    & > time {
-      font-size: 8pt;
-      line-height: 19px;
-      display: block;
-      border-bottom: 1px solid #555555;
-      padding-left: 7px;
-    }
-
-    &.selected > time {
-      color: #CCCCCC;
-      border-bottom-color: #CCCCCC;
-    }
-
-    ul {
-      & {
-        clear: left;
-        margin-left: 0;
-        padding-left: 0;
-        padding-right: 15px;
-      }
-
-      li {
-        padding: 0;
-        list-style: none;
-        height: 37px;
-      /*width: 180px;*/
-        margin-right: 10px;
-        float: left;
-
-        cursor: pointer;
-
-        -webkit-transition: color 0.5s;
-        -moz-transition: color 0.5s;
-        transition: color 0.5s;
-
-        &:hover {
-          color: #d1d1d1;
-        }
-
-        &.selected {
-          color: white;
-        }
-
-        .horaire {
-          font-family: "Ubuntu Condensed", Impact, sans-serif;
-          font-size: 18pt;
-          margin: 0;
-          display: block;
-          float: left;
-          padding-left: 6px;
-          padding-top: 2px;
-
-          em {
-            font-style: normal;
-            font-size: 14pt;
-          }
-        }
-
-        .titre {
-          display: block;
-          margin: 0;
-          line-height: 24px;
-          font-size: 10pt;
-          margin-left: 60px;
-          margin-top: 3px;
-          font-weight: normal;
-        }
-      }
+    strong {
+      font-weight: 500;
     }
   }
 }
 
-section.carton {
-    height: 500px;
-    width: 1000px;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    color: white;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-
-    -o-transition: left 1s;
-    -webkit-transition: left 1s;
-    -moz-transition: left 1s;
-    transition: left 1s;
-    left: -1000px;
-
-    &.selected {
-        left: 0;
-    }
-
-    &.next {
-        -o-transition: left 0s linear;
-        -webkit-transition: left 0s linear;
-        -moz-transition: left 0s linear;
-        transition: left 0s linear;
-        left: 1000px;
-    }
-
-    h1 {
-        font-family: 'Overlock','Trebuchet MS',sans-serif;
-        font-size: 30pt;
-        margin: 0;
-        position: absolute;
-        top: 300px;
-        left: 70px;
-        z-index: 10;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.5), 3px 3px 4px rgba(0,0,0,0.6);
-        cursor: default;
-
-        opacity: 0;
-    }
-
-    .tagline p {
-        font-family: 'Overlock','Trebuchet MS',sans-serif;
-        font-size: 16pt;
-        font-weight: bold;
-        margin: 0;
-        position: absolute;
-        top: 350px;
-        left: 70px;
-        z-index: 10;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.5), 3px 3px 4px rgba(0,0,0,0.6);
-        cursor: default;
-        color: white;
-        z-index: 15;
-        width: 860px;
-
-        opacity: 0;
-    }
-
-    h1, .tagline p, aside {
-        opacity: 0;
-        -o-transition: opacity 0.25s;
-        -webkit-transition: opacity 0.25s;
-        -moz-transition: opacity 0.25s;
-        transition: opacity 0.25s;
-    }
-
-    &.up {
-        h1, .tagline p, aside { opacity: 1; }
-    }
-
-    .masque {
-        height: 500px;
-        width: 1000px;
-        position: absolute;
-        background-image: url(/static/imgs/overs/masque-over-dark.png);
-        z-index: 2;
-    }
-
-    aside.infos {
-        border-bottom-left-radius: 7px;
-        border-top-left-radius: 7px;
-        box-shadow: -4px 4px 4px rgba(0,0,0,0.3);
-        position: absolute;
-        z-index: 22;
-        background-color: #f2f2f2;
-        top: 100px;
-        right: 0px;
-        width: 300px;
-        height: 76px;
-        padding: 10px;
-        color: #333333;
-
-        img.show-img {
-            float: left;
-            width: 85px;
-            height: 85px;
-            position: absolute;
-            top: 5px;
-            left: 5px;
-        }
-
-        h3 {
-            margin: 0;
-            font-weight: normal;
-            margin-left: 90px;
-            font-size: 13pt;
-            line-height: 1.15em;
-            margin-bottom: 5px;
-            font-family: "Ubuntu Condensed", Impact, sans-serif;
-            font-weight: normal;
-        }
-
-        h4 {
-            margin: 0;
-            font-size: 15pt;
-            line-height: 1.05em;
-            margin-left: 90px;
-            font-weight: normal;
-        }
-
-        .summary {
-            margin: 0;
-            margin-top: 5px;
-            margin-left: 90px;
-            font-size: 8pt;
-            line-height: 10pt;
-        }
-    }
-
-    aside.quick-buttons {
-        position: absolute;
-        top: 196px;
-        width: 300px;
-        right: 0;
-        z-index: 20;
-        margin-right: 0px;
-
-        a.do {
-            box-shadow: inset 0 -3px rgba(0,0,0,0.3), -4px 4px 4px rgba(0,0,0,0.3);
-            background-opacity: 0.2;
-            display: block;
-            position: absolute; /* (for z-index) */
-            z-index: 20;
-            margin: 0;
-            border-radius: 0 0 0 10px;
-            right: 0px;
-
-            &:hover, &:active {
-              text-decoration: none;
-              background-opacity: 0.8;
-            }
-
-            &:nth-of-type(1) {
-              width: 270px;
-              top: 0px;
-              z-index: 19;
-            }
-            &:nth-of-type(2) {
-              width: 250px;
-              top: 30px;
-              z-index: 18;
-            }
-            &:nth-of-type(3) {
-              width: 230px;
-              top: 60px;
-              z-index: 17;
-            }
-        }
-    }
-
-    .category {
-        @circle-diameter: 46px;
-        display: block;
-        background-color: #cccccc;
-        width: @circle-diameter;
-        height: @circle-diameter;
-        position: absolute;
-        top: (0 - @circle-diameter) / 2;
-        left: (0 - @circle-diameter) / 2;
-        border-radius: @circle-diameter / 2;
-        box-shadow: 2px 2px 3px rgba(0,0,0,0.3);
-        z-index: 3;
-        background-repeat: no-repeat;
-        background-position: center center;
-    }
+.intro-sl h2, .last-shows h2 {
+  font-size: 1.4em;
+  font-weight: 400;
+  color: #A9A9A9;
 }
 
-#transversal {
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-    background-color: rgba(255, 255, 255, 0.5);
-    background-image: url(/static/imgs/partenaires/LogoEcoleMultimedia.png);
-    background-position: 55px center;
-    background-repeat: no-repeat;
-    border-radius: 10px 10px 10px 10px;
-    margin: auto;
-    overflow: hidden;
-    margin-bottom: 15px;
-    font-family:"Lucida Grande","Ubuntu","Trebuchet MS",sans-serif;
-    padding: 6px;
-    margin-top: 10px;
+.intro-sl {
+  margin-top: 40px;
+
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  img {
+    float: left;
+    width: 12%;
+  }
+
+  p {
+    float: left;
+    width: 85%;
+    margin-left: 3%;
+    line-height: 1.4em;
+    color: #999999;
+    margin-top: 25px;
+  }
 }
 
-#transversal a {
-    padding: 8px;
-    padding-left: 180px;
-    padding-right: 50px;
-    text-align: justify;
-    display: block;
-    background-color: transparent;
-    -moz-transition: background-color 0.2s;
-    border-radius: 10px 10px 10px 10px;
-}
+.last-shows {
+  margin-top: 80px;
 
-#transversal a:hover {
-    background-image: url(/static/imgs/partenaires/LogoEcoleMultimedia-colored.png);
-    background-position: 49px center;
-    background-repeat: no-repeat;
+  a, a:link, a:hover, a:focus, a:active {
     text-decoration: none;
-    background-color: white;
-}
-
-#transversal .majeur {
-    font-size: 13pt;
-    font-weight: bold;
-    display: block;
-    letter-spacing: -1px;
-    margin-top: 13px;
-}
-
-#transversal .mineur {
-    font-size: 10pt;
-    display: block;
-    margin-top: 3px;
-    margin-bottom: 13px;
+    color: white;
+    outline: 0 none;
+  }
 }

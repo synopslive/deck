@@ -1,0 +1,31 @@
+{% load format_natural %}
+<div class="headline {% if not episode or show_only %}headline-show-only{% endif %}">
+    <div class="over"></div>
+    <div class="bgimg">
+        {% if episode %}
+            <img src="{{ episode.auto_carton_image.url }}" alt="" />
+        {% else %}
+            {% if show.carton_image %}
+                <img src="{{ show.carton_image.url }}" alt="" />
+            {% endif %}
+        {% endif %}
+    </div>
+    {% if episode %}
+        <time>
+            <span class="date">{{ episode.time|date:"l j F" }}</span>, à <span class="hour">{{ episode.time.hour }}h{{ episode.time.minute|zfill:2 }}</span>
+        </time>
+    {% endif %}
+    <h1>
+        {{ show.name }} <i class="fa fa-fw fa-chevron-right"></i>
+    </h1>
+    {% if episode and not show_only %}
+        <p>
+            {% if episode.download_set.count > 0 %}
+                <i class="fa fa-fw fa-download"></i> Replay disponible
+            {% endif %}
+        </p>
+        <h2>
+            #{{ episode.number }} − {{ episode.summary }}
+        </h2>
+    {% endif %}
+</div>

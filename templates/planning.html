@@ -1,0 +1,41 @@
+{% extends "main.html" %}
+{% load staticfiles %}
+
+{% block title %}Grille des programmes{% endblock %}
+
+{% block custom_css %}
+    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/calendar.less" %}" charset="utf-8">
+    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/planning.less" %}" charset="utf-8">
+{% endblock %}
+
+{% block page_classes %}planning{% endblock %}
+
+{% block page_content %}
+<section class="simple-header maximizer">
+    <h2>Grille des programmes des semaines à venir sur SynopsLive</h2>
+
+    <p>
+        Vous n'avez pas envie de rater le prochain épisode de votre émission favorite ? Ci-dessous, vous trouverez
+        les quatres prochaines semaines de diffusion sur SynopsLive.
+    </p>
+
+    <p>
+        Ce programme est toujours susceptible de changer, d'évoluer ‑ notamment en été ou vers les fêtes de fin
+        d'années. N'hésitez pas à visiter cette page régulièrement !
+    </p>
+</section>
+
+<section id="monthplanning" class="maximizer">
+    <div class="calendar">
+        {% regroup days by isocalendar.1 as weeks %}
+        {% for days in weeks %}
+            <ul class="weekdays" id="week-{{ days.grouper }}">
+                {% for day in days.list %}
+                    {% include "components/weekday.html" with day=day episodes=episodes %}
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}

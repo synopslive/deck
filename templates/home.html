@@ -1,89 +1,67 @@
-{% extends "page.html" %}
+{% extends "main.html" %}
+{% load static %}
 {% load format_natural %}
 
-{% block rawtitle %}SynopsLive, la webradio de toutes les cultures numériques (en direct et podcast){% endblock %}
+{% block rawtitle %}SynopsLive, la radio du monde numérique (direct et podcast){% endblock %}
 
 {% block custom_css %}
-<link rel="stylesheet" type="text/less" media="screen" href="/static/css/home.less" charset="utf-8">
+<link rel="stylesheet" type="text/less" media="screen" href="{% static "css/home.less" %}" charset="utf-8">
+<link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/carton.less" %}" charset="utf-8">
+<link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/calendar.less" %}" charset="utf-8">
+<link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/headline.less" %}" charset="utf-8">
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" src="{% static "js/home.js" %}"></script>
 {% endblock %}
 
 {% block page_classes %}home{% endblock %}
 
 {% block page_content %}
-    <p id="introducing">
-        Découvrez la webradio de toutes les cultures numériques, en direct et en podcast.
-    </p>
-    <div id="display-board">
-        {% for carton in cartons %}
-            <section class="carton{% if forloop.first and not has_highlights %} selected{% endif %}{% if carton.highlighted %} highlighted{% endif %}"
-                     style="background-image: url({{ carton.bg_image.url }})" data-cartonid="{{ carton.id }}">
-                <div class="masque"></div>
-                <h1>{{ carton.grand_titre }}</h1>
-                <div class="tagline">{{ carton.tagline }}</div>
+<section id="cartonstand" class="hero">
+    {% for episode in next_episodes %}
+        {% include "components/carton.html" %}
+    {% endfor %}
+</section>
 
-                <aside class="infos">
-                    {% if carton.episode.show.category %}
-                        <div class="category" style="background-color: {{ carton.episode.show.category.color }};
-                                                     background-image: url('/static/imgs/{{ carton.episode.show.category.icon }}');"
-                                title="{{ carton.episode.show.category.name }}"></div>
-                    {% endif %}
-                    <img class="show-img" src="{{ carton.episode.show.icon_image.url }}" alt="{{ carton.show.slug }}" />
-                    <h3>
-                        <time>
-                         {% if carton.episode.termined %}
-                             {{ carton.episode.time|date:"l d M. à H:i"|lower }}
-                         {% else %}
-                             {{ carton.episode.time|format_time }}
-                         {% endif %}
-                        </time>
-                    </h3>
-                    <h4><strong>{{ carton.episode.show.short }}</strong> #{{ carton.episode.number }}</h4>
-                    <p class="summary">
-                        {{ carton.episode.summary }}
-                        <!--<a href="http://synopslive.net/">(plus d'infos)</a>-->
-                    </p>
-                </aside>
-                <aside class="quick-buttons">
-                    {% if carton.episode.time|before_now and not carton.episode.termined %}
-                        <a href="{% url "live" %}" class="do do-listen-live">Écouter sur <strong>en direct</strong> sur SynopsLive</a>
-                    {% endif %}
-                    {% if carton.episode.time|before_now and carton.episode.download_set.count > 0 %}
-                        <a href="{% url "replay-show" show=carton.episode.show.slug %}" class="do do-download">Télécharger sur <strong>le Replay</strong></a>
-                    {% endif %}
-                    {% if carton.fb_url %}
-                        <a href="{{ carton.fb_url }}" class="do do-add-on-facebook">{{ carton.fb_msg|safe }}</a>
-                    {% endif %}
-                    {% if carton.tw_url %}
-                        <a href="{{ carton.tw_url }}" class="do do-twitter">{{ carton.tw_msg|safe }}</a>
-                    {% endif %}
-                </aside>
-            </section>
-        {% endfor %}
-        <ul id="planning">
-            {% regroup cartons by episode.time|day_and_timeslot as timeslots_grouped %}
-            {% for timeslot in timeslots_grouped %}
-                <li class="jour"><time>{{ timeslot.grouper }}</time>
-                    <ul>
-                        {% for carton in timeslot.list %}
-                            <li class="refcarton" data-cartonid="{{ carton.id }}">
-                                <p class="horaire">{{ carton.episode.time.hour }}<em>h{{ carton.episode.time.minute|zfill:2 }}</em></p>
-                                <p class="titre"><strong>{{ carton.episode.show.short }}</strong> #{{ carton.episode.number }}</p>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </li>
-            {% endfor %}
-        </ul>
-      </div>
-    <!--<div id="transversal" class="soutien">
-         <a class="soutien" href="http://ecole-multimedia.com/">
-            <span class="majeur">
-               Les émissions spéciales des 5 ans sont réalisées avec le soutien logistique de l'École Multimédia.
-            </span>
-            <span class="mineur">
-               À travers une formation aux métiers du design, l'École Multimédia à Paris forme les étudiants d'aujourd'hui
-               à devenir les professionnels de la création de demain. <em>En découvrir plus sur le site officiel →</em>
-            </span>
-         </a>
-    </div>-->
+<section id="weekplanning" class="maximizer">
+    {% include "components/calendar.html" %}
+</section>
+
+<section class="intro-sl maximizer clearfix">
+    <h2>Qu'est ce que SynopsLive ?</h2>
+    <img class="pull-left" src="{% static "imgs/logo-round-synopslive.png" %}" alt="" />
+    <p class="pull-right">
+        SynopsLive est une radio qui diffuse 24h/24 de la musique et des émissions inédites
+        tout au long de la semaine.
+        Créée par des amateurs en 2007, SynopsLive est devenue l'une des rares radio sur
+        Internet à réaliser plusieurs émissions en direct par semaine, tout en accueillant
+        près d'une vingtaine d'émissions différentes par mois.
+    </p>
+    <p>
+        <span class="pull-left nega-left">
+            <a class="btn flat" href="{% url "shows" %}">
+                Découvrir nos émissions <i class="fa fa-fw fa-chevron-right"></i>
+            </a>
+        </span>
+        <span class="pull-right">
+            <a class="btn go-live" href="{% url "live" %}">
+                <i class="fa fa-fw fa-play"></i> Écouter en direct
+            </a>
+        </span>
+    </p>
+</section>
+
+<section class="last-shows maximizer clearfix">
+    <h2>Dernières émissions diffusées</h2>
+
+    {% for episode in last_episodes %}
+    <a href="{% url "show" episode.show.slug %}">
+        {% include "components/headline.html" with show=episode.show episode=episode %}
+    </a>
+    {% endfor %}
+
+    <p><a href="{% url "replay" %}" class="pull-right btn"><i class="fa fa-fw fa-download"></i> Télécharger plus d'émissions</a></p>
+</section>
+
 {% endblock %}

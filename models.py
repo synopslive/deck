@@ -309,13 +309,22 @@ class Episode(models.Model):
             return EmptyImage()
 
     @property
+    def auto_carton_title(self):
+        if self.carton_title:
+            return self.carton_title
+        elif self.show.carton_title:
+            return self.show.carton_title
+        else:
+            return ""
+
+    @property
     def auto_carton_content(self):
         if self.carton_content:
             return self.carton_content
         elif self.show.carton_content:
             return self.show.carton_content
         else:
-            return EmptyImage()
+            return ""
 
     @property
     def auto_livepage_bg_image(self):

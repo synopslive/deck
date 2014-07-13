@@ -70,9 +70,9 @@ a.headline-link {
     z-index: -1;
     border-radius: 5px;
     opacity: 1;
-    transition: all 0.2s;
     -moz-transition: all 0.2s;
     -webkit-transition: all 0.2s;
+    transition: all 0.2s;
 
     background-image: url(../../imgs/overs/mini-over.png);
     background-position: 50% 0;
@@ -94,15 +94,16 @@ a.headline-link {
       position: absolute;
       width: 100%;
       top: 50%;
-      transform: translateY(-50%);
       -moz-transform: translateY(-50%);
       -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
     }
   }
 
   &:active {
-    transform: translateY(5px);
     -moz-transform: translateY(5px);
+    -webkit-transform: translateY(5px);
+    transform: translateY(5px);
     box-shadow: 0 2px 7px -2px rgba(0,0,0,0.5);
 
     height: 95px;

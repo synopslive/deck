@@ -53,7 +53,7 @@ function fetchAverageDuration() {
     var idShow = $("#id_show").val();
 
     if (!deckAllShows) {
-        return $.getJSON("http://localhost:8000/feeds/shows.json", function (data) {
+        return $.getJSON("/feeds/shows.json", function (data) {
             if (data) {
                 deckAllShows = data;
                 fetchAverageDuration();
@@ -106,5 +106,7 @@ $(document).ready(function() {
         if (currentShowDuration && timeMoment) {
             setTimeFieldMoment(".field-end_time", timeMoment.add('minutes', currentShowDuration));
         }
+
+        event.preventDefault();
     });
 });

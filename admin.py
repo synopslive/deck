@@ -46,6 +46,7 @@ class DownloadInline(admin.TabularInline):
 
 
 class CustomEpisodeAdmin(modelclone.ClonableModelAdmin):
+    change_form_template = 'admin/deck/change_episode_form.html'
     js = ('js/admin.js', )
 
     inlines = [DownloadInline, ]

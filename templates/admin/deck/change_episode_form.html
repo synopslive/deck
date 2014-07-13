@@ -1,0 +1,12 @@
+{% extends "admin/change_form.html" %}
+{% load static %}
+{% block extrahead %}{{ block.super }}
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+<script type="text/javascript" src="{% static 'js/admin.js' %}"></script>
+{% endblock %}
+{% block object-tools-items %}
+    {% if include_clone_link %}
+        <li><a href="clone/">Dupliquer</a></li>
+    {% endif %}
+    {{ block.super }}
+{% endblock %}

@@ -23,6 +23,8 @@ urlpatterns = patterns(
 
     url(r'^feeds/cartons\.json$', views.export_cartons),
     url(r'^feeds/current_episode\.json$', views.export_current_episode),
+    url(r'^feeds/shows\.json$', views.export_all_shows),
+
 
     url(r'^force-404/?', views.force404),
 )

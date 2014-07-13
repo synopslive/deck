@@ -131,6 +131,20 @@ def force500(request):
     return render(request, "500.html", {})
 
 
+def export_all_shows(request):
+    shows = Show.objects.order_by("short")
+
+    response = {}
+
+    for show in shows:
+        response[show.id] = {
+            "name": show.name,
+            "average_duration": show.average_duration
+        }
+
+    return HttpResponse(json.dumps(response), content_type="application/json")
+
+
 def export_current_episode(request):
     episodes = Episode.objects.filter(shown=True) \
         .filter(end_time__gte=datetime.now()) \

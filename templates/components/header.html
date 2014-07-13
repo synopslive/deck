@@ -42,7 +42,7 @@
                 </a>
             </li>
             <li class="menu-submenu-element">
-                <a href="/decouvrir/grille" class="btn flat">
+                <a href="{% url "planning" %}" class="btn flat">
                     <img src="{% static "imgs/icons/menu-grid.svg" %}" alt="" />
                     La grille
                 </a>
@@ -50,11 +50,18 @@
             <li>
                 <a class="menu-submenu-also btn flat" href="/podcasteurs">
                     <i class="fa fa-fw fa-microphone"></i>
-                    Podcasteurs →
+                    Podcasteurs
+                    &nbsp;<i class="fa fa-caret-right"></i>
                 </a>
                 <a class="menu-submenu-also btn flat" href="/presse">
                     <i class="fa fa-fw fa-file-o"></i>
-                    Presse →
+                    Presse
+                    &nbsp;<i class="fa fa-caret-right"></i>
+                </a>
+                <a class="menu-submenu-also btn flat" href="http://blog.synopslive.net/">
+                    <i class="fa fa-fw fa-book"></i>
+                    Blog
+                    &nbsp;<i class="fa fa-caret-right"></i>
                 </a>
             </li>
         </ul>

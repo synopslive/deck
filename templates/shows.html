@@ -3,11 +3,10 @@
 {% load safe_markdown %}
 {% load static %}
 
-{% block title %}{% if current_show == None %}Replay{% else %}{{ current_show.name }} en replay{% endif %}{% endblock %}
+{% block title %}Toutes nos émissions{% endblock %}
 
 {% block custom_css %}
-    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/replay.less" %}" />
-    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/episode.less" %}" />
+    <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/show.less" %}" />
     <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/components/headline.less" %}" />
 {% endblock %}
 
@@ -25,10 +24,18 @@
 </section>
 
 <section class="maximizer">
-    {% for show in all_shows %}
-        <a class="headline-link" href="{% url "show" show.slug %}">
-            {% include "components/headline.html" with show=show %}
-        </a>
+    {% regroup all_shows by archived as shows %}
+    {% for show_group in shows %}
+        {% if show_group.grouper %}
+            <h2 id="archived" style="margin-top: 100px;">Émissions archivées</h2>
+        {% endif %}
+        {% for show in show_group.list %}
+            <p>
+                <a class="headline-link" href="{% url "show" show.slug %}">
+                    {% include "components/headline.html" with show=show %}
+                </a>
+            </p>
+        {% endfor %}
     {% endfor %}
 </section>
 

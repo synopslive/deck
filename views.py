@@ -118,7 +118,7 @@ def view_show(request, show, page=1):
 
 
 def list_shows(request):
-    shows = Show.objects.all().order_by("short")
+    shows = Show.objects.all().order_by("archived", "short")
 
     return render(request, "shows.html", {"all_shows": shows})
 

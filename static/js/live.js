@@ -62,7 +62,7 @@ function updateWithMetadata (data) {
 
 function fetchAndUpdate() {
     $.getJSON("/feeds/current_episode.json", function(data) {
-        if (data.time === undefined) {
+        if (data.time === undefined || moment(data.time).diff(moment(), 'hours') > 24) {
             updateWithNothing();
         } else {
             updateWithEpisode(data);

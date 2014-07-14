@@ -13,15 +13,17 @@ header {
 
   h1 {
     float: left;
-    margin: 17px;
-    margin-left: 0px;
+    margin: 0 20px 0 0;
+    line-height: 85px;
 
     a {
       display: inline-block;
+      vertical-align: 4px;
+      line-height: 1;
     }
 
     img {
-      vertical-align: bottom;
+      vertical-align: middle;
     }
   }
 
@@ -47,12 +49,20 @@ header {
   .clearfix();
 
   @media @mobile {
+    background: none;
+    height: 150px;
+
     h1, .content-menu, .main-menu {
       float: none;
-      margin: 10px;
+      margin: 8px 0 0;
 
       font-size: 9pt;
       text-align: center;
+    }
+
+    h1 {
+      margin-top: 20px;
+      line-height: 1;
     }
 
     h1 img {
@@ -62,30 +72,43 @@ header {
   }
 
   @media @landscape {
+    background-position: -650px 50%;
     .content-menu, .main-menu {
       font-size: 9pt;
-      margin: 25px;
-      margin-left: 0;
+      float: right;
+      display: block;
+      clear: right;
+      margin: 8px 23px 0 0;
     }
 
     h1 {
-      margin: 20px;
-      margin-right: 0;
-      width: 250px;
-      position: relative;
+      margin-left: 23px;
+      margin-right: 23px;
+      width: 280px;
 
       img {
-        width: 100%;
+        width: 280px;
       }
     }
   }
 
   @media @sub1000 {
+    background-position: -650px 50%;
+    font-size: 14px;
     h1 {
       margin-left: 23px;
+      margin-right: 23px;
+
+      img {
+        width: 280px;
+      }
     }
-    .content-menu, .main-menu {
+    .content-menu {
+      margin-right: -10px;
+    }
+    .main-menu {
       margin-right: 25px;
+      margin-left: 0;
     }
   }
 }

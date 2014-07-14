@@ -24,10 +24,14 @@ body {
   }
 }
 
-@mobile: ~"(max-width: 500px)";
-@landscape: ~"(min-width: 501px) and (max-width: 800px)";
+@mobile: ~"(max-width: 590px)";
+@landscape: ~"(min-width: 591px) and (max-width: 800px)";
 @large: ~"(min-width: 801px)";
+
+@notlarge: ~"(max-width: 800px)";
+
 @sub1000: ~"(min-width: 801px) and (max-width: 1000px)";
+@verylarge: ~"(min-width: 1001px)";
 
 a:link, a:hover, a:active {
   color: inherit;
@@ -134,6 +138,21 @@ time {
     max-width: 1000px;
     margin-left: auto;
     margin-right: auto;
+  }
+}
+
+.sub1000-only {
+  @media @verylarge {
+    display: none;
+  }
+}
+
+.verylarge-only {
+  @media @notlarge {
+    display: none;
+  }
+  @media @sub1000 {
+    display: none;
   }
 }
 

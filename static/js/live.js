@@ -1,23 +1,19 @@
 var cachedEpisode = {};
 
+function generateTwitterMessageUrl(message) {
+    return 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(message);
+}
+
 function updateWithEpisode(episode) {
     var time = moment(episode.time),
         end_time = moment(episode.end_time),
         now = moment();
 
-    $(".off-synopsis").show();
-    $(".synopsis").hide();
+    $(".off-synopsis").hide();
+    $(".synopsis").show();
 
     if (time.isAfter(now)) {
-        var minutes = time.diff(now, 'minutes');
-
-        if (minutes > 90) {
-            var hours = time.diff(now, 'hours');
-
-            $(".live-now-legend").text("Dans " + hours + " heures");
-        } else {
-            $(".live-now-legend").text("Dans " + minutes + " minutes");
-        }
+        $(".live-now-legend").text(time.fromNow())
     } else {
         if(end_time.isAfter(now)) {
             $(".live-now-legend").text("Actuellement en direct");
@@ -28,21 +24,45 @@ function updateWithEpisode(episode) {
 
     if (episode.show_name !== cachedEpisode.show_name) {
         $(".live-show-name").text(episode.show_name);
+        $(".show-name").text(episode.show_name);
     }
 
     if (episode.bg_image !== cachedEpisode.bg_image) {
-        $(".live-background").css({
-            background: "url(" + episode.bg_image + ") center top"
-        }).fadeIn();
+        var bgImage = $("<img src='' alt='' />").attr("src", episode.bg_image).hide();
+        $(".live-background").empty().append(bgImage);
+        bgImage.load(function() {
+            $(this).fadeIn();
+        });
+    }
+
+    if (episode.number !== cachedEpisode.number) {
+        $(".episode-number").html("#" + episode.number);
     }
 
     if (episode.content !== cachedEpisode.content) {
-        $(".synopsis").html(episode.content);
+        $(".episode-content").html(episode.content);
+    }
+
+    if (episode.time !== cachedEpisode.time) {
+        $(".episode-time").html(moment(episode.time).format("dddd Do MMMM[, dès ]H[h]mm"));
     }
 
     if (episode.twitter_widget !== cachedEpisode.twitter_widget) {
         $(".twitter-feed").html(episode.twitter_widget);
         twttr.widgets.load();
+    }
+
+    if (episode.twitter_button_label !== cachedEpisode.twitter_button_label) {
+        $(".live-post-tweet").html(['<i class="fa fa-fw fa-twitter"></i>', episode.twitter_button_label].join(' '))
+    }
+
+    if (episode.twitter_button_message !== cachedEpisode.twitter_button_message) {
+        $(".live-post-tweet").attr('href', generateTwitterMessageUrl(episode.twitter_button_message));
+    }
+
+    if (episode.copyright !== cachedEpisode.copyright) {
+        $(".show-copyright").show();
+        $(".show-copyright").html(episode.copyright);
     }
 
     cachedEpisode = episode;
@@ -51,8 +71,12 @@ function updateWithEpisode(episode) {
 function updateWithNothing () {
     $(".live-now-legend").text("Actuellement");
     $(".live-show-name").text("Flux permanent");
+    $(".live-post-tweet").html('<i class="fa fa-fw fa-twitter"></i> SynopsLive');
+    $(".live-post-tweet").attr("href", generateTwitterMessageUrl("#SynopsLive"));
     $(".synopsis").hide();
     $(".off-synopsis").show();
+    $(".live-background img").fadeOut(function() { $(this).remove(); });
+    $(".show-copyright").hide();
 }
 
 function updateWithMetadata (data) {
@@ -78,7 +102,6 @@ function fetchAndUpdate() {
 
 $(document).ready(function(){
     var liveBackground = $('<div class="live-background"></div>');
-    liveBackground.hide();
     $("body").prepend(liveBackground);
 
     fetchAndUpdate();

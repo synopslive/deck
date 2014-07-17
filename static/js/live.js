@@ -1,3 +1,5 @@
+jQuery(function() {
+
 var cachedEpisode = {};
 
 function generateTwitterMessageUrl(message) {
@@ -100,60 +102,73 @@ function fetchAndUpdate() {
     }, 10000);
 }
 
-$(document).ready(function(){
+function isLivePlaying() {
+    var audio = document.querySelector("#live-audio");
+
+    return !audio.paused && !audio.ended && !audio.error;
+}
+
+var audio = document.querySelector("#live-audio"),
+    preferredSource = audio.currentSrc;
+
+function startAudio() {
+    var timeoutLoading = null,
+        doneLoading = function(event) {
+        clearTimeout(timeoutLoading);
+        if (isLivePlaying()) {
+            preferredSource = audio.currentSrc;
+
+            $(".live-play-button").html('<i class="fa fa-fw fa-pause"></i>');
+            $(".live-hint-click").stop(true, false).fadeOut(200);
+            $(".live-metadata").fadeIn(2000);
+        }
+    };
+
+    $(audio).on('canplaythrough', doneLoading);
+    timeoutLoading = setTimeout(doneLoading, 5000);
+
+    $(".live-hint-click").fadeOut(500);
+
+    if(audio.src == "") {
+        audio.src = [audio.currentSrc, "?cache=", Date.now()].join("");
+    }
+    audio.play();
+
+    $(".live-play-button").html('<i class="fa fa-fw fa-spinner fa-spin"></i>');
+}
+
+function stopAudio() {
+    var audio = document.querySelector("#live-audio");
+
+    audio.removeAttribute("src");
+    audio.load();
+
+    $(".live-metadata").stop(true, false).fadeOut(500, function() {
+        if (!isLivePlaying()) {
+            $(".live-hint-click").stop(true, false).fadeIn(2000);
+        }
+    });
+
+    $(".live-play-button").html('<i class="fa fa-fw fa-play"></i>');
+}
+
+function toggleAudio() {
+    if (isLivePlaying()) {
+        stopAudio();
+    } else {
+        startAudio();
+    }
+}
+
+function initLive() {
     var liveBackground = $('<div class="live-background"></div>');
     $("body").prepend(liveBackground);
 
     fetchAndUpdate();
 
-    var playing = false;
-    var liveAudio = $("#live-audio").clone();
-    var currentLiveAudio = null;
-    $("#live-audio").remove();
+    $(".live-play-button").click(toggleAudio);
+}
 
-    $(".live-play-button").click(function() {
-        if (!playing) {
-            currentLiveAudio = liveAudio.clone();
-            currentLiveAudio.appendTo(".live-player");
+initLive();
 
-            var timeoutLoading = null,
-                doneLoading = function(e) {
-                clearTimeout(timeoutLoading);
-                if (!playing) {
-                    $(".live-play-button").html('<i class="fa fa-fw fa-pause"></i>');
-                    $(".live-hint-click").stop(true, false).fadeOut(200);
-                    $(".live-metadata").fadeIn(2000);
-                    playing = true;
-                }
-            };
-
-            currentLiveAudio.on('canplaythrough', doneLoading);
-            timeoutLoading = setTimeout(doneLoading, 5000);
-
-            $(".live-hint-click").fadeOut(500);
-
-            var htmlAudio = currentLiveAudio.get(0);
-
-            htmlAudio.preload = "auto";
-            htmlAudio.load();
-            htmlAudio.play();
-
-            $(".live-play-button").html('<i class="fa fa-fw fa-spinner fa-spin"></i>');
-        } else {
-            currentLiveAudio.get(0).src = "";
-            currentLiveAudio.get(0).load();
-            delete currentLiveAudio.get(0);
-
-            currentLiveAudio.remove();
-            playing = false;
-
-            $(".live-metadata").stop(true, false).fadeOut(500, function() {
-                if (!playing) {
-                    $(".live-hint-click").stop(true, false).fadeIn(2000);
-                }
-            });
-
-            $(".live-play-button").html('<i class="fa fa-fw fa-play"></i>');
-        }
-    });
 });

@@ -116,30 +116,43 @@ $(document).ready(function(){
             currentLiveAudio = liveAudio.clone();
             currentLiveAudio.appendTo(".live-player");
 
-            currentLiveAudio.on('canplaythrough', function(e) {
-                currentLiveAudio.get(0).play();
-                $(".live-play-button").html('<i class="fa fa-fw fa-pause"></i>');
-                $(".live-hint-click").stop(true, true).fadeOut(200);
-                $(".live-metadata").fadeIn(2000);
-                playing = true;
-            });
+            var timeoutLoading = null,
+                doneLoading = function(e) {
+                clearTimeout(timeoutLoading);
+                if (!playing) {
+                    $(".live-play-button").html('<i class="fa fa-fw fa-pause"></i>');
+                    $(".live-hint-click").stop(true, false).fadeOut(200);
+                    $(".live-metadata").fadeIn(2000);
+                    playing = true;
+                }
+            };
+
+            currentLiveAudio.on('canplaythrough', doneLoading);
+            timeoutLoading = setTimeout(doneLoading, 5000);
 
             $(".live-hint-click").fadeOut(500);
 
-            currentLiveAudio.get(0).preload = "auto";
-            currentLiveAudio.get(0).load();
+            var htmlAudio = currentLiveAudio.get(0);
+
+            htmlAudio.preload = "auto";
+            htmlAudio.load();
+            htmlAudio.play();
+
             $(".live-play-button").html('<i class="fa fa-fw fa-spinner fa-spin"></i>');
         } else {
             currentLiveAudio.get(0).src = "";
             currentLiveAudio.get(0).load();
             delete currentLiveAudio.get(0);
+
             currentLiveAudio.remove();
             playing = false;
-            $(".live-metadata").fadeOut(500, function() {
+
+            $(".live-metadata").stop(true, false).fadeOut(500, function() {
                 if (!playing) {
-                    $(".live-hint-click").fadeIn(2000);
+                    $(".live-hint-click").stop(true, false).fadeIn(2000);
                 }
             });
+
             $(".live-play-button").html('<i class="fa fa-fw fa-play"></i>');
         }
     });

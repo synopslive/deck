@@ -108,16 +108,13 @@ function isLivePlaying() {
     return !audio.paused && !audio.ended && !audio.error;
 }
 
-var audio = document.querySelector("#live-audio"),
-    preferredSource = audio.currentSrc;
+var audio = document.querySelector("#live-audio");
 
 function startAudio() {
     var timeoutLoading = null,
         doneLoading = function(event) {
         clearTimeout(timeoutLoading);
         if (isLivePlaying()) {
-            preferredSource = audio.currentSrc;
-
             $(".live-play-button").html('<i class="fa fa-fw fa-pause"></i>');
             $(".live-hint-click").stop(true, false).fadeOut(200);
             $(".live-metadata").fadeIn(2000);
@@ -129,9 +126,8 @@ function startAudio() {
 
     $(".live-hint-click").fadeOut(500);
 
-    if(audio.src == "") {
-        audio.src = [audio.currentSrc, "?cache=", Date.now()].join("");
-    }
+    audio.src = [audio.currentSrc.split("?")[0], "?cache=", Date.now()].join("");
+    audio.load();
     audio.play();
 
     $(".live-play-button").html('<i class="fa fa-fw fa-spinner fa-spin"></i>');

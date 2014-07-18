@@ -126,7 +126,10 @@ function startAudio() {
 
     $(".live-hint-click").fadeOut(500);
 
-    audio.src = [audio.currentSrc.split("?")[0], "?cache=", Date.now()].join("");
+    if (audio.currentSrc != "") {
+        audio.src = [audio.currentSrc.split("?")[0], "?cache=", Date.now()].join("");
+    }
+
     audio.load();
     audio.play();
 

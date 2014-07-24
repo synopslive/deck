@@ -66,10 +66,6 @@ def live_page(request, show):
     return redirect('show', show=show.slug)
 
 
-def channel(request):
-    return render(request, "channel.html", {})
-
-
 def replay(request, page=1, show=None):
     episodes = Episode.objects.filter(time__lte=datetime.now()).select_related('show')
     shows = Show.objects.all()

@@ -19,12 +19,9 @@ urlpatterns = patterns(
 
     url(r'^replay/(?P<show>(-|\w)+)/(?P<page>\d+)?/?$', views.replay, name='replay-show'),
 
-    url(r'^discuter/channel/?$', views.channel, name='channel'),
-
     url(r'^feeds/cartons\.json$', views.export_cartons),
     url(r'^feeds/current_episode\.json$', views.export_current_episode),
     url(r'^feeds/shows\.json$', views.export_all_shows),
-
 
     url(r'^force-404/?', views.force404),
 )

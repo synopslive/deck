@@ -1,5 +1,13 @@
 jQuery(function($) {
-    var episodes = $(".calendar-episode");
+    var episodes = $(".calendar-episode"),
+        now = moment();
+
+    episodes.each(function() {
+       var episode_moment = moment.unix($(this).data('timestamp'));
+       if (episode_moment.isBefore(now)) {
+           $(this).addClass("in-the-past");
+       }
+    });
 
     function showCartonForEpisodeId(episode_id) {
         var old_up = $(".carton");
@@ -26,7 +34,7 @@ jQuery(function($) {
     }
 
 
-    episodes.repeat().each($).then(function() {
+    episodes.not(".in-the-past").repeat().each($).then(function() {
         selectEpisode(this);
     }).wait(12000);
 

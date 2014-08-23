@@ -95,7 +95,7 @@ def replay(request, page=1, show=None):
 
 def view_show(request, show, page=1):
     show = get_object_or_404(Show, slug=show)
-    episodes = Episode.objects.select_related('show').filter(show=show)\
+    episodes = Episode.objects.select_related('show').filter(show=show).filter(time__lte=datetime.now())\
         .order_by("time").reverse()
 
     paged = Paginator(episodes, 10)

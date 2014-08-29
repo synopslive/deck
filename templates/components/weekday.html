@@ -7,6 +7,7 @@
                 <li class="calendar-episode"
                     data-episode-id="{{ episode.id }}"
                     data-timestamp="{{ episode.time | date:"U" }}"
+                    data-end-timestamp="{{ episode.end_time | date:"U" }}"
                     style="background-color: {{ episode.show.category.color }}">
                     <b>{{ episode.show.short }}</b>
                     <small>{{ episode.summary }}</small>

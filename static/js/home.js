@@ -3,7 +3,7 @@ jQuery(function($) {
         now = moment();
 
     episodes.each(function() {
-       var episode_moment = moment.unix($(this).data('timestamp'));
+       var episode_moment = moment.unix($(this).data('end-timestamp'));
        if (episode_moment.isBefore(now)) {
            $(this).addClass("in-the-past");
        }

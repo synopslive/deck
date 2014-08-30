@@ -1,9 +1,9 @@
 {% load format_natural %}
 {% load safe_markdown %}
 
-<article class="carton"
+<article class="carton {{ episode.is_centered_carton }} carton-{{ episode.auto_carton_centering_strategy }}"
          data-episode-id="{{ episode.id }}">
-    <div class="bgimg">
+    <div class="bgimg" style="background-color: {{ episode.auto_carton_background_color }}">
         <img src="{{ episode.auto_carton_image.url }}" alt="" />
     </div>
     <div class="carton-info">

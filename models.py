@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class EmptyImage:
@@ -122,6 +125,28 @@ class Show(models.Model):
                                      Seule la bande horizontale la plus centrale sera utilisée sur les entêtes de
                                      replay et sur les pages d'émissions.
                                      """)
+
+    carton_centering_strategy = models.CharField(verbose_name="Stratégie par défaut d'affichage des cartons",
+                                                 max_length=20,
+                                                 choices=(
+                                                     ("stretched", "Centré et étiré"),
+                                                     ("centered", "Centré seulement"),
+                                                 ),
+                                                 default="stretched",
+                                                 help_text="""
+                                                 Indique si le carton doit être simplement centré au lieu d'être étiré.
+                                                 Si c'est le cas, prévoyez une couleur unie à gauche et à droite du
+                                                 carton, qui sera automatiquement détectée pour l'affichage.
+                                                 """)
+
+    carton_background_color = models.CharField(verbose_name="Couleur de fond de l'image du carton",
+                                               max_length=20,
+                                               editable=False,
+                                               default="transparent",
+                                               help_text="""
+                                               Cette couleur est devinée automatiquement après la sauvegarde de l'image
+                                               et n'est pas éditable directement par cette interface.
+                                               """)
 
     livepage_bg_image = models.ImageField(verbose_name="Image de fond du direct",
                                           upload_to="v7/backgrounds/",
@@ -279,6 +304,31 @@ class Episode(models.Model):
                                      Si aucune image n'est associée, l'image du carton associé à l'émission sera utilisée.
                                      """)
 
+    carton_centering_strategy = models.CharField(verbose_name="Stratégie d'affichage de l'image du carton",
+                                                 max_length=20,
+                                                 choices=(
+                                                     ("", "<hérité de l'émission>"),
+                                                     ("stretched", "Centré et étiré"),
+                                                     ("centered", "Centré seulement"),
+                                                 ),
+                                                 blank=True,
+                                                 default="",
+                                                 help_text="""
+                                                 Indique si le carton doit être simplement centré au lieu d'être étiré.
+                                                 Si c'est le cas, prévoyez une couleur unie à gauche et à droite du
+                                                 carton, qui sera automatiquement détectée pour l'affichage.
+                                                 """)
+
+    carton_background_color = models.CharField(verbose_name="Couleur de fond de l'image du carton",
+                                               max_length=20,
+                                               editable=False,
+                                               blank=True,
+                                               default="",
+                                               help_text="""
+                                               Cette couleur est devinée automatiquement après la sauvegarde de l'image
+                                               et n'est pas éditable directement par cette interface.
+                                               """)
+
     livepage_bg_image = models.ImageField(verbose_name="Image spécifique de fond du direct",
                                           upload_to="v7/backgrounds/",
                                           default="",
@@ -327,6 +377,20 @@ class Episode(models.Model):
             return ""
 
     @property
+    def auto_carton_centering_strategy(self):
+        if self.carton_centering_strategy != "":
+            return self.carton_centering_strategy
+        else:
+            return self.show.carton_centering_strategy
+
+    @property
+    def auto_carton_background_color(self):
+        if self.carton_background_color != "":
+            return self.carton_background_color
+        else:
+            return self.show.carton_background_color
+
+    @property
     def auto_livepage_bg_image(self):
         if self.livepage_bg_image:
             return self.livepage_bg_image
@@ -346,6 +410,41 @@ class Episode(models.Model):
         return self.show.short + " #" + self.number
 
     pass
+
+
+@receiver(post_save)
+def fill_out_background_color(sender, **kwargs):
+    if sender == Episode or sender == Show:
+        instance = kwargs.get('instance', None)
+        raw = kwargs.get('raw', False)
+        if not raw and instance is not None:
+            if instance.carton_image and instance.carton_image.path:
+                im = Image.open(instance.carton_image.path)
+                pixels = im.load()
+                width, height = im.size
+                border_pixels = []
+
+                for y in range(height):
+                    border_pixels.append(pixels[0, y])
+                    border_pixels.append(pixels[width - 1, y])
+
+                red = sum(pixel[0] for pixel in border_pixels) / len(border_pixels)
+                green = sum(pixel[1] for pixel in border_pixels) / len(border_pixels)
+                blue = sum(pixel[2] for pixel in border_pixels) / len(border_pixels)
+
+                hex_color = '#{}'.format(''.join([hex(red)[2:].zfill(2), hex(green)[2:].zfill(2), hex(blue)[2:].zfill(2)]))
+                instance.carton_background_color = hex_color
+            else:
+                if sender == Episode:
+                    instance.carton_background_color = ""
+                else:
+                    instance.carton_background_color = "transparent"
+
+            post_save.disconnect(fill_out_background_color)
+            try:
+                instance.save()
+            finally:
+                post_save.connect(fill_out_background_color)
 
 
 class Download(models.Model):

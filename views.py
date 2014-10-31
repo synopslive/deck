@@ -10,8 +10,10 @@ from django.utils.encoding import force_unicode
 import markdown2
 from deck.models import Episode, Show
 import random
+import redis
 
 LIVE_HOSTS = ["live.synopslive.net:8000", "synops.gagahome.fr"]
+redis_instance = redis.StrictRedis()
 
 
 def home(request):
@@ -151,44 +153,53 @@ def export_all_shows(request):
 
 
 def export_current_episode(request):
-    episodes = Episode.objects.filter(shown=True) \
-        .filter(end_time__gte=datetime.now()) \
-        .select_related('show') \
-        .order_by("time")
+    cached = redis_instance.get('deck_current_episode_cache')
 
-    response = {}
+    if not cached:
+        with redis_instance.lock('deck_current_episode_lock'):
+            episodes = Episode.objects.filter(shown=True) \
+                .filter(end_time__gte=datetime.now()) \
+                .select_related('show') \
+                .order_by("time")
 
-    if episodes.count() > 0:
-        episode = episodes[0]
-        response = {
-            'id': episode.id,
-            'bg_image': episode.auto_livepage_bg_image.url,
-            'show_name': episode.show.name,
-            'show_slug': episode.show.slug,
-            'twitter_button_label': episode.show.twitter_button_label,
-            'twitter_button_message': episode.show.twitter_button_message,
-            'twitter_widget': episode.show.twitter_widget,
-            'number': episode.number,
-            'content': markdown2.markdown(force_unicode(episode.content)),
-            'copyright': markdown2.markdown(force_unicode(episode.show.copyright)),
-            'time': episode.time.isoformat(),
-            'end_time': episode.end_time.isoformat()
-        }
+            response = {}
 
-    prog = re.compile(r'^mount=.+?, artist=(?P<artist>.*?), title=(?P<title>.*?), listeners=(?P<listeners>.*?)$')
+            if episodes.count() > 0:
+                episode = episodes[0]
+                response = {
+                    'id': episode.id,
+                    'bg_image': episode.auto_livepage_bg_image.url,
+                    'show_name': episode.show.name,
+                    'show_slug': episode.show.slug,
+                    'twitter_button_label': episode.show.twitter_button_label,
+                    'twitter_button_message': episode.show.twitter_button_message,
+                    'twitter_widget': episode.show.twitter_widget,
+                    'number': episode.number,
+                    'content': markdown2.markdown(force_unicode(episode.content)),
+                    'copyright': markdown2.markdown(force_unicode(episode.show.copyright)),
+                    'time': episode.time.isoformat(),
+                    'end_time': episode.end_time.isoformat()
+                }
 
-    try:
-        hosts = LIVE_HOSTS[:]
-        random.shuffle(hosts)
-        content = urllib2.urlopen("http://{}/status4.xsl".format(hosts[0]), timeout=2).readlines()
-        interesting_line = [prog.match(line) for line in content if line.startswith("mount=/synopslive-permanent.ogg")][0]
+            prog = re.compile(r'^mount=.+?, artist=(?P<artist>.*?), title=(?P<title>.*?), listeners=(?P<listeners>.*?)$')
 
-        response["artist"] = interesting_line.group("artist")
-        response["title"] = interesting_line.group("title")
-    except Exception:
-        pass
+            try:
+                hosts = LIVE_HOSTS[:]
+                random.shuffle(hosts)
+                content = urllib2.urlopen("http://{}/status4.xsl".format(hosts[0]), timeout=2).readlines()
+                interesting_line = [prog.match(line) for line in content if line.startswith("mount=/synopslive-permanent.ogg")][0]
 
-    return HttpResponse(json.dumps(response), content_type="application/json")
+                response["artist"] = interesting_line.group("artist")
+                response["title"] = interesting_line.group("title")
+            except Exception:
+                pass
+
+            cached = json.dumps(json.dumps(response))
+
+            redis_instance.set("deck_current_episode_cache", cached)
+            redis_instance.expire("deck_current_episode_cache", 10)
+
+    return HttpResponse(cached, content_type="application/json")
 
 
 def export_cartons(request):

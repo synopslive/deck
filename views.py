@@ -11,6 +11,8 @@ import markdown2
 from deck.models import Episode, Show
 import random
 
+LIVE_HOSTS = ["live.synopslive.net:8000", "synops.gagahome.fr"]
+
 
 def home(request):
     today = datetime.today().date()
@@ -47,7 +49,7 @@ def planning(request):
 
 
 def live_player(request):
-    hosts = ["live.synopslive.net:8000", "synops.gagahome.fr"]
+    hosts = LIVE_HOSTS[:]
 
     random.shuffle(hosts)
 
@@ -176,12 +178,13 @@ def export_current_episode(request):
     prog = re.compile(r'^mount=.+?, artist=(?P<artist>.*?), title=(?P<title>.*?), listeners=(?P<listeners>.*?)$')
 
     try:
-        content = urllib2.urlopen("http://live.synopslive.net:8000/status4.xsl").readlines()
+        hosts = LIVE_HOSTS[:]
+        random.shuffle(hosts)
+        content = urllib2.urlopen("http://{}/status4.xsl".format(hosts[0]), timeout=2).readlines()
         interesting_line = [prog.match(line) for line in content if line.startswith("mount=/synopslive-permanent.ogg")][0]
 
         response["artist"] = interesting_line.group("artist")
         response["title"] = interesting_line.group("title")
-        response["listeners"] = int(interesting_line.group("listeners"))
     except Exception:
         pass
 

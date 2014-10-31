@@ -196,8 +196,8 @@ def export_current_episode(request):
                     response["title"] = interesting_line.group("title")
                 except Exception:
                     pass
-    
-                cached = json.dumps(json.dumps(response))
+
+                cached = json.dumps(response)
 
                 redis_instance.set("deck_current_episode_cache", cached)
                 redis_instance.expire("deck_current_episode_cache", 10)

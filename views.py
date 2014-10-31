@@ -4,11 +4,12 @@ import re
 import urllib2
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.encoding import force_unicode
 import markdown2
-from deck.models import Episode, Show, LivePage
+from deck.models import Episode, Show
+import random
 
 
 def home(request):
@@ -46,7 +47,13 @@ def planning(request):
 
 
 def live_player(request):
-    return render(request, "live.html", {})
+    hosts = ["live.synopslive.net:8000", "synops.gagahome.fr"]
+
+    random.shuffle(hosts)
+
+    return render(request, "live.html", {
+        'hosts': hosts
+    })
 
 
 def live_page(request, show):

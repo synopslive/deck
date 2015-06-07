@@ -1,4 +1,48 @@
 {% load staticfiles %}
+{% if days_left > 0 %}
+<style type="text/css">
+    #superheader {
+      position: absolute;
+      top: 0;
+      z-index: 10000;
+      background-color: #1fa1ff;
+      color: white;
+      width: 100%;
+      text-align: center;
+      box-shadow: inset 0 -10px 10px -10px rgba(0,0,0,0.2);
+      text-shadow: 1px 1px rgba(0,0,0,0.2);
+    }
+
+    #superheader p {
+      margin: 0;
+      line-height: 40px;
+    }
+
+    #superheader a {
+      text-decoration: none;
+      color: rgba(255,255,255,0.8);
+      border-bottom: 2px solid rgba(255,255,255,0.5);
+      text-shadow: 1px 1px rgba(0,0,0,0.05);
+    }
+
+    #superheader a:hover, #superheader a:focus {
+      color: white;
+      border-bottom: 2px solid rgba(255,255,255,0.9);
+      text-shadow: 1px 1px rgba(0,0,0,0.2);
+    }
+
+    header {
+      margin-top: 40px;
+    }
+
+    body {
+      padding-top: 125px;
+    }
+</style>
+<div id="superheader">
+  <p><strong>SynopsLive, la radio, s'arrêtera dans {{ days_left }} jours.</strong> <a href="/goodbye-sl/">En savoir plus...</a></p>
+</div>
+{% endif %}
 <header>
     <div class="maximizer">
         <h1>

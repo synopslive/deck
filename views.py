@@ -12,7 +12,7 @@ from deck.models import Episode, Show
 import random
 import redis
 
-LIVE_HOSTS = ["live.synopslive.net:8000", "synops.gagahome.fr"]
+LIVE_HOSTS = ["live.synopslive.net:8000"]
 redis_instance = redis.StrictRedis()
 
 

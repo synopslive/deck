@@ -425,8 +425,8 @@ def fill_out_background_color(sender, **kwargs):
                 border_pixels = []
 
                 for y in range(height):
-                    border_pixels.append(pixels[y, 0])
-                    border_pixels.append(pixels[y, width - 1])
+                    border_pixels.append(pixels[0, y])
+                    border_pixels.append(pixels[width - 1, y])
 
                 red = sum(pixel[0] for pixel in border_pixels) / len(border_pixels)
                 green = sum(pixel[1] for pixel in border_pixels) / len(border_pixels)

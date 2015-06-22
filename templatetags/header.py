@@ -1,6 +1,7 @@
 from django import template
 from deck.models import Show
 from datetime import datetime, date
+from math import ceil
 
 register = template.Library()
 
@@ -9,9 +10,9 @@ register = template.Library()
 def header():
     all_shows = Show.objects.filter(archived=False).order_by("category__name", "short")
 
-    days_left = (datetime(2015, 6, 23).date() - date.today()).days
+    hours_left = ceil((datetime(2015, 6, 23, 23, 59, 59) - datetime.now()).total_seconds() / 60 / 60)
 
     return {
         'all_shows': all_shows,
-        'days_left': days_left
+        'hours_left': hours_left
     }

@@ -7,7 +7,7 @@ urlpatterns = patterns(
     url(r'^(?:home)?$', views.home, name='home'),
 
     url(r'^decouvrir/emissions$', views.list_shows, name='shows'),
-    url(r'^decouvrir/grille$', views.planning, name='planning'),
+    # url(r'^decouvrir/grille$', views.planning, name='planning'),
 
     url(r'^emission/(?P<show>(-|\w)+)$', views.view_show, name='show'),
     url(r'^emission/(?P<show>(-|\w)+)/(?P<page>\d+)?/?', views.view_show, name='show-page'),

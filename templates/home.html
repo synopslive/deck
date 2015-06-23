@@ -18,15 +18,6 @@
 {% block page_classes %}home{% endblock %}
 
 {% block page_content %}
-<section id="cartonstand" class="hero">
-    {% for episode in next_episodes %}
-        {% include "components/carton.html" %}
-    {% endfor %}
-</section>
-
-<section id="weekplanning" class="maximizer">
-    {% include "components/calendar.html" %}
-</section>
 
 <section class="intro-sl maximizer clearfix">
     <h2>Qu'est ce que SynopsLive ?</h2>

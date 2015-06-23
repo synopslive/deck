@@ -42,6 +42,10 @@
 <div id="superheader">
   <p><strong>SynopsLive, la radio, s'arrêtera dans {{ minutes_left }} minutes.</strong> <a href="/goodbye-sl/">En savoir plus...</a></p>
 </div>
+{% else %}
+<div id="superheader">
+  <p><strong>SynopsLive, c'est fini.</strong></p>
+</div>
 {% endif %}
 <header>
     <div class="maximizer">

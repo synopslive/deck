@@ -1,5 +1,4 @@
 {% load staticfiles %}
-{% if minutes_left > 0 %}
 <style type="text/css">
     #superheader {
       position: absolute;
@@ -39,6 +38,7 @@
       padding-top: 125px;
     }
 </style>
+{% if minutes_left > 0 %}
 <div id="superheader">
   <p><strong>SynopsLive, la radio, s'arrêtera dans {{ minutes_left }} minutes.</strong> <a href="/goodbye-sl/">En savoir plus...</a></p>
 </div>

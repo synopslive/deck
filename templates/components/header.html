@@ -64,11 +64,13 @@
             <a href="{% url "replay" %}" class="btn flat go-replay">
                 <i class="fa fa-fw fa-download"></i> Replay
             </a>
+            {% if minutes_left > 0 %}
             <a href="{% url "live" %}" class="btn go-live">
                 <i class="fa fa-fw fa-play"></i>
                 <span class="verylarge-only">Écouter en direct</span>
                 <span class="sub1000-only">Direct</span>
             </a>
+            {% endif %}
         </nav>
         {% endspaceless %}
     </div>

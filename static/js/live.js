@@ -71,8 +71,8 @@ function updateWithEpisode(episode) {
 }
 
 function updateWithNothing () {
-    $(".live-now-legend").text("Actuellement");
-    $(".live-show-name").text("Flux permanent");
+    $(".live-now-legend").text("Pour toujours");
+    $(".live-show-name").text("C'est fini.");
     $(".live-post-tweet").html('<i class="fa fa-fw fa-twitter"></i> SynopsLive');
     $(".live-post-tweet").attr("href", generateTwitterMessageUrl("#SynopsLive"));
     $(".synopsis").hide();

@@ -10,9 +10,9 @@ register = template.Library()
 def header():
     all_shows = Show.objects.filter(archived=False).order_by("category__name", "short")
 
-    hours_left = int(ceil((datetime(2015, 6, 23, 23, 59, 59) - datetime.now()).total_seconds() / 60 / 60))
+    minutes_left = int(ceil((datetime(2015, 6, 23, 23, 59, 59) - datetime.now()).total_seconds() / 60))
 
     return {
         'all_shows': all_shows,
-        'hours_left': hours_left
+        'minutes_left': minutes_left
     }

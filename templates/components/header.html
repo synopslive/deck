@@ -1,5 +1,5 @@
 {% load staticfiles %}
-{% if hours_left > 0 %}
+{% if minutes_left > 0 %}
 <style type="text/css">
     #superheader {
       position: absolute;
@@ -40,7 +40,7 @@
     }
 </style>
 <div id="superheader">
-  <p><strong>SynopsLive, la radio, s'arrêtera dans {{ hours_left }} heures.</strong> <a href="/goodbye-sl/">En savoir plus...</a></p>
+  <p><strong>SynopsLive, la radio, s'arrêtera dans {{ minutes_left }} minutes.</strong> <a href="/goodbye-sl/">En savoir plus...</a></p>
 </div>
 {% endif %}
 <header>

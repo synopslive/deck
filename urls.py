@@ -13,7 +13,7 @@ urlpatterns = patterns(
     url(r'^emission/(?P<show>(-|\w)+)$', views.view_show, name='show'),
     url(r'^emission/(?P<show>(-|\w)+)/(?P<page>\d+)?/?', views.view_show, name='show-page'),
 
-    url(r'^direct/?$', views.live_player, name='live'),
+    url(r'^direct/?$', RedirectView.as_view(url='/', permanent=True), name='live'),
     url(r'^direct/(?P<show>(-|\w)+)$', views.live_page, name='live-page'),
 
     url(r'^replay(?:/(?P<page>\d+))?/?$', RedirectView.as_view(url='/', permanent=True), name='replay'),

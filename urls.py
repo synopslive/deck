@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.views.generic.base import RedirectView
 import views
 
 urlpatterns = patterns(
@@ -6,7 +7,7 @@ urlpatterns = patterns(
 
     url(r'^(?:home)?$', views.home, name='home'),
 
-    url(r'^decouvrir/emissions$', views.list_shows, name='shows'),
+    url(r'^decouvrir/emissions$', RedirectView.as_view(url='/', permanent=True), name='shows'),
     # url(r'^decouvrir/grille$', views.planning, name='planning'),
 
     url(r'^emission/(?P<show>(-|\w)+)$', views.view_show, name='show'),
@@ -15,7 +16,7 @@ urlpatterns = patterns(
     url(r'^direct/?$', views.live_player, name='live'),
     url(r'^direct/(?P<show>(-|\w)+)$', views.live_page, name='live-page'),
 
-    url(r'^replay(?:/(?P<page>\d+))?/?$', views.replay, name='replay'),
+    url(r'^replay(?:/(?P<page>\d+))?/?$', RedirectView.as_view(url='/', permanent=True), name='replay'),
 
     url(r'^replay/(?P<show>(-|\w)+)/(?P<page>\d+)?/?$', views.replay, name='replay-show'),
 

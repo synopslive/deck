@@ -1,52 +1,4 @@
 {% load staticfiles %}
-<style type="text/css">
-    #superheader {
-      position: absolute;
-      top: 0;
-      z-index: 10000;
-      background-color: #1fa1ff;
-      color: white;
-      width: 100%;
-      text-align: center;
-      box-shadow: inset 0 -10px 10px -10px rgba(0,0,0,0.2);
-      text-shadow: 1px 1px rgba(0,0,0,0.2);
-    }
-
-    #superheader p {
-      margin: 0;
-      line-height: 40px;
-    }
-
-    #superheader a {
-      text-decoration: none;
-      color: rgba(255,255,255,0.8);
-      border-bottom: 2px solid rgba(255,255,255,0.5);
-      text-shadow: 1px 1px rgba(0,0,0,0.05);
-    }
-
-    #superheader a:hover, #superheader a:focus {
-      color: white;
-      border-bottom: 2px solid rgba(255,255,255,0.9);
-      text-shadow: 1px 1px rgba(0,0,0,0.2);
-    }
-
-    header {
-      margin-top: 40px;
-    }
-
-    body {
-      padding-top: 125px;
-    }
-</style>
-{% if minutes_left > 0 %}
-<div id="superheader">
-  <p><strong>SynopsLive, la radio, s'arrêtera dans {{ minutes_left }} minutes.</strong> <a href="/goodbye-sl/">En savoir plus...</a></p>
-</div>
-{% else %}
-<div id="superheader">
-  <p><strong>SynopsLive, c'est fini.</strong></p>
-</div>
-{% endif %}
 <header>
     <div class="maximizer">
         <h1>
@@ -55,14 +7,9 @@
             </a>
         </h1>
         {% spaceless %}
-        <nav class="content-menu">
-            <a href="{% url "shows" %}" class="btn flat go-shows">
-                Les émissions <i class="fa fa-fw fa-caret-down"></i>
-            </a>
-        </nav>
         <nav class="main-menu">
-            <a href="{% url "replay" %}" class="btn flat go-replay">
-                <i class="fa fa-fw fa-download"></i> Replay
+            <a href="{% url "home" %}" class="btn flat go-replay">
+                <i class="fa fa-fw fa-home"></i> Accueil
             </a>
             {% if minutes_left > 0 %}
             <a href="{% url "live" %}" class="btn go-live">
@@ -75,43 +22,6 @@
         {% endspaceless %}
     </div>
 </header>
-<nav class="menu-submenu menu-antenna" style="display: none;">
-    <div class="maximizer">
-        <ul>
-            <li class="menu-submenu-element">
-                <a href="/decouvrir/antenne" class="btn flat">
-                    <img src="{% static "imgs/icons/menu-story.svg" %}" alt="" />
-                    L'histoire
-                </a>
-            </li>
-            <li class="menu-submenu-element">
-                <a href="/decouvrir/equipe" class="btn flat">
-                    <img src="{% static "imgs/icons/menu-team.svg" %}" alt="" />
-                    L'équipe
-                </a>
-            </li>
-            <li>
-                <a class="menu-submenu-also btn flat" href="/podcasteurs">
-                    <i class="fa fa-fw fa-microphone"></i>
-                    Podcasteurs
-                    &nbsp;<i class="fa fa-caret-right"></i>
-                </a>
-                <a class="menu-submenu-also btn flat" href="/presse">
-                    <i class="fa fa-fw fa-file-o"></i>
-                    Presse
-                    &nbsp;<i class="fa fa-caret-right"></i>
-                </a>
-                <a class="menu-submenu-also btn flat" href="http://blog.synopslive.net/">
-                    <i class="fa fa-fw fa-book"></i>
-                    Blog
-                    &nbsp;<i class="fa fa-caret-right"></i>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
-<nav class="menu-submenu menu-shows" style="display: none;">
-    <div class="maximizer">
         {% regroup all_shows by category as categories %}
         {% for category in categories %}
         <ul class="show-category-group {% if category.list|length > 6 %}show-category-large{% endif %} {% if category.list|length == 1 %}show-category-mini{% endif %}">
@@ -130,5 +40,3 @@
             {% endif %}
         </ul>
         {% endfor %}
-    </div>
-</nav>

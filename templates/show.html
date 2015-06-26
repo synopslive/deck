@@ -16,7 +16,6 @@
 
 {% block page_content %}
 
-{% if not episodes.has_previous  %}
 <section class="show-header panorama">
     <div class="bgimg">
         <img src="{{ show.carton_image.url }}" alt="" />
@@ -32,7 +31,6 @@
         </div>
     </div>
 </section>
-{% endif %}
 
 <section class="show-about maximizer">
     {% if show.producer %}

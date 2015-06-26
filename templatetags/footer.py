@@ -6,7 +6,8 @@ register = template.Library()
 
 @register.inclusion_tag('components/footer.html')
 def footer():
-    random_shows = Show.objects.filter(archived=False).order_by('?')[0:5]
+    all_shows = Show.objects.order_by("short")
+
     return {
-        'random_shows': random_shows
+        'all_shows': all_shows
     }

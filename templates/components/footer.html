@@ -1,41 +1,30 @@
 {% load staticfiles %}
 <footer>
     <div class="maximizer">
-        <div class="footer-decoration">
-            <img src="{% static "imgs/logo-footer.png" %}" />
-        </div>
+        <p>
+            SynopsLive était une webradio, créée en 2007 par Signez, Gregorif, Jay, et Pfsm999, qui a diffusé
+            pendant huit ans plus de 1500 heures de programmes inédits, garnis de musique libre. Tous le contenu
+            disponible sur ce site appartient à leurs auteurs. La licence sous laquelle sont distribuées les
+            émissions est indiquée sur les pages respectives des émissions.
+        </p>
 
-        <div class="footer-links">
-            <ul class="synopslive-links">
-                <li class="links-title">SynopsLive <i class="fa fa-fw fa-caret-right"></i></li>
-                <li><a href="{% url "home" %}">Accueil</a></li>
-                <li><a href="{% url "shows" %}">Émissions</a></li>
-                <li><a href="{% url "replay" %}">Replay</a></li>
-                <li><a href="/podcasteurs">Podcasteurs</a></li>
-                <li><a href="/contact">Contact</a></li>
-                <li><a href="/legal">Mentions légales...</a></li>
-            </ul>
+        <ul class="footer-links shows-links">
+            <li class="links-title">Émissions <i class="fa fa-fw fa-caret-right"></i></li>
 
-            <ul class="shows-links">
-                <li class="links-title">Émissions <i class="fa fa-fw fa-caret-right"></i></li>
+            {% for show in all_shows %}
+            <li><a href="{% url 'show' show.slug %}">{{ show.short }}</a></li>
+            {% endfor %}
+        </ul>
 
-                {% for show in random_shows %}
-                <li><a href="{% url 'show' show.slug %}">{{ show.name }}</a></li>
-                {% endfor %}
-
-                <li><a href="{% url "shows" %}">Toutes les émissions...</a></li>
-            </ul>
-
-            <ul class="friends-links">
-                <li class="links-title">Amis <i class="fa fa-fw fa-caret-right"></i></li>
-                <li><a href="http://www.radiojv.com/">RadioJV.com</a></li>
-                <li><a href="http://www.radiokawa.com/">RadioKawa</a></li>
-                <li><a href="http://www.magoyond.com/">MagoYond</a></li>
-                <li><a href="http://www.synopsite.com/">Synops (Reflets d'Acide)</a></li>
-                <li><a href="http://www.netophonix.com/">Netophonix</a></li>
-                <li><a href="http://www.facebook.com/SynopsLive">Vous !</a></li>
-            </ul>
-        </div>
+        <ul class="footer-links friends-links">
+            <li class="links-title">Amis <i class="fa fa-fw fa-caret-right"></i></li>
+            <li><a href="http://www.radiojv.com/">RadioJV.com</a></li>
+            <li><a href="http://www.radiokawa.com/">RadioKawa</a></li>
+            <li><a href="http://www.magoyond.com/">MagoYond</a></li>
+            <li><a href="http://www.synopsite.com/">Synops (Reflets d'Acide)</a></li>
+            <li><a href="http://www.netophonix.com/">Netophonix</a></li>
+            <li><a href="http://www.facebook.com/SynopsLive">Vous !</a></li>
+        </ul>
 
         <p class="clearfix">
             © <strong>SynopsLive</strong> et partenaires, 2007-2015. &nbsp;

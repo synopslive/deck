@@ -17,23 +17,10 @@ redis_instance = redis.StrictRedis()
 
 
 def home(request):
-    today = datetime.today().date()
-    if today.weekday() in [5, 6]:
-        monday = today
-    else:
-        monday = today - timedelta(days=today.weekday())
-
-    next_episodes = Episode.objects.filter(
-        time__gte=datetime.combine(monday, time(0, 0)),
-        time__lt=datetime.combine(monday + timedelta(days=7), time(0, 0))
-    ).order_by("time")
-
-    last_episodes = Episode.objects.filter(time__lte=datetime.now()).select_related('show').order_by("time").reverse()[:5]
+    all_shows = Show.objects.order_by("short")
 
     return render(request, "home.html", {
-        'next_episodes': next_episodes,
-        'last_episodes': last_episodes,
-        'weekdays': [monday + timedelta(days=i) for i in range(7)]
+        'all_shows': all_shows
     })
 
 
@@ -62,28 +49,16 @@ def live_player(request):
 
 def live_page(request, show):
     show = get_object_or_404(Show, slug=show)
-    try:
-        episode = Episode.objects \
-            .filter(show=show) \
-            .filter(time__lte=datetime.now() + timedelta(hours=2)) \
-            .filter(end_time__gte=datetime.now() - timedelta(hours=2)) \
-            .order_by("time").select_related('show')[0]
-
-        if episode:
-            return redirect('live')
-    except IndexError:
-        pass
 
     return redirect('show', show=show.slug)
 
 
-def replay(request, page=1, show=None):
+def replay(request, show, page=1):
     episodes = Episode.objects.filter(time__lte=datetime.now()).select_related('show')
     shows = Show.objects.all()
 
-    if show is not None:
-        show = get_object_or_404(Show, slug=show)
-        episodes = episodes.filter(show=show)
+    show = get_object_or_404(Show, slug=show)
+    episodes = episodes.filter(show=show)
 
     episodes = episodes.order_by("time").reverse()
 

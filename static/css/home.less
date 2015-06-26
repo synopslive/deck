@@ -1,79 +1,92 @@
 @import (reference) "base.less";
 
-#cartonstand {
-  width: 100%;
-  overflow: hidden;
-  z-index: 2;
-  position: relative;
+body.home {
+  padding-top: 0;
 
-  height: 500px;
-
-  @media @sub1000 {
-    height: 400px;
+  &:before {
+    content: "";
+    display: block;
+    background-color: #888888;
+    height: 500px;
+    width: 100%;
+    z-index: -1;
+    position: absolute;
+    transform: rotate(6deg);
+    transform-origin: bottom right;
+    top: -40px;
+    right: calc(~"50% + 289px");
   }
-  @media @landscape {
-    height: 300px;
-  }
-  @media @mobile {
-    height: 200px;
-  }
-
-  background: url(../imgs/empty-space.png) center center no-repeat;
 }
 
-#weekplanning {
-  padding-top: 20px;
-  background-color: #171717;
-  z-index: 12;
-  position: relative;
-  box-shadow: 0 -20px 20px -20px rgba(0,0,0,0.5);
-  .clearfix;
+.home-section {
+  margin-top: 150px;
+  font-weight: 300;
 
-  h2 {
-    font-weight: 100;
-    font-size: 1.2rem;
+  a:not(.btn) {
+    text-decoration: none;
+    font-weight: 400;
 
-    strong {
-      font-weight: 500;
+    &:hover, &:active, &:focus {
+      border-bottom: 1px solid currentColor;
     }
   }
-}
 
-.intro-sl h2, .last-shows h2 {
-  font-size: 1.4em;
-  font-weight: 400;
-  color: #A9A9A9;
-}
-
-.intro-sl {
-  margin-top: 70px;
-
-  h2 {
-    text-align: center;
-    margin-bottom: 30px;
+  .btn {
+    font-weight: 400;
+    margin-left: 5px;
+    margin-right: 5px;
   }
+}
 
-  img {
+
+.ci-git {
+  margin-top: 0;
+  padding-top: 300px;
+  min-height: 300px;
+  position: relative;
+
+  .empty-logo {
     float: left;
-    width: 12%;
+    border: 1px solid grey;
+    width: 132px;
+    margin-right: 50px;
   }
 
-  p {
-    float: left;
-    width: 85%;
-    margin-left: 3%;
-    line-height: 1.4em;
-    color: #999999;
-    margin-top: 25px;
+  h1 {
+    font-weight: 300;
   }
 }
 
-.last-shows {
-  margin-top: 80px;
+h2 {
+  border-bottom: 2px solid #808080;
+}
 
-  a, a:link, a:hover, a:focus, a:active {
-    text-decoration: none;
-    color: white;
-    outline: 0 none;
+a.goodbyesl {
+  font-style: italic;
+  text-decoration: none;
+}
+
+.shows-list .headline {
+  width: 48%;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+  margin-bottom: 10px;
+
+  h1 {
+    font-size: 1.5em;
+    letter-spacing: -1px;
+    line-height: 1.65em;
   }
+
+  &:active {
+    margin-bottom: 10px;
+  }
+}
+
+.shows-list a .headline {
+  float: left;
+}
+
+.shows-list {
+  .clearfix;
 }

@@ -4,8 +4,8 @@
 }
 
 html {
-  background-color: #171717;
-  color: #b3b3b3;
+  background-color: white;
+  color: #191919;
 }
 
 body {
@@ -58,19 +58,20 @@ a:focus {
     outline: 0 none;
   }
 
-  &:hover {
+  &:hover, &:active {
     color: white;
   }
 
   .go-rule (@color: #282828, @shadow-diff: #050505, @hover-highlight: #101010) {
-    background-color: @color;
+    border: 1px solid @color;
     box-shadow: 0 2px (@color - @shadow-diff);
-    color: white;
+    color: @color;
 
     &:hover, &:focus {
       background-color: @color + @hover-highlight;
       box-shadow: 0 2px @color - @shadow-diff;
       outline: 0 none;
+      color: white;
     }
 
     &:active {
@@ -78,6 +79,7 @@ a:focus {
       -moz-transform: translateY(2px);
       -webkit-transform: translateY(2px);
       box-shadow: none;
+      color: white;
     }
   }
   .go-rule;
@@ -135,7 +137,7 @@ time {
     padding: 0 20px;
   }
   @media @large {
-    max-width: 1000px;
+    max-width: 880px;
     margin-left: auto;
     margin-right: auto;
   }

@@ -2,7 +2,10 @@
 {% load static %}
 {% load format_natural %}
 
-{% block rawtitle %}SynopsLive, la radio du monde numérique (direct et podcast){% endblock %}
+{% block rawtitle %}SynopsLive, l’ex-radio du monde numérique{% endblock %}
+{% block override_header %}
+    {# No header #}
+{% endblock %}
 
 {% block custom_css %}
 <link rel="stylesheet" type="text/less" media="screen" href="{% static "css/home.less" %}" charset="utf-8">
@@ -19,35 +22,61 @@
 
 {% block page_content %}
 
-<section class="intro-sl maximizer clearfix">
-    <h2>Qu'est ce que SynopsLive ?</h2>
-    <img class="pull-left" src="{% static "imgs/logo-round-synopslive.png" %}" alt="" />
-    <p class="pull-right">
-        SynopsLive était une radio qui diffuse 24h/24 de la musique et des émissions inédites
-        tout au long de la semaine.
-        Créée par des amateurs en 2007, SynopsLive était devenue l'une des rares radio sur
-        Internet à réaliser plusieurs émissions en direct par semaine, tout en accueillant
-        près d'une vingtaine d'émissions différentes par mois.
-    </p>
-    <p>
-        <span class="pull-left nega-left">
-            <a class="btn flat" href="{% url "shows" %}">
-                Découvrir nos archives <i class="fa fa-fw fa-chevron-right"></i>
-            </a>
-        </span>
+<section class="home-section ci-git maximizer">
+    <img class="empty-logo" src="{% static "imgs/emptylogo.png" %}" alt="" />
+    <h1>Ci-gît <strong>SynopsLive</strong>, la radio du monde numérique.</h1>
+    <p style="font-weight: 300;">
+        Le mardi 23 juin 2015 à 23h59, après huit ans de programmes en direct, l'antenne s'est
+        défintivement arrêtée. <a class="goodbyesl" href="https://twitter.com/hashtag/goodbyesl">#GoodbyeSL</a>
     </p>
 </section>
 
-<section class="last-shows maximizer clearfix">
-    <h2>Dernières émissions diffusées</h2>
+<section class="home-section it-continues maximizer">
+    <h2>La plupart de vos émissions préférées continuent</h2>
+    <p>
+        Vous pouvez retrouver <em>Passe le Stick</em>, <em>Le Player Club</em>, <em>Les Tauliers</em>, <em>Comics Outcast</em>,
+        <em>Allô Centrale</em>, <em>Parodian Rhapsody</em>, <em>LOLJapon</em>, <em>Ta Gueule</em>, <em>Ludographie Comparée</em>
+        et <em>TVNR</em> sur le site de leur producteur et désormais diffuseur, <strong>RadioKawa</strong>.
+    </p>
+    <p style="text-align: center;">
+        <a class="btn" href="http://www.radiokawa.com/">RadioKawa.com</a>
+    </p>
+    <p>
+        Vous pouvez retrouver les émissions de <em>Comixity</em>, <em>DC Planet</em>, <em>Le Duel</em> ou <em>Les Sondiers</em> sur leurs sites respectifs.
+    </p>
+    <p style="text-align: center;">
+        <a class="btn" href="http://www.comixity.fr/">Comixity.fr</a>
+        <a class="btn" href="http://www.dcplanet.fr/">DCPlanet.fr</a>
+        <a class="btn" href="http://www.leduel.com/">LeDuel.com</a>
+        <a class="btn" href="http://www.lessondiers.com/">LesSondiers.com</a>
+    </p>
+</section>
 
-    {% for episode in last_episodes %}
-    <a href="{% url "show" episode.show.slug %}">
-        {% include "components/headline.html" with show=episode.show episode=episode %}
-    </a>
-    {% endfor %}
+<section class="home-section old-shows-are-here maximizer">
+    <h2>Les anciennes émissions restent intactes</h2>
+    <p>
+        Pas d'autodafé en vue : les émissions restent disponibles sur ce site ainsi que par podcast.
+        Vous pouvez retrouver la totalité de nos archives précédemment accessibles ci-dessous, et nous travaillons
+        à sortir de nos cartons quelques émissions plus anciennes encore pour parfaire votre collection.
+    </p>
+    <div class="shows-list">
+        {% for show in all_shows %}
+            <a class="headline-link" href="{% url "show" show.slug %}">
+                {% include "components/headline.html" with show=show %}
+            </a>
+        {% endfor %}
+    </div>
+</section>
 
-    <p><a href="{% url "replay" %}" class="pull-right btn"><i class="fa fa-fw fa-download"></i> Télécharger plus d'émissions</a></p>
+<section class="home-section and-museum maximizer">
+    <h2>Toujours quelque chose à découvrir…</h2>
+    <p>
+        Durant l'été, nous comptons ajouter quelques éléments de souvenirs à ce mini-site pour agrémenter
+        les plus nostalgiques d'entre vous : pastilles de making-of, pépites cachées dans des placards,
+        analyses de cartons, nous vous réservons quelques surprises. Suivez
+        <a href="http://twitter.com/SynopsLive">@SynopsLive</a> sur Twitter
+        pour ne pas les manquer.
+    </p>
 </section>
 
 {% endblock %}

@@ -52,7 +52,9 @@
     <script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
 </head>
 <body class="{% block page_classes %}generic{% endblock %}">
-    {% header %}
+    {% block override_header %}
+        {% header %}
+    {% endblock %}
     {% block page_content %}
     {% endblock %}
     {% footer %}
